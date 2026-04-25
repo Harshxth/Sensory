@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 import { MapView } from "@/components/map/MapView";
+import { SensoryLayer } from "@/components/map/SensoryLayer";
 
 const FEATURES = [
   {
@@ -100,7 +101,9 @@ export default function LandingPage() {
         <section className="w-full px-6 pb-16 md:pb-24 max-w-6xl mx-auto">
           <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-primary/10 border border-outline/10 bg-surface-container-low">
             <div className="relative h-[420px] md:h-[560px] w-full">
-              <MapView interactive={false} initialZoom={12} className="absolute inset-0" />
+              <MapView interactive={false} initialZoom={12} className="absolute inset-0">
+                <SensoryLayer />
+              </MapView>
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
               <div className="pointer-events-none absolute top-6 left-6 right-6 flex items-start justify-between">
                 <div className="bg-surface-bright/90 backdrop-blur-md rounded-full px-4 py-2 shadow-md border border-outline/10 flex items-center gap-2 text-sm font-bold text-on-surface">
