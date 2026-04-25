@@ -1,0 +1,64 @@
+import Link from "next/link";
+import { Icon } from "@/components/ui/Icon";
+
+export type AppBarAction = {
+  icon: string;
+  label: string;
+  onClick?: () => void;
+  href?: string;
+};
+
+export function TopAppBar({
+  title = "Sensory",
+  leading,
+  trailing,
+}: {
+  title?: string;
+  leading?: AppBarAction;
+  trailing?: AppBarAction | React.ReactNode;
+}) {
+  const isAppBarAction = (v: unknown): v is AppBarAction =>
+    typeof v === "object" && v !== null && "icon" in v && "label" in v;
+
+  let trailingNode: React.ReactNode = null;
+  if (isAppBarAction(trailing)) {
+    trailingNode = <ActionButton {...trailing} />;
+  } else if (trailing !== undefined) {
+    trailingNode = trailing as React.ReactNode;
+  }
+
+  return (
+    <header className="sticky top-0 z-50 w-full bg-background/90 backdrop-blur-md text-primary font-bold border-b border-outline/20 shadow-sm">
+      <div className="flex justify-between items-center w-full px-6 py-3">
+        <div className="flex items-center gap-3">
+          {leading ? (
+            <ActionButton {...leading} />
+          ) : (
+            <Link href="/" className="flex items-center gap-2 text-primary">
+              <Icon name="visibility" filled size={24} />
+            </Link>
+          )}
+          <h1 className="text-xl font-bold text-primary tracking-tight">{title}</h1>
+        </div>
+        {trailingNode}
+      </div>
+    </header>
+  );
+}
+
+export function ActionButton({ icon, label, onClick, href }: AppBarAction) {
+  const cn =
+    "p-2 rounded-full hover:bg-surface-container transition-colors active:scale-95 text-primary flex items-center justify-center";
+  if (href) {
+    return (
+      <Link href={href} aria-label={label} className={cn}>
+        <Icon name={icon} size={24} />
+      </Link>
+    );
+  }
+  return (
+    <button type="button" aria-label={label} onClick={onClick} className={cn}>
+      <Icon name={icon} size={24} />
+    </button>
+  );
+}
