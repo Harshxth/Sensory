@@ -1,0 +1,42 @@
+{
+  "name": "sensory",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "db:init": "tsx scripts/init-indexes.ts",
+    "seed:venues": "tsx scripts/seed-venues.ts",
+    "seed:reviews": "tsx scripts/seed-reviews.ts",
+    "seed:alerts": "tsx scripts/seed-alerts.ts",
+    "extract:sensory": "tsx scripts/extract-sensory.ts"
+  },
+  "dependencies": {
+    "@elevenlabs/elevenlabs-js": "^2.44.0",
+    "@google/generative-ai": "^0.24.1",
+    "@supabase/supabase-js": "^2.104.1",
+    "date-fns": "^4.1.0",
+    "framer-motion": "^12.38.0",
+    "mapbox-gl": "^3.22.0",
+    "mongodb": "^7.2.0",
+    "next": "16.2.4",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "recharts": "^3.8.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/mapbox-gl": "^3.4.1",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "dotenv": "^17.4.2",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.4",
+    "tailwindcss": "^4",
+    "tsx": "^4.21.0",
+    "typescript": "^5"
+  }
+}
