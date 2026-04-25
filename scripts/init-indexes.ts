@@ -1,7 +1,8 @@
 // Create indexes + the noise_samples time-series collection.
 // Run with: npx tsx scripts/init-indexes.ts
 
-import "dotenv/config";
+import { config } from "dotenv";
+config({ path: ".env.local" });
 import { COLLECTIONS, getDb } from "../lib/mongodb";
 
 async function main() {

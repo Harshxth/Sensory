@@ -1,10 +1,9 @@
 import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
 import type { Language } from "@/types";
 
-const apiKey = process.env.ELEVENLABS_API_KEY;
-
 export function getElevenLabs(): ElevenLabsClient {
-  if (!apiKey) throw new Error("ELEVENLABS_API_KEY is required");
+  const apiKey = process.env.ELEVENLABS_API_KEY;
+  if (!apiKey) throw new Error("ELEVENLABS_API_KEY is required (check .env.local)");
   return new ElevenLabsClient({ apiKey });
 }
 

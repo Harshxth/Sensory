@@ -1,7 +1,8 @@
 // F1.7 — seed mock reviews so the venue panel has a populated feed at demo time.
 // Run with: npx tsx scripts/seed-reviews.ts
 
-import "dotenv/config";
+import { config } from "dotenv";
+config({ path: ".env.local" });
 import { ObjectId } from "mongodb";
 import { COLLECTIONS, getDb } from "../lib/mongodb";
 

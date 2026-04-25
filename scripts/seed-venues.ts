@@ -1,7 +1,8 @@
 // F1.4 step 1 — fetch ~30 Tampa venues from Google Places, store with 2dsphere index.
 // Run with: npx tsx scripts/seed-venues.ts
 
-import "dotenv/config";
+import { config } from "dotenv";
+config({ path: ".env.local" });
 import { COLLECTIONS, getDb } from "../lib/mongodb";
 
 const USF_CENTER = { lat: 28.0587, lng: -82.4139 };
