@@ -1,41 +1,33 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Icon } from "@/components/ui/Icon";
 import { loadPreferences } from "@/lib/preferences";
 
-type Phase = "in" | "hold" | "fadeout" | "reveal" | "swipe" | "gone";
+type Phase = "wordmark" | "typing" | "brighten" | "exit" | "gone";
 
-const SWIPE_THRESHOLD = 90;
-const SWIPE_VELOCITY = 0.45;
 const STORAGE_KEY = "sensory:boot-seen";
+const TAGLINE = "Maps for everyone.";
 
 /**
- * Cinematic app boot splash — adapted from the partner's Lovable export.
- * Timeline:
- *  - 0.0s: "Sensory" wordmark pops in, breathing aura behind
- *  - 0.7s: hold
- *  - 1.5s: wordmark fades, tagline emerges
- *  - 2.1s: "Try Sensory" CTA appears
- *  - swipe right OR tap CTA to dismiss
+ * Cinematic app boot splash.
+ * Timeline (auto-progresses, no user action required):
+ *  0.0s  wordmark fades in with breathing aura
+ *  1.0s  tagline starts typing letter by letter
+ *  2.6s  glow brightens + moves across the screen
+ *  3.8s  splash exits with a soft slide
  *
- * Only shows once per session (sessionStorage flag).
+ * Skip button is always visible for impatient users.
  */
 export function BootSplash({ onDone }: { onDone?: () => void }) {
   const router = useRouter();
-  const [phase, setPhase] = useState<Phase>("in");
-  const [drag, setDrag] = useState(0);
-  const [dragging, setDragging] = useState(false);
+  const [phase, setPhase] = useState<Phase>("wordmark");
+  const [typed, setTyped] = useState("");
   const [needsOnboarding, setNeedsOnboarding] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const startX = useRef(0);
-  const startT = useRef(0);
-  const widthRef = useRef(0);
+  const dismissedRef = useRef(false);
 
-  // Skip if user has already seen the splash this session, otherwise advance
-  // through phases on a single mount (deps must NOT include phase or the
-  // cleanup cancels the in-flight timers each time phase changes).
+  // First-mount setup
   useEffect(() => {
     if (typeof window === "undefined") return;
     setNeedsOnboarding(!loadPreferences().onboardingComplete);
@@ -44,131 +36,107 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
       onDone?.();
       return;
     }
-    const t1 = window.setTimeout(() => setPhase("hold"), 700);
-    const t2 = window.setTimeout(() => setPhase("fadeout"), 1500);
-    const t3 = window.setTimeout(() => setPhase("reveal"), 2100);
+    const t1 = window.setTimeout(() => setPhase("typing"), 1000);
+    const t2 = window.setTimeout(() => setPhase("brighten"), 2600);
+    const t3 = window.setTimeout(() => triggerExit(), 3800);
     return () => {
       [t1, t2, t3].forEach(window.clearTimeout);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Typewriter
   useEffect(() => {
-    if (phase !== "swipe") return;
+    if (phase !== "typing") return;
+    let i = 0;
+    const id = window.setInterval(() => {
+      i++;
+      setTyped(TAGLINE.slice(0, i));
+      if (i >= TAGLINE.length) window.clearInterval(id);
+    }, 70);
+    return () => window.clearInterval(id);
+  }, [phase]);
+
+  const triggerExit = () => {
+    if (dismissedRef.current) return;
+    dismissedRef.current = true;
     try {
       sessionStorage.setItem(STORAGE_KEY, String(Date.now()));
     } catch {
       /* ignore */
     }
-    const t = window.setTimeout(() => {
+    setPhase("exit");
+    setTimeout(() => {
       setPhase("gone");
       onDone?.();
-    }, 600);
-    return () => window.clearTimeout(t);
-  }, [phase, onDone]);
-
-  const canDrag = phase === "reveal";
-  const beginDrag = useCallback(
-    (clientX: number) => {
-      if (!canDrag) return;
-      widthRef.current = containerRef.current?.offsetWidth ?? window.innerWidth;
-      startX.current = clientX;
-      startT.current = performance.now();
-      setDragging(true);
-    },
-    [canDrag],
-  );
-  const moveDrag = useCallback(
-    (clientX: number) => {
-      if (!dragging) return;
-      const raw = clientX - startX.current;
-      setDrag(raw > 0 ? raw : raw * 0.15);
-    },
-    [dragging],
-  );
-  const endDrag = useCallback(
-    (clientX: number) => {
-      if (!dragging) return;
-      const dx = clientX - startX.current;
-      const dt = Math.max(1, performance.now() - startT.current);
-      const v = dx / dt;
-      const commit = dx > SWIPE_THRESHOLD || (dx > 30 && v > SWIPE_VELOCITY);
-      setDragging(false);
-      if (commit) setPhase("swipe");
-      else setDrag(0);
-    },
-    [dragging],
-  );
-
-  useEffect(() => {
-    if (!dragging) return;
-    const mm = (e: MouseEvent) => moveDrag(e.clientX);
-    const mu = (e: MouseEvent) => endDrag(e.clientX);
-    window.addEventListener("mousemove", mm);
-    window.addEventListener("mouseup", mu);
-    return () => {
-      window.removeEventListener("mousemove", mm);
-      window.removeEventListener("mouseup", mu);
-    };
-  }, [dragging, moveDrag, endDrag]);
-
-  const dismiss = () => {
-    setPhase("swipe");
-    if (needsOnboarding) {
-      // Route to onboarding after the splash slides away
-      setTimeout(() => router.push("/onboarding"), 350);
-    }
+      // First-time visitors get routed straight into the onboarding flow.
+      if (needsOnboarding) {
+        setTimeout(() => router.push("/onboarding"), 50);
+      }
+    }, 700);
   };
 
   if (phase === "gone") return null;
 
-  const wordmarkVisible = phase === "in" || phase === "hold";
-  const showCta = phase === "reveal" || phase === "swipe";
-
-  const w = widthRef.current || 1;
-  const swipeOffset = phase === "swipe" ? w : dragging || drag !== 0 ? drag : 0;
-  const swipeProgress = Math.min(1, Math.max(0, swipeOffset / w));
+  const wordmarkVisible = phase !== "exit";
+  const showTagline = phase === "typing" || phase === "brighten" || phase === "exit";
+  const exiting = phase === "exit";
+  const glowIntense = phase === "brighten" || phase === "exit";
 
   return (
     <div
-      ref={containerRef}
       role="dialog"
       aria-modal="true"
       aria-labelledby="boot-title"
-      onTouchStart={(e) => beginDrag(e.touches[0].clientX)}
-      onTouchMove={(e) => moveDrag(e.touches[0].clientX)}
-      onTouchEnd={(e) => endDrag(e.changedTouches[0].clientX)}
-      onMouseDown={(e) => {
-        if (e.button !== 0) return;
-        beginDrag(e.clientX);
-      }}
-      className="fixed inset-0 z-[100] overflow-hidden select-none touch-pan-y bg-background text-on-background"
+      className="fixed inset-0 z-[100] overflow-hidden select-none"
       style={{
-        transform: `translateX(${swipeOffset}px)`,
-        transition: dragging ? "none" : "transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)",
-        opacity: 1 - swipeProgress * 0.6,
+        background: "#ffffff",
+        color: "#113a1e",
+        opacity: exiting ? 0 : 1,
+        transform: exiting ? "scale(1.04)" : "scale(1)",
+        transition: "opacity 700ms ease-in-out, transform 800ms cubic-bezier(0.22,1,0.36,1)",
       }}
     >
-      {/* Always-available Skip in the top corner */}
       <button
         type="button"
-        onClick={dismiss}
-        className="absolute top-4 right-4 z-10 px-4 h-9 rounded-full bg-on-surface/10 hover:bg-on-surface/20 text-on-surface text-xs font-bold backdrop-blur-md transition-colors"
+        onClick={triggerExit}
+        className="absolute top-4 right-4 z-20 px-4 h-9 rounded-full text-xs font-bold backdrop-blur-md transition-colors"
+        style={{ background: "rgba(17, 58, 30, 0.08)", color: "#113a1e" }}
       >
         Skip →
       </button>
 
-      {/* Breathing aura behind the wordmark */}
+      {/* Moving, brightening aura behind the wordmark */}
       <div
         aria-hidden
-        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        className="absolute inset-0 pointer-events-none"
+        style={{ filter: "blur(60px)" }}
       >
         <div
-          className="w-[460px] h-[460px] rounded-full opacity-30 animate-pulse"
+          className="absolute aura-orb"
           style={{
+            top: "50%",
+            left: "50%",
+            width: glowIntense ? "780px" : "460px",
+            height: glowIntense ? "780px" : "460px",
             background:
-              "radial-gradient(circle, var(--color-primary) 0%, transparent 65%)",
-            filter: "blur(40px)",
+              "radial-gradient(circle, var(--color-primary) 0%, transparent 70%)",
+            opacity: glowIntense ? 0.6 : 0.35,
+            transform: "translate(-50%, -50%)",
+            transition: "opacity 1.2s ease, width 1.2s ease, height 1.2s ease",
+          }}
+        />
+        <div
+          className="absolute aura-orb-secondary"
+          style={{
+            top: "30%",
+            left: "30%",
+            width: "320px",
+            height: "320px",
+            background:
+              "radial-gradient(circle, var(--color-tertiary-container) 0%, transparent 70%)",
+            opacity: glowIntense ? 0.45 : 0.18,
+            transition: "opacity 1.2s ease",
           }}
         />
       </div>
@@ -177,51 +145,101 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
         <h1
           id="boot-title"
           className={`text-7xl md:text-8xl font-bold tracking-tight transition-all duration-700 ${
-            wordmarkVisible ? "opacity-100 scale-100" : "opacity-0 scale-95 -translate-y-2"
+            wordmarkVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
           }`}
           style={{
             color: "var(--color-primary)",
-            textShadow: "0 0 60px var(--color-primary)",
+            textShadow: glowIntense
+              ? "0 0 90px var(--color-primary), 0 0 30px var(--color-primary)"
+              : "0 0 40px var(--color-primary)",
+            transition: "text-shadow 1s ease-in-out",
           }}
         >
           Sensory
         </h1>
 
         <p
-          className={`mt-6 text-lg md:text-xl text-on-surface-variant text-center max-w-md transition-all duration-700 ${
-            phase === "fadeout" || phase === "reveal" || phase === "swipe"
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-4"
+          className={`mt-8 text-xl md:text-3xl font-semibold tracking-tight transition-opacity duration-500 ${
+            showTagline ? "opacity-100" : "opacity-0"
           }`}
+          style={{ color: "#113a1e" }}
+          aria-live="polite"
         >
-          The map for how a place <em>feels</em>.
+          {typed}
+          <span
+            className="inline-block w-[2px] h-7 align-middle ml-1 caret"
+            style={{ background: "#113a1e" }}
+            aria-hidden
+          />
         </p>
-
-        <button
-          type="button"
-          onClick={dismiss}
-          className={`mt-12 inline-flex items-center gap-2 px-8 h-14 rounded-full bg-primary text-on-primary font-bold text-lg shadow-2xl shadow-primary/30 hover:bg-primary-dim active:scale-95 transition-all ${
-            showCta ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6 pointer-events-none"
-          }`}
-          style={{ transitionDuration: "600ms" }}
-        >
-          {needsOnboarding ? "Get started" : "Try Sensory"}
-          <Icon name="arrow_forward" size={22} />
-        </button>
-        {needsOnboarding && showCta && (
-          <p className="mt-3 text-xs text-on-surface-variant">
-            We&apos;ll set up your accessibility profile in a few steps.
-          </p>
-        )}
 
         <p
-          className={`absolute bottom-10 text-xs text-on-surface-variant transition-opacity duration-500 ${
-            showCta ? "opacity-60" : "opacity-0"
+          className={`mt-4 text-sm md:text-base max-w-md text-center transition-opacity duration-700 ${
+            phase === "brighten" || phase === "exit" ? "opacity-100" : "opacity-0"
           }`}
+          style={{ color: "#3f6847" }}
         >
-          Swipe right to enter
+          Sensory heatmaps · Haptic feedback · Voice-guided routes
         </p>
       </div>
+
+      <style jsx>{`
+        @keyframes drift {
+          0% {
+            transform: translate(-50%, -50%);
+          }
+          25% {
+            transform: translate(-46%, -54%);
+          }
+          50% {
+            transform: translate(-52%, -50%);
+          }
+          75% {
+            transform: translate(-50%, -46%);
+          }
+          100% {
+            transform: translate(-50%, -50%);
+          }
+        }
+        @keyframes drift-secondary {
+          0% {
+            transform: translate(0, 0);
+          }
+          33% {
+            transform: translate(80px, 60px);
+          }
+          66% {
+            transform: translate(-60px, 40px);
+          }
+          100% {
+            transform: translate(0, 0);
+          }
+        }
+        @keyframes blink {
+          0%, 50% {
+            opacity: 1;
+          }
+          51%, 100% {
+            opacity: 0;
+          }
+        }
+        .aura-orb {
+          animation: drift 6s ease-in-out infinite;
+        }
+        .aura-orb-secondary {
+          animation: drift-secondary 9s ease-in-out infinite;
+        }
+        .caret {
+          animation: blink 1s steps(2) infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .aura-orb,
+          .aura-orb-secondary,
+          .caret {
+            animation: none;
+          }
+        }
+      `}</style>
     </div>
   );
 }
