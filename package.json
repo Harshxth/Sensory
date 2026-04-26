@@ -11,6 +11,7 @@
     "seed:venues": "tsx scripts/seed-venues.ts",
     "seed:reviews": "tsx scripts/seed-reviews.ts",
     "seed:alerts": "tsx scripts/seed-alerts.ts",
+    "seed:usf": "tsx scripts/seed-usf-tampa.ts",
     "extract:sensory": "tsx scripts/extract-sensory.ts"
   },
   "dependencies": {
