@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BootSplash } from "@/components/BootSplash";
 import { EditorialNav } from "@/components/editorial/EditorialNav";
 import { HeroMap } from "@/components/editorial/HeroMap";
+import { SensoryForecast } from "@/components/editorial/SensoryForecast";
 import {
   Eyebrow,
   SerifHeadline,
@@ -89,6 +90,9 @@ export default function LandingPage() {
             ]}
           />
         </section>
+
+        {/* ============ SENSORY FORECAST ============ */}
+        <SensoryForecast />
 
         {/* ============ ESSAY: WHY ============ */}
         <PaperFrame paddingY={120}>
