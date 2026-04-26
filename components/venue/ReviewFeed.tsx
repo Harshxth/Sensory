@@ -1,30 +1,35 @@
 "use client";
 
-// F1.7 — scrollable list of reviews with formatDistanceToNow timestamps.
 import { useEffect, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import type { Review } from "@/types";
 
-export function ReviewFeed({ venueId }: { venueId: string }) {
+type Props = {
+  venueId: string;
+  /** Bump this number to force a refetch (e.g. after a new submission). */
+  refreshKey?: number;
+};
+
+export function ReviewFeed({ venueId, refreshKey = 0 }: Props) {
   const [reviews, setReviews] = useState<Review[]>([]);
 
   useEffect(() => {
-    fetch(`/api/venues/${venueId}/reviews`)
+    fetch(`/api/venues/${venueId}/reviews`, { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => setReviews(d.reviews ?? []))
       .catch(() => setReviews([]));
-  }, [venueId]);
+  }, [venueId, refreshKey]);
 
   if (reviews.length === 0) {
-    return <p className="text-xs text-muted-foreground">No reviews yet.</p>;
+    return <p className="text-xs text-on-surface-variant">No reviews yet.</p>;
   }
 
   return (
-    <ul className="my-3 space-y-2">
+    <ul className="my-2 space-y-2">
       {reviews.map((r) => (
-        <li key={r._id} className="rounded-lg bg-foreground/5 p-2 text-sm">
-          <p>{r.text}</p>
-          <p className="mt-1 text-xs text-muted-foreground">
+        <li key={r._id} className="rounded-lg bg-on-surface/5 p-2.5 text-sm">
+          <p className="text-on-surface leading-snug">{r.text}</p>
+          <p className="mt-1 text-[11px] text-on-surface-variant">
             {formatDistanceToNow(new Date(r.timestamp), { addSuffix: true })}
           </p>
         </li>
