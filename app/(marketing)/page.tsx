@@ -3,6 +3,7 @@ import { Icon } from "@/components/ui/Icon";
 import { MapView } from "@/components/map/MapView";
 import { SensoryLayer } from "@/components/map/SensoryLayer";
 import { BootSplash } from "@/components/BootSplash";
+import { WorkflowCardSwap } from "@/components/marketing/WorkflowCardSwap";
 
 const FEATURES = [
   {
@@ -212,6 +213,8 @@ export default function LandingPage() {
             </article>
           </div>
         </section>
+
+        <WorkflowCardSwap />
 
         <section id="how" className="w-full px-6 pb-16 md:pb-24 max-w-5xl mx-auto">
           <div className="bg-on-background text-background rounded-3xl p-8 md:p-12 relative overflow-hidden">

@@ -6,7 +6,7 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: "Sensory",
     description:
       "Accessibility map for autistic, sensory-sensitive, wheelchair, deaf, blind, and ESL communities.",
-    start_url: "/map",
+    start_url: "/",
     scope: "/",
     display: "standalone",
     orientation: "portrait",
