@@ -39,7 +39,34 @@ export function TopAppBar({
               <SensoryGlyph size={28} />
             </Link>
           )}
-          <h1 className="text-xl font-bold text-primary tracking-tight">{title}</h1>
+          <h1
+            className="text-on-surface"
+            style={{
+              fontFamily: '"Cormorant Garamond","Playfair Display",ui-serif,Georgia,serif',
+              fontWeight: 500,
+              fontSize: 22,
+              letterSpacing: "-0.02em",
+              lineHeight: 1,
+            }}
+          >
+            {title}
+          </h1>
+          <span
+            className="hidden md:inline"
+            style={{
+              fontFamily: '"IBM Plex Mono",ui-monospace,monospace',
+              fontSize: 9,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "#64748b",
+              borderLeft: "1px solid #cbd5e1",
+              paddingLeft: 12,
+              marginLeft: 4,
+              fontWeight: 500,
+            }}
+          >
+            Live Field Map
+          </span>
         </div>
         {trailingNode}
       </div>

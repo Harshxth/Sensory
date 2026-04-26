@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Public_Sans, Playfair_Display } from "next/font/google";
+import { Public_Sans, Playfair_Display, Cormorant_Garamond, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import { PreferencesProvider } from "@/components/PreferencesProvider";
@@ -13,8 +13,23 @@ const publicSans = Public_Sans({
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
-  weight: ["500", "600"],
-  style: ["italic"],
+  weight: ["500", "600", "700"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
+  weight: ["300", "400", "500", "600"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-plex-mono",
+  weight: ["400", "500"],
   subsets: ["latin"],
   display: "swap",
 });
@@ -45,7 +60,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${publicSans.variable} ${playfair.variable} h-full antialiased`}>
+    <html lang="en" className={`${publicSans.variable} ${playfair.variable} ${cormorant.variable} ${plexMono.variable} h-full antialiased`}>
       <head>
         <link
           rel="stylesheet"
