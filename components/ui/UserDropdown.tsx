@@ -152,12 +152,23 @@ export function UserDropdown({
                     : "Not set yet"}
                 </div>
               </div>
-              <Link
-                href="/onboarding"
-                className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full bg-on-surface/8 hover:bg-on-surface/12"
-              >
-                {voiceCloneId ? "Change" : "Add"}
-              </Link>
+              {voiceCloneId ? (
+                <button
+                  type="button"
+                  onClick={() => testCloneVoice(voiceCloneId)}
+                  className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full bg-primary text-on-primary hover:bg-primary-dim"
+                  title="Play a sample in your cloned voice"
+                >
+                  Test
+                </button>
+              ) : (
+                <Link
+                  href="/onboarding"
+                  className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full bg-on-surface/8 hover:bg-on-surface/12"
+                >
+                  Add
+                </Link>
+              )}
             </div>
           </div>
 
@@ -208,6 +219,42 @@ export function UserDropdown({
       </DropdownMenuPrimitive.Portal>
     </DropdownMenuPrimitive.Root>
   );
+}
+
+/* ── voice clone test ────────────────────────────────────────────── */
+
+/**
+ * Plays a quick "this is your comfort voice" sample through ElevenLabs
+ * so the user can verify the clone is wired up without starting navigation.
+ * Errors are logged to the console so you can see exactly what failed.
+ */
+async function testCloneVoice(voiceId: string) {
+  const sample =
+    "Hi, this is your comfort voice. I'll guide you through every step.";
+  try {
+    const res = await fetch("/api/voice/speak", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: sample, voice_id: voiceId, lang: "en" }),
+    });
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      console.error("[voice] /api/voice/speak failed", res.status, body);
+      alert(
+        `Voice test failed (${res.status}). Check the browser console for details.`,
+      );
+      return;
+    }
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    audio.preload = "auto";
+    audio.onended = () => URL.revokeObjectURL(url);
+    await audio.play();
+  } catch (e) {
+    console.error("[voice] test threw", e);
+    alert("Voice test threw — check the console.");
+  }
 }
 
 /* ── primitives ───────────────────────────────────────────────────── */
