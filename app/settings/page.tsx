@@ -11,6 +11,7 @@ import {
   TEXT_SIZE_LABELS,
   type Preferences,
 } from "@/lib/preferences";
+import { ShareJourneyButton } from "@/components/ShareJourneyButton";
 
 export default function SettingsPage() {
   const [prefs, setPrefs] = useState<Preferences>(loadPreferences);
@@ -128,6 +129,15 @@ export default function SettingsPage() {
               </div>
             </section>
           </div>
+
+          <section className="lg:col-span-12 bg-surface-container-lowest rounded-2xl shadow-sm border border-surface-container p-6 flex flex-col gap-4">
+            <SectionHeader icon="share_location" container="bg-primary-container text-on-primary-container" title="Group mode" />
+            <p className="text-sm text-on-surface-variant">
+              Share a read-only link so a caregiver, family member, or friend can see your live
+              position and accessibility profile. Stop anytime.
+            </p>
+            <ShareJourneyButton />
+          </section>
 
           <section className="lg:col-span-12 bg-surface-container-lowest rounded-2xl shadow-sm border border-surface-container p-6 flex flex-col gap-4">
             <SectionHeader icon="shield_lock" container="bg-secondary-container text-on-secondary-container" title="Privacy & Voice" />
