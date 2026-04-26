@@ -37,7 +37,7 @@ const INJECTED_STYLES = `
   }
 
   .text-silver-matte {
-      background: linear-gradient(180deg, #0f172a 0%, rgba(15,23,42,0.4) 100%);
+      background: linear-gradient(180deg, #0f172a 0%, rgba(15,23,42,0.45) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -45,6 +45,25 @@ const INJECTED_STYLES = `
       filter:
           drop-shadow(0px 10px 20px rgba(15,23,42,0.15))
           drop-shadow(0px 2px 4px rgba(15,23,42,0.10));
+  }
+
+  /* Dark mode — flip text to light so it reads against the deep grid bg */
+  @media (prefers-color-scheme: dark) {
+    .text-3d-matte {
+        color: #f1f5f9;
+        text-shadow:
+            0 10px 30px rgba(255,255,255,0.10),
+            0 2px 4px rgba(0,0,0,0.5);
+    }
+    .text-silver-matte {
+        background: linear-gradient(180deg, #f8fafc 0%, rgba(241,245,249,0.55) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        filter:
+            drop-shadow(0px 10px 20px rgba(255,255,255,0.10))
+            drop-shadow(0px 2px 4px rgba(0,0,0,0.5));
+    }
   }
 
   .text-card-silver-matte {
