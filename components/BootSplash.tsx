@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Icon } from "@/components/ui/Icon";
+import { loadPreferences } from "@/lib/preferences";
 
 type Phase = "in" | "hold" | "fadeout" | "reveal" | "swipe" | "gone";
 
@@ -21,9 +23,11 @@ const STORAGE_KEY = "sensory:boot-seen";
  * Only shows once per session (sessionStorage flag).
  */
 export function BootSplash({ onDone }: { onDone?: () => void }) {
+  const router = useRouter();
   const [phase, setPhase] = useState<Phase>("in");
   const [drag, setDrag] = useState(0);
   const [dragging, setDragging] = useState(false);
+  const [needsOnboarding, setNeedsOnboarding] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const startX = useRef(0);
   const startT = useRef(0);
@@ -34,6 +38,7 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
   // cleanup cancels the in-flight timers each time phase changes).
   useEffect(() => {
     if (typeof window === "undefined") return;
+    setNeedsOnboarding(!loadPreferences().onboardingComplete);
     if (sessionStorage.getItem(STORAGE_KEY)) {
       setPhase("gone");
       onDone?.();
@@ -107,7 +112,13 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
     };
   }, [dragging, moveDrag, endDrag]);
 
-  const dismiss = () => setPhase("swipe");
+  const dismiss = () => {
+    setPhase("swipe");
+    if (needsOnboarding) {
+      // Route to onboarding after the splash slides away
+      setTimeout(() => router.push("/onboarding"), 350);
+    }
+  };
 
   if (phase === "gone") return null;
 
@@ -194,9 +205,14 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
           }`}
           style={{ transitionDuration: "600ms" }}
         >
-          Try Sensory
+          {needsOnboarding ? "Get started" : "Try Sensory"}
           <Icon name="arrow_forward" size={22} />
         </button>
+        {needsOnboarding && showCta && (
+          <p className="mt-3 text-xs text-on-surface-variant">
+            We&apos;ll set up your accessibility profile in a few steps.
+          </p>
+        )}
 
         <p
           className={`absolute bottom-10 text-xs text-on-surface-variant transition-opacity duration-500 ${

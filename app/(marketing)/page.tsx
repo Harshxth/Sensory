@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 import { MapView } from "@/components/map/MapView";
 import { SensoryLayer } from "@/components/map/SensoryLayer";
+import { BootSplash } from "@/components/BootSplash";
 
 const FEATURES = [
   {
@@ -39,6 +40,7 @@ const STATS = [
 export default function LandingPage() {
   return (
     <>
+      <BootSplash />
       <header className="sticky top-0 z-50 w-full bg-background/85 backdrop-blur-xl border-b border-outline/15">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4">
           <Link href="/" className="flex items-center gap-2 text-primary group">
@@ -71,7 +73,7 @@ export default function LandingPage() {
         <section className="w-full px-6 pt-12 md:pt-20 pb-12 md:pb-16 max-w-7xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-container text-on-primary-container text-sm font-bold mb-6">
             <Icon name="auto_awesome" filled size={16} />
-            Hackabull VII · Tech For Good
+            Accessibility-first navigation
           </div>
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-on-background tracking-tight max-w-5xl mx-auto leading-[1.05] mb-6">
             The world feels different to everyone.
@@ -246,7 +248,7 @@ export default function LandingPage() {
               <span className="text-xl font-bold">Sensory</span>
             </div>
             <p className="text-sm leading-relaxed text-on-surface-variant max-w-xs">
-              Built for inclusion at Hackabull VII. © 2026 Sensory Accessibility.
+              Built for inclusion. © 2026 Sensory Accessibility.
             </p>
           </div>
           <FooterColumn
@@ -265,11 +267,12 @@ export default function LandingPage() {
             ]}
           />
           <FooterColumn
-            title="Sponsors"
+            title="Powered by"
             items={[
               { label: "MongoDB Atlas", href: "https://mongodb.com" },
               { label: "Gemini", href: "https://ai.google.dev" },
               { label: "ElevenLabs", href: "https://elevenlabs.io" },
+              { label: "Google Maps", href: "https://maps.google.com" },
             ]}
           />
         </div>
