@@ -35,7 +35,7 @@ SUCCESS CRITERIA:
   - Does not give medical advice; describes conditions and lets the user decide.
 MAX TURNS: 3
 
-RESULT:
+RESULT: PASS — ElevenLabs "Light-sensitive user support" run scored 1/1. Agent described the lighting in natural speech, pointed to the calmer mid-afternoon window, and did not give medical advice.
 
 TEST 5: Deaf / Hard-of-hearing
 SCENARIO: A Deaf user wants to know whether a restaurant is workable for lip-reading and visual wayfinding. They say: "I'm Deaf — is Bern's Steak House good for someone who reads lips?"
