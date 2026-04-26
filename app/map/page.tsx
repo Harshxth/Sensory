@@ -24,6 +24,7 @@ import { SignReader } from "@/components/camera/SignReader";
 import { HapticWatcher } from "@/components/HapticWatcher";
 import { adjustVenuesForTime, isLive, nowKey, type TimeKey } from "@/lib/time-aware";
 import { fetchAlerts } from "@/lib/map-data";
+import { saveEntry as saveJournalEntry } from "@/lib/journal";
 import type { Alert, Venue } from "@/types";
 import type { GooglePlaceDetails } from "@/lib/google-places";
 
@@ -41,6 +42,7 @@ export default function MapPage() {
     route: Route;
     flags: RouteFlag[];
     destinationName: string;
+    startedAt: number;
   } | null>(null);
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [bannerDismissed, setBannerDismissed] = useState(false);
@@ -159,6 +161,7 @@ export default function MapPage() {
                   route,
                   flags,
                   destinationName: destination?.name ?? "destination",
+                  startedAt: Date.now(),
                 });
               }}
             />
@@ -176,6 +179,25 @@ export default function MapPage() {
               totalDistanceMeters={navigation.route.distanceMeters}
               flags={navigation.flags}
               onEnd={() => {
+                if (navigation) {
+                  saveJournalEntry({
+                    startedAt: navigation.startedAt,
+                    endedAt: Date.now(),
+                    fromName: "Your location",
+                    toName: navigation.destinationName,
+                    routeKind: "calm",
+                    distanceMeters: navigation.route.distanceMeters,
+                    durationSec: navigation.route.durationSec,
+                    encountered: navigation.flags.map((f) => ({
+                      kind: (f.kind === "alert"
+                        ? "alert"
+                        : f.kind === "noise" || f.kind === "light" || f.kind === "crowd" || f.kind === "smell"
+                          ? f.kind
+                          : "noise") as "noise" | "light" | "crowd" | "smell" | "alert",
+                      label: f.label,
+                    })),
+                  });
+                }
                 setNavigation(null);
                 setDestination(null);
               }}

@@ -97,6 +97,9 @@ export function EditorialNav() {
           <Link href="#voices" style={{ color: "#475569", textDecoration: "none" }}>
             Voices
           </Link>
+          <Link href="/journal" style={{ color: "#475569", textDecoration: "none" }}>
+            Journal
+          </Link>
           <Link href="/map" style={{ color: "#475569", textDecoration: "none" }}>
             Open map
           </Link>
