@@ -75,4 +75,4 @@ SUCCESS CRITERIA:
   - Does not invent scores, hours, or accessibility claims; does not loop back to the same limitation later.
 MAX TURNS: 2
 
-RESULT:
+RESULT: PASS — Graceful-fallback behavior verified against the unknown-venue prompt: single-sentence acknowledgement that exact data isn't available, followed by exactly one useful next step (similar known venue). No clarifying-question loop, no fabricated scores.
