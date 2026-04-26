@@ -21,6 +21,7 @@ import { PlaceInfoCard } from "@/components/google/PlaceInfoCard";
 import { SensoryDetailPanel } from "@/components/google/SensoryDetailPanel";
 import { TimeSlider } from "@/components/google/TimeSlider";
 import { UserLocationLayer } from "@/components/google/UserLocationLayer";
+import { PlaceSearchBox } from "@/components/google/PlaceSearchBox";
 import { SignReader } from "@/components/camera/SignReader";
 import { HapticWatcher } from "@/components/HapticWatcher";
 import { adjustVenuesForTime, isLive, nowKey, type TimeKey } from "@/lib/time-aware";
@@ -253,8 +254,18 @@ export default function MapPage() {
         />
         <HapticWatcher venues={displayedVenues} />
 
+        {/* Search box — only when neither nav nor a place card is active so it
+            doesn't double-up with the directions panel. */}
+        {!navigation && !destination && !selected && !googlePlace && (
+          <PlaceSearchBox
+            onSelect={(p) =>
+              setDestination({ lat: p.lat, lng: p.lng, name: p.name })
+            }
+          />
+        )}
+
         {/* Live alert banner */}
-        {!navigation && activeAlert && !bannerDismissed && layers.alerts && !destination && (
+        {!navigation && activeAlert && !bannerDismissed && layers.alerts && !destination && !selected && !googlePlace && (
           <div className="absolute top-20 md:top-24 left-1/2 -translate-x-1/2 w-[92%] max-w-md z-30">
             <div className="bg-surface-container-lowest/95 backdrop-blur-xl text-on-surface rounded-2xl p-4 shadow-2xl border border-orange-500/30 flex items-start gap-3">
               <div className="w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center flex-shrink-0">

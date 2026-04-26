@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
+import { Typewriter } from "@/components/ui/Typewriter";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -207,61 +208,81 @@ export function CinematicHero({
     };
   }, []);
 
+  // Auto-loop timeline (no scroll). Plays end-to-end on its own and repeats
+  // forever — perfect for a screensaver running on a second device.
   useEffect(() => {
     const isMobile = window.innerWidth < 768;
     const ctx = gsap.context(() => {
-      gsap.set(".text-track", { autoAlpha: 0, y: 60, scale: 0.85, filter: "blur(20px)", rotationX: -20 });
-      gsap.set(".text-days", { autoAlpha: 1, clipPath: "inset(0 100% 0 0)" });
-      gsap.set(".main-card", { y: window.innerHeight + 200, autoAlpha: 1 });
-      gsap.set([".card-left-text", ".card-right-text", ".mockup-scroll-wrapper", ".floating-badge", ".phone-widget"], { autoAlpha: 0 });
-      gsap.set(".cta-wrapper", { autoAlpha: 0, scale: 0.8, filter: "blur(30px)" });
+      const setInitial = () => {
+        gsap.set(".text-track", { autoAlpha: 0, y: 60, scale: 0.85, filter: "blur(20px)", rotationX: -20 });
+        gsap.set(".text-days", { autoAlpha: 1, clipPath: "inset(0 100% 0 0)" });
+        gsap.set(".main-card", {
+          y: window.innerHeight + 200,
+          autoAlpha: 1,
+          width: isMobile ? "92vw" : "85vw",
+          height: isMobile ? "92vh" : "85vh",
+          borderRadius: isMobile ? 32 : 40,
+        });
+        gsap.set([".card-left-text", ".card-right-text", ".mockup-scroll-wrapper", ".floating-badge", ".phone-widget"], { autoAlpha: 0 });
+        gsap.set(".cta-wrapper", { autoAlpha: 0, scale: 0.8, filter: "blur(30px)" });
+        gsap.set(".hero-text-wrapper", { autoAlpha: 1, scale: 1, filter: "blur(0px)" });
+        gsap.set(".counter-val", { innerHTML: 0 });
+        gsap.set(".progress-ring", { strokeDashoffset: 402 });
+      };
 
-      const introTl = gsap.timeline({ delay: 0.3 });
-      introTl
-        .to(".text-track", { duration: 1.8, autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)", rotationX: 0, ease: "expo.out" })
-        .to(".text-days", { duration: 1.4, clipPath: "inset(0 0% 0 0)", ease: "power4.inOut" }, "-=1.0");
+      setInitial();
 
-      const scrollTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top top",
-          end: "+=7000",
-          pin: true,
-          scrub: 1,
-          anticipatePin: 1,
-        },
+      const tl = gsap.timeline({
+        repeat: -1,
+        repeatDelay: 1.5,
+        onRepeat: setInitial,
       });
 
-      scrollTl
-        .to([".hero-text-wrapper", ".bg-grid-theme"], { scale: 1.15, filter: "blur(20px)", opacity: 0.2, ease: "power2.inOut", duration: 2 }, 0)
-        .to(".main-card", { y: 0, ease: "power3.inOut", duration: 2 }, 0)
-        .to(".main-card", { width: "100%", height: "100%", borderRadius: "0px", ease: "power3.inOut", duration: 1.5 })
+      tl
+        // Phase 1 — hero text reveal
+        .to(".text-track", { duration: 1.6, autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)", rotationX: 0, ease: "expo.out" })
+        .to(".text-days", { duration: 1.2, clipPath: "inset(0 0% 0 0)", ease: "power4.inOut" }, "-=0.9")
+        // Hold the hero
+        .to({}, { duration: 1.4 })
+        // Phase 2 — push hero out, bring up the deep card
+        .to([".hero-text-wrapper", ".bg-grid-theme"], { scale: 1.15, filter: "blur(20px)", opacity: 0.2, ease: "power2.inOut", duration: 1.2 })
+        .to(".main-card", { y: 0, ease: "power3.inOut", duration: 1.4 }, "<")
+        .to(".main-card", { width: "100%", height: "100%", borderRadius: 0, ease: "power3.inOut", duration: 1.2 })
+        // Phase 3 — phone + widgets + badges
         .fromTo(".mockup-scroll-wrapper",
           { y: 300, z: -500, rotationX: 50, rotationY: -30, autoAlpha: 0, scale: 0.6 },
-          { y: 0, z: 0, rotationX: 0, rotationY: 0, autoAlpha: 1, scale: 1, ease: "expo.out", duration: 2.5 }, "-=0.8"
+          { y: 0, z: 0, rotationX: 0, rotationY: 0, autoAlpha: 1, scale: 1, ease: "expo.out", duration: 1.8 }, "-=0.6"
         )
-        .fromTo(".phone-widget", { y: 40, autoAlpha: 0, scale: 0.95 }, { y: 0, autoAlpha: 1, scale: 1, stagger: 0.15, ease: "back.out(1.2)", duration: 1.5 }, "-=1.5")
-        .to(".progress-ring", { strokeDashoffset: 60, duration: 2, ease: "power3.inOut" }, "-=1.2")
-        .to(".counter-val", { innerHTML: metricValue, snap: { innerHTML: 1 }, duration: 2, ease: "expo.out" }, "-=2.0")
-        .fromTo(".floating-badge", { y: 100, autoAlpha: 0, scale: 0.7, rotationZ: -10 }, { y: 0, autoAlpha: 1, scale: 1, rotationZ: 0, ease: "back.out(1.5)", duration: 1.5, stagger: 0.2 }, "-=2.0")
-        .fromTo(".card-left-text", { x: -50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, ease: "power4.out", duration: 1.5 }, "-=1.5")
-        .fromTo(".card-right-text", { x: 50, autoAlpha: 0, scale: 0.8 }, { x: 0, autoAlpha: 1, scale: 1, ease: "expo.out", duration: 1.5 }, "<")
-        .to({}, { duration: 2.5 })
+        .fromTo(".phone-widget", { y: 40, autoAlpha: 0, scale: 0.95 }, { y: 0, autoAlpha: 1, scale: 1, stagger: 0.12, ease: "back.out(1.2)", duration: 1.2 }, "-=1.2")
+        .to(".progress-ring", { strokeDashoffset: 60, duration: 1.5, ease: "power3.inOut" }, "-=1.0")
+        .to(".counter-val", { innerHTML: metricValue, snap: { innerHTML: 1 }, duration: 1.6, ease: "expo.out" }, "-=1.5")
+        .fromTo(".floating-badge", { y: 100, autoAlpha: 0, scale: 0.7, rotationZ: -10 }, { y: 0, autoAlpha: 1, scale: 1, rotationZ: 0, ease: "back.out(1.5)", duration: 1.2, stagger: 0.18 }, "-=1.5")
+        .fromTo(".card-left-text", { x: -50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, ease: "power4.out", duration: 1.2 }, "-=1.2")
+        .fromTo(".card-right-text", { x: 50, autoAlpha: 0, scale: 0.8 }, { x: 0, autoAlpha: 1, scale: 1, ease: "expo.out", duration: 1.2 }, "<")
+        // Hold on the full mockup
+        .to({}, { duration: 4 })
+        // Phase 4 — pull back, fade contents, show CTA
         .set(".hero-text-wrapper", { autoAlpha: 0 })
-        .set(".cta-wrapper", { autoAlpha: 1 })
-        .to({}, { duration: 1.5 })
         .to([".mockup-scroll-wrapper", ".floating-badge", ".card-left-text", ".card-right-text"], {
-          scale: 0.9, y: -40, z: -200, autoAlpha: 0, ease: "power3.in", duration: 1.2, stagger: 0.05,
+          scale: 0.9, y: -40, z: -200, autoAlpha: 0, ease: "power3.in", duration: 1, stagger: 0.04,
         })
         .to(".main-card", {
           width: isMobile ? "92vw" : "85vw",
           height: isMobile ? "92vh" : "85vh",
-          borderRadius: isMobile ? "32px" : "40px",
+          borderRadius: isMobile ? 32 : 40,
           ease: "expo.inOut",
-          duration: 1.8,
+          duration: 1.4,
         }, "pullback")
-        .to(".cta-wrapper", { scale: 1, filter: "blur(0px)", ease: "expo.inOut", duration: 1.8 }, "pullback")
-        .to(".main-card", { y: -window.innerHeight - 300, ease: "power3.in", duration: 1.5 });
+        .to(".cta-wrapper", { autoAlpha: 1, scale: 1, filter: "blur(0px)", ease: "expo.inOut", duration: 1.4 }, "pullback")
+        // Hold on CTA
+        .to({}, { duration: 3 })
+        // Phase 5 — exit (slide everything out before the loop resets)
+        .to(".cta-wrapper", { autoAlpha: 0, scale: 0.92, filter: "blur(20px)", duration: 0.8, ease: "power3.in" })
+        .to(".main-card", { y: -window.innerHeight - 300, ease: "power3.in", duration: 1.0 }, "<");
+
+      return () => {
+        tl.kill();
+      };
     }, containerRef);
     return () => ctx.revert();
   }, [metricValue]);
@@ -286,14 +307,14 @@ export function CinematicHero({
           {tagline1}
         </h1>
         <h1 className="text-days gsap-reveal text-silver-matte text-5xl md:text-7xl lg:text-[6rem] font-extrabold tracking-tighter">
-          {tagline2}
+          <Typewriter text={tagline2} speed={70} startDelay={400} loop holdMs={2400} />
         </h1>
       </div>
 
       {/* CTA */}
       <div className="cta-wrapper absolute z-10 flex flex-col items-center justify-center text-center w-screen px-4 gsap-reveal pointer-events-auto will-change-transform">
         <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight text-silver-matte">
-          {ctaHeading}
+          <Typewriter text={ctaHeading} speed={55} loop holdMs={2200} />
         </h2>
         <p className="text-slate-600 text-lg md:text-xl mb-12 max-w-xl mx-auto font-light leading-relaxed">
           {ctaDescription}
