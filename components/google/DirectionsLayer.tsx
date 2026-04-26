@@ -93,7 +93,7 @@ export function DirectionsLayer({
     setError(null);
     setActiveRouteIdx(0);
     const prefs = loadPreferences();
-    fetchRoutes(origin, destination, mode, prefs.needs)
+    fetchRoutes(origin, destination, mode, prefs.needs, prefs.language)
       .then((routes) => {
         if (routes.length === 0) throw new Error("No routes found");
         const scored = scoreRoutes(
@@ -296,9 +296,17 @@ async function fetchRoutes(
   destination: { lat: number; lng: number },
   mode: Mode,
   needs: string[] = [],
+  language: "en" | "es" | "zh" = "en",
 ): Promise<Route[]> {
   const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
   if (!key) throw new Error("Maps API key missing");
+
+  // Google Routes API honors a BCP-47 languageCode and returns the entire
+  // step instructions translated. So Spanish users get "Gira a la izquierda
+  // en 50 metros" instead of "Turn left in 50 meters" — which is then sent
+  // straight to ElevenLabs multilingual TTS.
+  const languageCode =
+    language === "es" ? "es" : language === "zh" ? "zh-CN" : "en-US";
 
   const body: Record<string, unknown> = {
     origin: { location: { latLng: { latitude: origin.lat, longitude: origin.lng } } },
@@ -307,6 +315,7 @@ async function fetchRoutes(
     },
     travelMode: mode,
     computeAlternativeRoutes: true,
+    languageCode,
   };
 
   // For wheelchair users on transit, prefer accessible routes (Routes API

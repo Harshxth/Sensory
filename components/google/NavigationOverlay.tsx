@@ -416,6 +416,49 @@ function formatDistance(meters: number): string {
 
 // Tailor the warning phrase to the user's saved accessibility needs.
 function warningPhrase(f: RouteFlag, needs: AccessibilityNeed[]): string | null {
+  // Pull the user's spoken language from preferences so warnings spoken
+  // through ElevenLabs match their chosen language.
+  let lang: "en" | "es" | "zh" = "en";
+  if (typeof window !== "undefined") {
+    try {
+      const raw = window.localStorage.getItem("sensory:prefs");
+      if (raw) {
+        const p = JSON.parse(raw) as { language?: "en" | "es" | "zh" };
+        if (p.language) lang = p.language;
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+
+  if (lang === "es") {
+    switch (f.kind) {
+      case "noise":
+        if (needs.includes("noise") || needs.includes("blind") || needs.includes("deaf")) {
+          return `Zona ruidosa adelante — ${f.label}.`;
+        }
+        return `Zona ruidosa — ${f.label}.`;
+      case "crowd":
+        if (needs.includes("wheelchair")) {
+          return `Mucha gente adelante — espacio estrecho, ${f.label}.`;
+        }
+        if (needs.includes("noise") || needs.includes("blind")) {
+          return `Mucha gente adelante — habrá más ruido, ${f.label}.`;
+        }
+        return `Mucha gente adelante — ${f.label}.`;
+      case "light":
+        if (needs.includes("light") || needs.includes("blind")) {
+          return `Iluminación intensa adelante en ${f.label}.`;
+        }
+        return null;
+      case "alert":
+        return `Alerta cercana — ${f.label}.`;
+      default:
+        return null;
+    }
+  }
+
+  // Default English
   switch (f.kind) {
     case "noise":
       if (needs.includes("noise") || needs.includes("blind") || needs.includes("deaf")) {
