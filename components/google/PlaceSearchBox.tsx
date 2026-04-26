@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useMapsLibrary } from "@vis.gl/react-google-maps";
+import { useMap, useMapsLibrary } from "@vis.gl/react-google-maps";
 import { Icon } from "@/components/ui/Icon";
 
 type Props = {
@@ -18,6 +18,7 @@ type Props = {
  */
 export function PlaceSearchBox({ onSelect, bias }: Props) {
   const places = useMapsLibrary("places");
+  const map = useMap();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
   const [focused, setFocused] = useState(false);
@@ -42,13 +43,26 @@ export function PlaceSearchBox({ onSelect, bias }: Props) {
       const place = ac.getPlace();
       const loc = place.geometry?.location;
       if (!loc) return;
+      const lat = loc.lat();
+      const lng = loc.lng();
+
+      // Pan + zoom the live map so the user actually sees they navigated.
+      // Slightly higher zoom than the default so the destination dominates.
+      if (map) {
+        map.panTo({ lat, lng });
+        const targetZoom = Math.max(map.getZoom() ?? 14, 16);
+        map.setZoom(targetZoom);
+      }
+
       onSelect({
-        lat: loc.lat(),
-        lng: loc.lng(),
+        lat,
+        lng,
         name: place.name ?? place.formatted_address ?? "Destination",
       });
-      // Clear the input after selection so the user can search again
+
+      // Clear + blur the input so it doesn't keep predictions open.
       if (inputRef.current) {
+        inputRef.current.value = "";
         inputRef.current.blur();
       }
     });
@@ -56,7 +70,7 @@ export function PlaceSearchBox({ onSelect, bias }: Props) {
       listener.remove();
       autocompleteRef.current = null;
     };
-  }, [places, bias, onSelect]);
+  }, [places, bias, onSelect, map]);
 
   return (
     <div className="absolute top-20 md:top-24 left-1/2 -translate-x-1/2 w-[92%] max-w-md z-30">

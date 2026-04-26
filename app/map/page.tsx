@@ -163,6 +163,15 @@ export default function MapPage() {
               positioning fills the viewport instead of being trapped inside
               the map's tile container. It still has access to useMap()
               because it's inside the same <GoogleMapsProvider>. */}
+          {/* Search box — sits inside the provider so its `useMap()` works.
+              Hidden during nav or whenever a card / panel is already active. */}
+          {!navigation && !destination && !selected && !googlePlace && (
+            <PlaceSearchBox
+              onSelect={(p) =>
+                setDestination({ lat: p.lat, lng: p.lng, name: p.name })
+              }
+            />
+          )}
           {navigation && (
             <NavigationOverlay
               destinationName={navigation.destinationName}
@@ -253,16 +262,6 @@ export default function MapPage() {
           }
         />
         <HapticWatcher venues={displayedVenues} />
-
-        {/* Search box — only when neither nav nor a place card is active so it
-            doesn't double-up with the directions panel. */}
-        {!navigation && !destination && !selected && !googlePlace && (
-          <PlaceSearchBox
-            onSelect={(p) =>
-              setDestination({ lat: p.lat, lng: p.lng, name: p.name })
-            }
-          />
-        )}
 
         {/* Live alert banner */}
         {!navigation && activeAlert && !bannerDismissed && layers.alerts && !destination && !selected && !googlePlace && (

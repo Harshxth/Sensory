@@ -277,7 +277,12 @@ export function CinematicHero({
     let raf = 0;
     let direction = 1;
     let lastUserScroll = 0;
-    const speed = 1.4; // px per frame ≈ 84px/s
+    const startedAt = performance.now();
+    // Two-stage speed: gentle for the first ~3s so the intro reveal reads
+    // calmly, then ~3× faster for the rest so the cinematic doesn't drag.
+    const introMs = 3000;
+    const slowSpeed = 1.4; // px / frame  ≈ 84 px/s
+    const fastSpeed = 4.5; // px / frame  ≈ 270 px/s
     const onUserScroll = () => {
       lastUserScroll = performance.now();
     };
@@ -287,6 +292,7 @@ export function CinematicHero({
       if (!userActive) {
         const max =
           (document.documentElement.scrollHeight || 0) - window.innerHeight;
+        const speed = now - startedAt < introMs ? slowSpeed : fastSpeed;
         const next = window.scrollY + direction * speed;
         if (next >= max) {
           direction = -1;
