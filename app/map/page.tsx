@@ -9,6 +9,7 @@ import { NoiseHeatmap } from "@/components/google/NoiseHeatmap";
 import { CrowdHeatmap } from "@/components/google/CrowdHeatmap";
 import { LightHeatmap } from "@/components/google/LightHeatmap";
 import { HeatmapLegend } from "@/components/google/HeatmapLegend";
+import { StreetlightHeatmap } from "@/components/google/StreetlightHeatmap";
 import { VenueMarkers } from "@/components/google/VenueMarkers";
 import { AlertMarkers } from "@/components/google/AlertMarkers";
 import { WheelchairMarkers } from "@/components/google/WheelchairMarkers";
@@ -25,7 +26,7 @@ import { fetchAlerts } from "@/lib/map-data";
 import type { Alert, Venue } from "@/types";
 import type { GooglePlaceDetails } from "@/lib/google-places";
 
-type ToggleKey = "noise" | "crowd" | "light" | "wheelchair" | "alerts";
+type ToggleKey = "noise" | "crowd" | "light" | "wheelchair" | "alerts" | "streetlights";
 
 export default function MapPage() {
   const [selected, setSelected] = useState<Venue | null>(null);
@@ -48,6 +49,7 @@ export default function MapPage() {
     light: true,
     wheelchair: false,
     alerts: true,
+    streetlights: false,
   });
   const [venues, setVenues] = useState<Venue[]>([]);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -144,6 +146,7 @@ export default function MapPage() {
             <LightHeatmap venues={displayedVenues} visible={layers.light} />
             <AlertMarkers visible={layers.alerts} />
             <WheelchairMarkers visible={layers.wheelchair} />
+            <StreetlightHeatmap visible={layers.streetlights} />
             <DirectionsLayer
               destination={destination}
               venues={venues}
@@ -215,6 +218,13 @@ export default function MapPage() {
             active={layers.alerts}
             onToggle={() => toggle("alerts")}
             accent="#ef4444"
+          />
+          <ToggleChip
+            icon="lightbulb_circle"
+            label="Lamps"
+            active={layers.streetlights}
+            onToggle={() => toggle("streetlights")}
+            accent="#facc15"
           />
           <ToggleChip
             icon="schedule"
