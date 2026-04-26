@@ -29,25 +29,24 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
   const startT = useRef(0);
   const widthRef = useRef(0);
 
-  // Skip if user has already seen the splash this session
+  // Skip if user has already seen the splash this session, otherwise advance
+  // through phases on a single mount (deps must NOT include phase or the
+  // cleanup cancels the in-flight timers each time phase changes).
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (sessionStorage.getItem(STORAGE_KEY)) {
       setPhase("gone");
       onDone?.();
+      return;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (phase === "gone") return;
     const t1 = window.setTimeout(() => setPhase("hold"), 700);
     const t2 = window.setTimeout(() => setPhase("fadeout"), 1500);
     const t3 = window.setTimeout(() => setPhase("reveal"), 2100);
     return () => {
       [t1, t2, t3].forEach(window.clearTimeout);
     };
-  }, [phase]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (phase !== "swipe") return;
@@ -139,6 +138,15 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
         opacity: 1 - swipeProgress * 0.6,
       }}
     >
+      {/* Always-available Skip in the top corner */}
+      <button
+        type="button"
+        onClick={dismiss}
+        className="absolute top-4 right-4 z-10 px-4 h-9 rounded-full bg-on-surface/10 hover:bg-on-surface/20 text-on-surface text-xs font-bold backdrop-blur-md transition-colors"
+      >
+        Skip →
+      </button>
+
       {/* Breathing aura behind the wordmark */}
       <div
         aria-hidden
