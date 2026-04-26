@@ -25,10 +25,10 @@ const CARDS: Card[] = [
     title: "Mobility safe",
     caption:
       "Step-free routes, ramp locations, and verified accessible entrances — updated in real time.",
-    // Wheelchair ramp / curb cut
+    // Warm sunlit walkway with no steps — feel of an accessible path
     image:
-      "https://images.unsplash.com/photo-1593114057402-a23a59cb1929?q=80&w=1200&auto=format&fit=crop",
-    tint: "rgba(15,28,17,0.85)",
+      "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1400&auto=format&fit=crop",
+    tint: "rgba(35,21,5,0.78)",
     accent: "#22c55e",
     icon: "♿",
   },
@@ -37,10 +37,10 @@ const CARDS: Card[] = [
     title: "Vision support",
     caption:
       "High-contrast modes, audible turn-by-turn, and a camera that reads any sign aloud in your language.",
-    // Tactile paving / textured ground
+    // Warm reading nook / soft window light — vision-as-comfort
     image:
-      "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1200&auto=format&fit=crop",
-    tint: "rgba(35,21,5,0.85)",
+      "https://images.unsplash.com/photo-1490818387583-1baba5e638af?q=80&w=1400&auto=format&fit=crop",
+    tint: "rgba(28,14,4,0.78)",
     accent: "#fb923c",
     icon: "👁",
   },
@@ -49,10 +49,10 @@ const CARDS: Card[] = [
     title: "Hearing friendly",
     caption:
       "Visual alerts, vibration cues, and environments tagged for sign-language visibility.",
-    // Hands signing / quiet conversation
+    // Warm intimate conversation — hands + faces in soft light
     image:
-      "https://images.unsplash.com/photo-1521120098171-be0a31bb4001?q=80&w=1200&auto=format&fit=crop",
-    tint: "rgba(15,23,42,0.85)",
+      "https://images.unsplash.com/photo-1454944338482-a69bb95894af?q=80&w=1400&auto=format&fit=crop",
+    tint: "rgba(28,14,4,0.78)",
     accent: "#22d3ee",
     icon: "🦻",
   },
@@ -61,10 +61,10 @@ const CARDS: Card[] = [
     title: "Sensory calm routing",
     caption:
       "Navigate away from loud construction, heavy traffic, and crowded areas — to the quietest path that fits your body.",
-    // Calm path / quiet street
+    // Soft empty bench / golden-hour path — the literal calm
     image:
-      "https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80&w=1200&auto=format&fit=crop",
-    tint: "rgba(15,28,17,0.85)",
+      "https://images.unsplash.com/photo-1437428948595-93b67d4c34a3?q=80&w=1400&auto=format&fit=crop",
+    tint: "rgba(28,42,18,0.80)",
     accent: "#225f1c",
     icon: "🔇",
   },
@@ -73,10 +73,10 @@ const CARDS: Card[] = [
     title: "Dyslexia optimized",
     caption:
       "OpenDyslexic option, icon-first navigation, and plain-language summaries on every venue.",
-    // Open book / reading
+    // Warm coffee + open book — reading as comfort
     image:
-      "https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=1200&auto=format&fit=crop",
-    tint: "rgba(35,21,5,0.82)",
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1400&auto=format&fit=crop",
+    tint: "rgba(35,21,5,0.78)",
     accent: "#f59e0b",
     icon: "📖",
   },
@@ -85,10 +85,10 @@ const CARDS: Card[] = [
     title: "ESL ready",
     caption:
       "Map UI and live navigation in English, Spanish, and Mandarin. Sign reader translates as it speaks.",
-    // International / language
+    // Warm group of friends sharing a meal — multilingual community
     image:
-      "https://images.unsplash.com/photo-1526129318478-62ed807ebdf9?q=80&w=1200&auto=format&fit=crop",
-    tint: "rgba(15,23,42,0.85)",
+      "https://images.unsplash.com/photo-1444459094717-a39f1e3e0903?q=80&w=1400&auto=format&fit=crop",
+    tint: "rgba(28,14,4,0.78)",
     accent: "#a855f7",
     icon: "🌐",
   },

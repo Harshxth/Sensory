@@ -21,41 +21,41 @@ const CARDS: Card[] = [
     vol: "Vol. 01",
     title: "Sense",
     caption: "Live noise, light, crowd, smell, and exit data — layered over the streets you already know.",
-    // Topographic map-paper texture
+    // Warm books + coffee on a soft window-lit table — a quiet morning read
     image:
-      "https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1200&auto=format&fit=crop",
-    tint: "rgba(15,23,42,0.85)",
+      "https://images.unsplash.com/photo-1481277542470-605612bd2d61?q=80&w=1400&auto=format&fit=crop",
+    tint: "rgba(35,21,5,0.78)",
     accent: "#f97316",
   },
   {
     vol: "Vol. 02",
     title: "Plan",
     caption: "Profile-aware routing picks the calmest, step-free, well-lit path your body can handle.",
-    // Quiet forest path / softly lit walkway
+    // Soft golden-hour countryside road — calm planning vibe
     image:
-      "https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80&w=1200&auto=format&fit=crop",
-    tint: "rgba(15,28,17,0.82)",
-    accent: "#22c55e",
+      "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1400&auto=format&fit=crop",
+    tint: "rgba(35,21,5,0.78)",
+    accent: "#225f1c",
   },
   {
     vol: "Vol. 03",
     title: "Walk",
     caption: "Turn-by-turn with haptic warnings before high-sensory zones and voice cues in your language.",
-    // Solo walker on quiet street
+    // Warm cobbled street at golden hour — intimate "walking in your city" feel
     image:
-      "https://images.unsplash.com/photo-1494522855154-9297ac14b55f?q=80&w=1200&auto=format&fit=crop",
-    tint: "rgba(35,21,5,0.85)",
+      "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=1400&auto=format&fit=crop",
+    tint: "rgba(28,14,4,0.78)",
     accent: "#fb923c",
   },
   {
     vol: "Vol. 04",
     title: "Share",
     caption: "Caregiver mode lets a trusted person follow your live journey and check in with one tap.",
-    // Phone in hand showing navigation
+    // Two pairs of hands meeting over a warm wooden table — the sharing motif
     image:
-      "https://images.unsplash.com/photo-1551295022-de5522c94e08?q=80&w=1200&auto=format&fit=crop",
-    tint: "rgba(15,23,42,0.85)",
-    accent: "#22d3ee",
+      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1400&auto=format&fit=crop",
+    tint: "rgba(28,14,4,0.78)",
+    accent: "#d97706",
   },
 ];
 
