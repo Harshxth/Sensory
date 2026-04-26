@@ -221,14 +221,44 @@ html.a11y-reduced-motion *::after {
 }
 
 body {
-  background: #ffffff;
+  background: var(--grid-bg, #ffffff);
   color: var(--color-on-background);
   font-family: var(--font-sans);
   min-height: 100dvh;
 }
 
 html {
-  background: #ffffff;
+  background: var(--grid-bg, #ffffff);
+}
+
+/* ============================================================
+   Animated grid background tokens (used by <GridBackground />).
+   Light + dark, with a soft radial vignette painted over the
+   drifting grid so content stays readable.
+   ============================================================ */
+:root {
+  --grid-bg: #fdfdfe;
+  --grid-line: rgba(203, 213, 225, 0.35);
+  --grid-hover: rgba(34, 95, 28, 0.10);
+  --grid-vignette-start: rgba(253, 253, 254, 0);
+  --grid-vignette-end: rgba(253, 253, 254, 0.7);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --grid-bg: #020617;
+    --grid-line: rgba(30, 41, 59, 0.6);
+    --grid-hover: rgba(56, 189, 248, 0.15);
+    --grid-vignette-start: rgba(2, 6, 23, 0);
+    --grid-vignette-end: rgba(2, 6, 23, 0.9);
+  }
+}
+
+/* Frosted glass surface, used by content cards that sit over the grid. */
+.glass-card {
+  background: color-mix(in srgb, var(--color-surface-container-lowest, #ffffff) 80%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid color-mix(in srgb, var(--color-on-surface, #0f172a) 8%, transparent);
 }
 
 /* Material Symbols sizing */

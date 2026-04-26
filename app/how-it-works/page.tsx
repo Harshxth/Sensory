@@ -16,7 +16,7 @@ export default function HowItWorksPage() {
   const next = () => router.push("/onboarding");
 
   return (
-    <main className="min-h-screen flex flex-col bg-background text-on-surface">
+    <main className="min-h-screen flex flex-col text-on-surface">
       <header className="flex items-center justify-between px-6 py-5 max-w-7xl mx-auto w-full">
         <SensoryLockup glyphSize={28} wordSize={20} />
 

@@ -87,11 +87,9 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
       /* ignore */
     }
     setPhase("exit");
-    // Start the route push immediately while the splash is still mid-fade —
-    // both pages share the same white background so there's no visible flash.
-    if (needsOnboarding) {
-      router.push("/how-it-works");
-    }
+    // First-timers go through the field guide before the map; returning users
+    // jump straight in. Either way, the marketing landing never shows.
+    router.push(needsOnboarding ? "/how-it-works" : "/map");
     setTimeout(() => {
       setPhase("gone");
       onDone?.();

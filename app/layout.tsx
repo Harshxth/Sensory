@@ -3,6 +3,7 @@ import { Public_Sans, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import { PreferencesProvider } from "@/components/PreferencesProvider";
+import { GridBackground } from "@/components/GridBackground";
 
 const publicSans = Public_Sans({
   variable: "--font-public-sans",
@@ -52,9 +53,10 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-background text-on-background">
+      <body className="min-h-screen flex flex-col text-on-background">
         <PreferencesProvider />
-        {children}
+        <GridBackground />
+        <div className="relative z-10 flex flex-1 flex-col">{children}</div>
         <ServiceWorkerRegister />
       </body>
     </html>
