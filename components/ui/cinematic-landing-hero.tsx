@@ -277,29 +277,40 @@ export function CinematicHero({
     let raf = 0;
     let direction = 1;
     let lastUserScroll = 0;
+    let holdUntil = 0;
     const startedAt = performance.now();
     // Two-stage speed: a brief gentle window so the intro hero reads, then
     // we accelerate aggressively so the rest of the cinematic doesn't drag.
     const introMs = 1400;
     const slowSpeed = 1.6; // px / frame
     const fastSpeed = 5.5; // px / frame  ≈ 330 px/s
+    const endHoldMs = 5000; // dwell at top + bottom for 5s each
     const onUserScroll = () => {
       lastUserScroll = performance.now();
     };
     const tick = () => {
       const now = performance.now();
       const userActive = now - lastUserScroll < 1500;
-      if (!userActive) {
+      const holding = now < holdUntil;
+      if (!userActive && !holding) {
         const max =
           (document.documentElement.scrollHeight || 0) - window.innerHeight;
         const speed = now - startedAt < introMs ? slowSpeed : fastSpeed;
         const next = window.scrollY + direction * speed;
         if (next >= max) {
+          // Reached the end of the cinematic — hold the CTA on screen for 5s
+          // before scrolling back to the top.
+          window.scrollTo({ top: max, behavior: "auto" });
           direction = -1;
+          holdUntil = now + endHoldMs;
         } else if (next <= 0) {
+          // Back at the top — short pause so the hero gets a beat to settle.
+          window.scrollTo({ top: 0, behavior: "auto" });
           direction = 1;
+          holdUntil = now + endHoldMs;
+        } else {
+          window.scrollTo({ top: next, behavior: "auto" });
         }
-        window.scrollTo({ top: Math.max(0, Math.min(max, next)), behavior: "auto" });
       }
       raf = requestAnimationFrame(tick);
     };
@@ -325,7 +336,7 @@ export function CinematicHero({
     <div
       ref={containerRef}
       className={cn(
-        "relative w-screen h-screen overflow-hidden flex items-center justify-center bg-white text-slate-900 font-sans antialiased",
+        "relative w-screen h-screen overflow-hidden flex items-center justify-center text-slate-900 font-sans antialiased",
         className,
       )}
       style={{ perspective: "1500px" }}

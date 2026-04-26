@@ -12,7 +12,7 @@ export const metadata = {
  */
 export default function StandbyPage() {
   return (
-    <div className="overflow-x-hidden w-full min-h-screen bg-white">
+    <div className="overflow-x-hidden w-full min-h-screen">
       <CinematicHero />
     </div>
   );
