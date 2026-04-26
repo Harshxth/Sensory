@@ -87,8 +87,9 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
     setTimeout(() => {
       setPhase("gone");
       onDone?.();
+      // First-time visitors see the "How it works" carousel before onboarding.
       if (needsOnboarding) {
-        setTimeout(() => router.push("/onboarding"), 50);
+        setTimeout(() => router.push("/how-it-works"), 50);
       }
     }, 1060);
   };
