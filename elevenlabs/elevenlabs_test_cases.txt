@@ -1,0 +1,78 @@
+TEST 1: Basic venue summary
+SCENARIO: A USF student curious about study spots wants a quick read on the campus library before they walk over. They open with: "Hey, can you tell me about the USF Tampa Library?"
+SUCCESS CRITERIA:
+  - Response stays between two and five sentences.
+  - Mentions both noise and lighting in plain language ("about two out of ten," not "2/10").
+  - Includes one accessibility or "best time" detail without listing every dimension.
+MAX TURNS: 2
+RESULT:
+
+TEST 2: Quiet nearby venue
+SCENARIO: A sensory-sensitive visitor near USF wants somewhere calm to work. They say: "I need the calmest cafe near USF — somewhere I can actually focus."
+SUCCESS CRITERIA:
+  - Recommends a specific named cafe from the knowledge base (e.g. Felicitous Coffee and Tea House).
+  - Includes a "best time (quieter)" suggestion in natural speech.
+  - Does not dump every cafe in the knowledge base; gives one clear pick.
+MAX TURNS: 3
+
+RESULT:
+
+TEST 3: Wheelchair accessibility
+SCENARIO: A wheelchair user is planning a meal out and wants to know if a specific restaurant is workable. They say: "Is Bern's Steak House wheelchair accessible?"
+SUCCESS CRITERIA:
+  - Leads with the wheelchair field (yes / limited / no) before any other dimension.
+  - Mentions exits or layout as the second beat.
+  - Surfaces the upstairs-stairs-only caveat for Bern's honestly, without claiming the place is "safe."
+MAX TURNS: 2
+
+RESULT:
+
+TEST 4: Light sensitivity
+SCENARIO: A user with chronic migraines is deciding whether to meet a friend at Chick-fil-A USF. They say: "Bright lights trigger my migraines. Is Chick-fil-A USF okay?"
+SUCCESS CRITERIA:
+  - Leads with the lighting score described in natural speech ("very bright, around nine out of ten").
+  - Mentions any dimmer zone or quieter time window the summary hints at (e.g. mid-afternoon).
+  - Does not give medical advice; describes conditions and lets the user decide.
+MAX TURNS: 3
+
+RESULT:
+
+TEST 5: Deaf / Hard-of-hearing
+SCENARIO: A Deaf user wants to know whether a restaurant is workable for lip-reading and visual wayfinding. They say: "I'm Deaf — is Bern's Steak House good for someone who reads lips?"
+SUCCESS CRITERIA:
+  - Mentions the noise level and frames it in terms of how it affects lip-reading.
+  - Mentions visual signage or line of sight to staff.
+  - Does not over-claim "Deaf-friendly"; describes conditions instead.
+MAX TURNS: 3
+
+RESULT:
+
+TEST 6: Simple English / ESL
+SCENARIO: A user new to English asks for help. They say: "Please explain simply. The library — is it loud?"
+SUCCESS CRITERIA:
+  - Switches immediately to short sentences and common words.
+  - Avoids idioms, contractions of complex tense, and bracketed asides.
+  - Stays in simple-English mode for any follow-up turn in the same test.
+MAX TURNS: 4
+
+RESULT:
+
+TEST 7: Spanish language switch
+SCENARIO: A Spanish-speaking user opens with: "Hola, ¿cómo es la biblioteca de USF en las mañanas?"
+SUCCESS CRITERIA:
+  - Entire response is in Spanish.
+  - Covers noise and lighting in plain natural Spanish.
+  - Mentions wheelchair access or "best time" briefly without listing every field.
+MAX TURNS: 3
+
+RESULT:
+
+TEST 8: Graceful fallback
+SCENARIO: A user asks about a venue not in the knowledge base. They say: "Tell me about Joe's Tacos on Bruce B Downs."
+SUCCESS CRITERIA:
+  - Acknowledges in exactly one sentence that exact data isn't available yet.
+  - Offers exactly one useful next step (similar known venue OR a general description), not a list of options.
+  - Does not invent scores, hours, or accessibility claims; does not loop back to the same limitation later.
+MAX TURNS: 2
+
+RESULT:
