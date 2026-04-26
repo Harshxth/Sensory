@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Icon } from "@/components/ui/Icon";
 import { TopAppBar } from "@/components/layout/TopAppBar";
+import { UserDropdown } from "@/components/ui/UserDropdown";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { GoogleMap, GoogleMapsProvider } from "@/components/google/GoogleMapBase";
 import { NoiseHeatmap } from "@/components/google/NoiseHeatmap";
@@ -112,14 +113,7 @@ export default function MapPage() {
         <TopAppBar
           title="SensoryPath"
           leading={{ icon: "menu", label: "Menu", href: "/settings" }}
-          trailing={
-            <button
-              aria-label="Profile"
-              className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary bg-primary-container flex items-center justify-center text-on-primary-container"
-            >
-              <Icon name="person" filled size={20} />
-            </button>
-          }
+          trailing={<UserDropdown />}
         />
       )}
 
