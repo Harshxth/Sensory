@@ -4,6 +4,7 @@ import { MapView } from "@/components/map/MapView";
 import { SensoryLayer } from "@/components/map/SensoryLayer";
 import { BootSplash } from "@/components/BootSplash";
 import { WorkflowCardSwap } from "@/components/marketing/WorkflowCardSwap";
+import { SensoryLockup, SensoryGlyph } from "@/components/brand/SensoryMark";
 
 const FEATURES = [
   {
@@ -44,12 +45,8 @@ export default function LandingPage() {
       <BootSplash />
       <header className="sticky top-0 z-50 w-full bg-background/85 backdrop-blur-xl border-b border-outline/15">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4">
-          <Link href="/" className="flex items-center gap-2 text-primary group">
-            <span className="w-9 h-9 rounded-lg bg-primary text-on-primary flex items-center justify-center group-hover:scale-105 transition-transform">
-              <Icon name="visibility" filled size={22} />
-            </span>
-            <span className="text-2xl font-bold tracking-tight">Sensory</span>
-          </Link>
+          <SensoryLockup glyphSize={36} wordSize={26} />
+
           <nav className="hidden md:flex gap-8" aria-label="Primary">
             <a href="#features" className="font-semibold text-on-surface-variant hover:text-primary transition-colors">
               Features
@@ -244,12 +241,7 @@ export default function LandingPage() {
       <footer className="bg-surface-container-highest mt-auto rounded-t-3xl border-t border-outline/10">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 px-8 py-12 max-w-7xl mx-auto w-full">
           <div className="col-span-2 md:col-span-1 flex flex-col gap-3">
-            <div className="flex items-center gap-2 text-primary">
-              <span className="w-9 h-9 rounded-lg bg-primary text-on-primary flex items-center justify-center">
-                <Icon name="visibility" filled size={22} />
-              </span>
-              <span className="text-xl font-bold">Sensory</span>
-            </div>
+            <SensoryLockup glyphSize={32} wordSize={22} tag="Maps that feel" asLink={false} />
             <p className="text-sm leading-relaxed text-on-surface-variant max-w-xs">
               Built for inclusion. © 2026 Sensory Accessibility.
             </p>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
+import { SensoryGlyph } from "@/components/brand/SensoryMark";
 
 export type AppBarAction = {
   icon: string;
@@ -34,8 +35,8 @@ export function TopAppBar({
           {leading ? (
             <ActionButton {...leading} />
           ) : (
-            <Link href="/" className="flex items-center gap-2 text-primary">
-              <Icon name="visibility" filled size={24} />
+            <Link href="/" className="flex items-center gap-2 text-primary" aria-label="Sensory home">
+              <SensoryGlyph size={28} />
             </Link>
           )}
           <h1 className="text-xl font-bold text-primary tracking-tight">{title}</h1>

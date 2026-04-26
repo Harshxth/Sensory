@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { loadPreferences } from "@/lib/preferences";
+import { SensoryGlyph } from "@/components/brand/SensoryMark";
 
 type Phase = "in" | "ready" | "exit" | "gone";
 
@@ -216,6 +217,16 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
 
         {/* Wordmark + tagline + tap hint */}
         <div className="relative z-10 flex flex-col items-center gap-6 px-6 text-center">
+          <div
+            style={{
+              opacity: wordmarkIn ? 1 : 0,
+              transform: wordmarkIn ? "translateY(0) scale(1)" : "translateY(8px) scale(0.92)",
+              transition:
+                "opacity 1100ms cubic-bezier(0.16,1,0.3,1) 80ms, transform 1100ms cubic-bezier(0.16,1,0.3,1) 80ms",
+            }}
+          >
+            <SensoryGlyph size={88} />
+          </div>
           <h1
             id="boot-title"
             style={{
@@ -266,7 +277,7 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
           </div>
 
           <span
-            className="tap-hint"
+            className={hintIn ? "tap-hint" : ""}
             style={{
               marginTop: "22px",
               fontFamily: '"Public Sans", system-ui, sans-serif',
@@ -276,6 +287,7 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
               letterSpacing: "0.18em",
               color: "#3f6847",
               opacity: hintIn ? 0.6 : 0,
+              visibility: hintIn ? "visible" : "hidden",
               transition: "opacity 500ms ease",
             }}
           >
