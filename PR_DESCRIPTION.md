@@ -26,6 +26,8 @@ It is intentionally **not yet wired into production**. Review at https://sensory
 
 `components/editorial/SensoryForecast.tsx` — **NEW FEATURE**: a 12-hour bar chart of predicted sensory load for Tampa/USF, sourced live from the venue API with a diurnal-pattern fallback.
 
+`components/editorial/MapTour.tsx` — **NEW FEATURE**: 6-step coach-mark tour for the live map. Auto-fires once on first visit, dim backdrop with pulsing white ring anchors each step to the relevant UI control, persists "seen" flag in localStorage so it never repeats. Crucial for hackathon judges who don&rsquo;t know the app — they get oriented in 30 seconds.
+
 ### B. Re-themed pages
 - **`/`** — masthead, huge serif hero, animated SVG hero map, stat grid (148 venues / 5 senses / 3 langs / 0 accounts), **Sensory Forecast strip** (dark, 12-hour bar chart), short essay, four story-card chapters, pull quote, feature spread, voices section, dark masthead footer.
 - **`/how-it-works`** — four numbered editorial chapters (Sense, Plan, Walk, Share), each with display number, italic subdeck, body, leftbar/rightbar detail, and a chapter-specific pull quote.
@@ -68,6 +70,7 @@ npm run dev
 - **Like the components but not the layout →** I'll rebuild `main`'s landing using these atoms.
 - **Like only the Trip Journal →** cherry-pick `lib/journal.ts` + `app/journal/page.tsx` + the `NavigationOverlay onEnd` wiring.
 - **Like only the Sensory Forecast →** cherry-pick `components/editorial/SensoryForecast.tsx` and drop it into the existing landing as a section.
+- **Like only the Map Tour →** cherry-pick `components/editorial/MapTour.tsx` and mount it inside `app/map/page.tsx`.
 - **Don't like any of it →** close PR, branch stays as a reference, no harm done.
 
 ## Files touched
@@ -81,5 +84,6 @@ npm run dev
 - `components/editorial/EditorialNav.tsx` — sticky publication nav
 - `components/editorial/HeroMap.tsx` — animated hero illustration
 - `components/editorial/SensoryForecast.tsx` — NEW 12-hour forecast widget
+- `components/editorial/MapTour.tsx` — NEW 6-step first-visit coach-mark tour
 - `components/layout/TopAppBar.tsx` — serif-titled map app bar
 - `lib/journal.ts` — journal storage helpers
