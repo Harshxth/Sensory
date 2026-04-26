@@ -10,11 +10,28 @@ import type { Alert, Venue } from "@/types";
 
 type Mode = "WALK" | "DRIVE" | "TRANSIT" | "BICYCLE";
 
+/** Transit-specific step detail (only populated when the route uses transit). */
+export type TransitStep = {
+  /** Vehicle type, e.g. "BUS", "RAIL", "TRAM". */
+  vehicle?: string;
+  /** Public-facing line name, e.g. "Route 5" or "Green Line". */
+  lineName?: string;
+  /** Where the line is heading — "to USF Marshall Center". */
+  headsign?: string;
+  /** Boarding stop name. */
+  departureStopName?: string;
+  /** Alighting stop name. */
+  arrivalStopName?: string;
+  /** Number of stops the user stays on for. */
+  stopCount?: number;
+};
+
 type Step = {
   instruction: string;
   distanceMeters: number;
   durationSec: number;
   maneuver?: string;
+  transit?: TransitStep;
 };
 
 export type Route = {
@@ -304,7 +321,7 @@ async function fetchRoutes(
       "Content-Type": "application/json",
       "X-Goog-Api-Key": key,
       "X-Goog-FieldMask":
-        "routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline,routes.legs.steps.navigationInstruction,routes.legs.steps.distanceMeters,routes.legs.steps.staticDuration,routes.legs.steps.transitDetails",
+        "routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline,routes.legs.steps.navigationInstruction,routes.legs.steps.distanceMeters,routes.legs.steps.staticDuration,routes.legs.steps.travelMode,routes.legs.steps.transitDetails",
     },
     body: JSON.stringify(body),
   });
@@ -313,18 +330,32 @@ async function fetchRoutes(
     const body = await res.text();
     throw new Error(`Routes ${res.status}: ${body.slice(0, 120)}`);
   }
+  type ApiTransit = {
+    stopDetails?: {
+      arrivalStop?: { name?: string };
+      departureStop?: { name?: string };
+    };
+    headsign?: string;
+    transitLine?: {
+      nameShort?: string;
+      name?: string;
+      vehicle?: { type?: string };
+    };
+    stopCount?: number;
+  };
+  type ApiStep = {
+    navigationInstruction?: { instructions?: string; maneuver?: string };
+    distanceMeters?: number;
+    staticDuration?: string;
+    travelMode?: string;
+    transitDetails?: ApiTransit;
+  };
   const data = (await res.json()) as {
     routes?: {
       duration?: string;
       distanceMeters?: number;
       polyline?: { encodedPolyline?: string };
-      legs?: {
-        steps?: {
-          navigationInstruction?: { instructions?: string; maneuver?: string };
-          distanceMeters?: number;
-          staticDuration?: string;
-        }[];
-      }[];
+      legs?: { steps?: ApiStep[] }[];
     }[];
   };
   if (!data.routes || data.routes.length === 0) throw new Error("No route found");
@@ -336,13 +367,27 @@ async function fetchRoutes(
       const steps: Step[] =
         r.legs?.flatMap(
           (leg) =>
-            leg.steps?.map((s) => ({
-              instruction: s.navigationInstruction?.instructions ?? "Continue",
-              maneuver: s.navigationInstruction?.maneuver,
-              distanceMeters: s.distanceMeters ?? 0,
-              durationSec:
-                parseInt(String(s.staticDuration ?? "0").replace(/[^\d]/g, ""), 10) || 0,
-            })) ?? [],
+            leg.steps?.map((s) => {
+              const td = s.transitDetails;
+              const transit: TransitStep | undefined = td
+                ? {
+                    vehicle: td.transitLine?.vehicle?.type,
+                    lineName: td.transitLine?.nameShort ?? td.transitLine?.name,
+                    headsign: td.headsign,
+                    departureStopName: td.stopDetails?.departureStop?.name,
+                    arrivalStopName: td.stopDetails?.arrivalStop?.name,
+                    stopCount: td.stopCount,
+                  }
+                : undefined;
+              return {
+                instruction: s.navigationInstruction?.instructions ?? "Continue",
+                maneuver: s.navigationInstruction?.maneuver,
+                distanceMeters: s.distanceMeters ?? 0,
+                durationSec:
+                  parseInt(String(s.staticDuration ?? "0").replace(/[^\d]/g, ""), 10) || 0,
+                transit,
+              };
+            }) ?? [],
         ) ?? [];
       return {
         durationSec,

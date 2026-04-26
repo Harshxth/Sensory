@@ -2,20 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Player } from "@remotion/player";
 import { loadPreferences } from "@/lib/preferences";
-import { MaskedSlideReveal } from "@/components/ui/masked-slide-reveal";
-
-const SensoryReveal = () => (
-  <MaskedSlideReveal
-    text="Sensory"
-    fontSize={200}
-    color="#0a0f0c"
-    fontWeight={800}
-    speed={1}
-    letterSpacing="-0.045em"
-  />
-);
 
 type Phase = "in" | "ready" | "exit" | "gone";
 
@@ -226,31 +213,43 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
 
         {/* Wordmark + tagline + tap hint */}
         <div className="relative z-10 flex flex-col items-center gap-6 px-6 text-center">
-          <div
+          {/* Masked slide-reveal — pure CSS so the text rises into view once
+              and stays visible. The outer span is the overflow mask; the
+              inner span starts at translateY(100%) and rests at 0. */}
+          <h1
             id="boot-title"
             aria-label="Sensory"
-            role="img"
             style={{
-              width: "min(900px, 92vw)",
-              aspectRatio: "1200 / 280",
-              opacity: wordmarkIn ? 1 : 0,
-              transition: "opacity 600ms ease",
+              fontFamily: '"Public Sans", system-ui, sans-serif',
+              fontWeight: 800,
+              fontSize: "clamp(72px, 14vw, 200px)",
+              lineHeight: 1,
+              letterSpacing: "-0.045em",
+              color: "#0a0f0c",
+              margin: 0,
+              display: "inline-block",
             }}
           >
-            {wordmarkIn && (
-              <Player
-                component={SensoryReveal}
-                durationInFrames={45}
-                fps={30}
-                compositionWidth={1200}
-                compositionHeight={280}
-                autoPlay
-                loop={false}
-                controls={false}
-                style={{ width: "100%", height: "100%" }}
-              />
-            )}
-          </div>
+            <span
+              aria-hidden
+              style={{
+                display: "inline-block",
+                overflow: "hidden",
+                lineHeight: 1,
+                paddingBottom: "0.08em",
+              }}
+            >
+              <span
+                style={{
+                  display: "inline-block",
+                  transform: wordmarkIn ? "translateY(0)" : "translateY(100%)",
+                  transition: "transform 1100ms cubic-bezier(0.16,1,0.3,1) 80ms",
+                }}
+              >
+                Sensory
+              </span>
+            </span>
+          </h1>
 
           <div
             aria-live="polite"

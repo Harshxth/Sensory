@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Icon } from "@/components/ui/Icon";
 import { loadPreferences } from "@/lib/preferences";
+import * as haptic from "@/lib/haptic";
 
 type Stage = "idle" | "live" | "capturing" | "result" | "error";
 
@@ -133,6 +134,20 @@ export function SignReader({ destination }: Props = {}) {
       }
       setWayfinding(way);
       setStage("result");
+
+      // Haptic feedback matches the verdict so users with low vision /
+      // hearing assist sense the answer through touch alone.
+      if (way) {
+        if (way.verdict === "at_destination" || way.verdict === "approaching") {
+          haptic.success();
+        } else if (way.verdict === "off_track") {
+          haptic.offTrack();
+        } else {
+          haptic.tap();
+        }
+      } else {
+        haptic.tap();
+      }
 
       // Speak: wayfinding line first (if any), then the raw sign text. Both
       // go through ElevenLabs so the cloned/comfort voice is what's heard.

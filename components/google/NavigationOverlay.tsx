@@ -4,14 +4,25 @@ import { useEffect, useRef, useState } from "react";
 import { useMap, useMapsLibrary } from "@vis.gl/react-google-maps";
 import { Icon } from "@/components/ui/Icon";
 import { loadPreferences } from "@/lib/preferences";
+import * as haptic from "@/lib/haptic";
 import type { AccessibilityNeed } from "@/types";
 import type { RouteFlag } from "./RouteFlags";
+
+type TransitStep = {
+  vehicle?: string;
+  lineName?: string;
+  headsign?: string;
+  departureStopName?: string;
+  arrivalStopName?: string;
+  stopCount?: number;
+};
 
 type Step = {
   instruction: string;
   distanceMeters: number;
   durationSec: number;
   maneuver?: string;
+  transit?: TransitStep;
 };
 
 type Props = {
@@ -137,7 +148,7 @@ export function NavigationOverlay({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [position, geometry, encodedPolyline]);
 
-  // Voice cue when step changes
+  // Voice cue + haptic when step changes
   useEffect(() => {
     if (muted) return;
     const step = steps[stepIdx];
@@ -146,9 +157,11 @@ export function NavigationOverlay({
     if (spokenRef.current.has(key)) return;
     spokenRef.current.add(key);
     speak(stripHtml(step.instruction));
+    // Subtle haptic confirms the step changed even if voice is missed.
+    haptic.pulse();
   }, [stepIdx, steps, muted]);
 
-  // Voice cue when approaching a flagged condition
+  // Voice cue + warning haptic when approaching a flagged condition
   useEffect(() => {
     if (muted || !position) return;
     flags.forEach((f) => {
@@ -159,6 +172,7 @@ export function NavigationOverlay({
         spokenRef.current.add(key);
         const phrase = warningPhrase(f, needsRef.current);
         if (phrase) speak(phrase);
+        haptic.warn();
       }
     });
   }, [position, flags, muted]);
@@ -199,6 +213,32 @@ export function NavigationOverlay({
                   __html: currentStep?.instruction ?? "Continue to destination",
                 }}
               />
+              {currentStep?.transit && (
+                <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[11px]">
+                  <span className="inline-flex items-center gap-1 bg-primary-container text-on-primary-container px-2 py-0.5 rounded-full font-bold">
+                    <Icon name={vehicleIcon(currentStep.transit.vehicle)} filled size={12} />
+                    {currentStep.transit.lineName ?? currentStep.transit.vehicle ?? "Transit"}
+                  </span>
+                  {currentStep.transit.headsign && (
+                    <span className="text-on-surface-variant truncate">
+                      → {currentStep.transit.headsign}
+                    </span>
+                  )}
+                  {currentStep.transit.stopCount != null && (
+                    <span className="text-on-surface-variant">
+                      · {currentStep.transit.stopCount} stops
+                    </span>
+                  )}
+                </div>
+              )}
+              {currentStep?.transit?.departureStopName && (
+                <div className="mt-1 text-[11px] text-on-surface-variant">
+                  Board at <strong className="text-on-surface">{currentStep.transit.departureStopName}</strong>
+                  {currentStep.transit.arrivalStopName && (
+                    <>, off at <strong className="text-on-surface">{currentStep.transit.arrivalStopName}</strong></>
+                  )}
+                </div>
+              )}
             </div>
             <button
               type="button"
@@ -417,4 +457,16 @@ function maneuverIcon(maneuver?: string): string {
   if (m.includes("roundabout")) return "roundabout_left";
   if (m.includes("destination")) return "place";
   return "arrow_upward";
+}
+
+function vehicleIcon(vehicle?: string): string {
+  if (!vehicle) return "directions_transit";
+  const v = vehicle.toUpperCase();
+  if (v.includes("BUS")) return "directions_bus";
+  if (v.includes("RAIL") || v.includes("HEAVY_RAIL")) return "directions_railway";
+  if (v.includes("SUBWAY") || v.includes("METRO")) return "directions_subway";
+  if (v.includes("TRAM") || v.includes("LIGHT_RAIL")) return "tram";
+  if (v.includes("FERRY")) return "directions_boat";
+  if (v.includes("CABLE")) return "tram";
+  return "directions_transit";
 }
