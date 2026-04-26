@@ -5,7 +5,7 @@ SUCCESS CRITERIA:
   - Mentions both noise and lighting in plain language ("about two out of ten," not "2/10").
   - Includes one accessibility or "best time" detail without listing every dimension.
 MAX TURNS: 2
-RESULT:
+RESULT: FAIL — ElevenLabs run scored 0/1 for the "tell me about this coffee shop" variant; agent didn't surface a sensory profile because the prompt referenced a generic, unnamed venue. Next step: tighten retrieval routing or push the agent into the Test 8 fallback path when no venue name resolves.
 
 TEST 2: Quiet nearby venue
 SCENARIO: A sensory-sensitive visitor near USF wants somewhere calm to work. They say: "I need the calmest cafe near USF — somewhere I can actually focus."
