@@ -208,83 +208,111 @@ export function CinematicHero({
     };
   }, []);
 
-  // Auto-loop timeline (no scroll). Plays end-to-end on its own and repeats
-  // forever — perfect for a screensaver running on a second device.
+  // Scroll-driven cinematic timeline + auto-scroller that loops the page
+  // top→bottom→top forever. Drop /standby on a laptop and walk away —
+  // ScrollTrigger advances the story while the auto-scroller drives scroll.
   useEffect(() => {
     const isMobile = window.innerWidth < 768;
     const ctx = gsap.context(() => {
-      const setInitial = () => {
-        gsap.set(".text-track", { autoAlpha: 0, y: 60, scale: 0.85, filter: "blur(20px)", rotationX: -20 });
-        gsap.set(".text-days", { autoAlpha: 1, clipPath: "inset(0 100% 0 0)" });
-        gsap.set(".main-card", {
-          y: window.innerHeight + 200,
-          autoAlpha: 1,
-          width: isMobile ? "92vw" : "85vw",
-          height: isMobile ? "92vh" : "85vh",
-          borderRadius: isMobile ? 32 : 40,
-        });
-        gsap.set([".card-left-text", ".card-right-text", ".mockup-scroll-wrapper", ".floating-badge", ".phone-widget"], { autoAlpha: 0 });
-        gsap.set(".cta-wrapper", { autoAlpha: 0, scale: 0.8, filter: "blur(30px)" });
-        gsap.set(".hero-text-wrapper", { autoAlpha: 1, scale: 1, filter: "blur(0px)" });
-        gsap.set(".counter-val", { innerHTML: 0 });
-        gsap.set(".progress-ring", { strokeDashoffset: 402 });
-      };
+      gsap.set(".text-track", { autoAlpha: 0, y: 60, scale: 0.85, filter: "blur(20px)", rotationX: -20 });
+      gsap.set(".text-days", { autoAlpha: 1, clipPath: "inset(0 100% 0 0)" });
+      gsap.set(".main-card", { y: window.innerHeight + 200, autoAlpha: 1 });
+      gsap.set([".card-left-text", ".card-right-text", ".mockup-scroll-wrapper", ".floating-badge", ".phone-widget"], { autoAlpha: 0 });
+      gsap.set(".cta-wrapper", { autoAlpha: 0, scale: 0.8, filter: "blur(30px)" });
 
-      setInitial();
+      const introTl = gsap.timeline({ delay: 0.3 });
+      introTl
+        .to(".text-track", { duration: 1.8, autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)", rotationX: 0, ease: "expo.out" })
+        .to(".text-days", { duration: 1.4, clipPath: "inset(0 0% 0 0)", ease: "power4.inOut" }, "-=1.0");
 
-      const tl = gsap.timeline({
-        repeat: -1,
-        repeatDelay: 1.5,
-        onRepeat: setInitial,
+      const scrollTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: "+=7000",
+          pin: true,
+          scrub: 1,
+          anticipatePin: 1,
+        },
       });
 
-      tl
-        // Phase 1 — hero text reveal
-        .to(".text-track", { duration: 1.6, autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)", rotationX: 0, ease: "expo.out" })
-        .to(".text-days", { duration: 1.2, clipPath: "inset(0 0% 0 0)", ease: "power4.inOut" }, "-=0.9")
-        // Hold the hero
-        .to({}, { duration: 1.4 })
-        // Phase 2 — push hero out, bring up the deep card
-        .to([".hero-text-wrapper", ".bg-grid-theme"], { scale: 1.15, filter: "blur(20px)", opacity: 0.2, ease: "power2.inOut", duration: 1.2 })
-        .to(".main-card", { y: 0, ease: "power3.inOut", duration: 1.4 }, "<")
-        .to(".main-card", { width: "100%", height: "100%", borderRadius: 0, ease: "power3.inOut", duration: 1.2 })
-        // Phase 3 — phone + widgets + badges
+      scrollTl
+        .to([".hero-text-wrapper", ".bg-grid-theme"], { scale: 1.15, filter: "blur(20px)", opacity: 0.2, ease: "power2.inOut", duration: 2 }, 0)
+        .to(".main-card", { y: 0, ease: "power3.inOut", duration: 2 }, 0)
+        .to(".main-card", { width: "100%", height: "100%", borderRadius: "0px", ease: "power3.inOut", duration: 1.5 })
         .fromTo(".mockup-scroll-wrapper",
           { y: 300, z: -500, rotationX: 50, rotationY: -30, autoAlpha: 0, scale: 0.6 },
-          { y: 0, z: 0, rotationX: 0, rotationY: 0, autoAlpha: 1, scale: 1, ease: "expo.out", duration: 1.8 }, "-=0.6"
+          { y: 0, z: 0, rotationX: 0, rotationY: 0, autoAlpha: 1, scale: 1, ease: "expo.out", duration: 2.5 }, "-=0.8"
         )
-        .fromTo(".phone-widget", { y: 40, autoAlpha: 0, scale: 0.95 }, { y: 0, autoAlpha: 1, scale: 1, stagger: 0.12, ease: "back.out(1.2)", duration: 1.2 }, "-=1.2")
-        .to(".progress-ring", { strokeDashoffset: 60, duration: 1.5, ease: "power3.inOut" }, "-=1.0")
-        .to(".counter-val", { innerHTML: metricValue, snap: { innerHTML: 1 }, duration: 1.6, ease: "expo.out" }, "-=1.5")
-        .fromTo(".floating-badge", { y: 100, autoAlpha: 0, scale: 0.7, rotationZ: -10 }, { y: 0, autoAlpha: 1, scale: 1, rotationZ: 0, ease: "back.out(1.5)", duration: 1.2, stagger: 0.18 }, "-=1.5")
-        .fromTo(".card-left-text", { x: -50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, ease: "power4.out", duration: 1.2 }, "-=1.2")
-        .fromTo(".card-right-text", { x: 50, autoAlpha: 0, scale: 0.8 }, { x: 0, autoAlpha: 1, scale: 1, ease: "expo.out", duration: 1.2 }, "<")
-        // Hold on the full mockup
-        .to({}, { duration: 4 })
-        // Phase 4 — pull back, fade contents, show CTA
+        .fromTo(".phone-widget", { y: 40, autoAlpha: 0, scale: 0.95 }, { y: 0, autoAlpha: 1, scale: 1, stagger: 0.15, ease: "back.out(1.2)", duration: 1.5 }, "-=1.5")
+        .to(".progress-ring", { strokeDashoffset: 60, duration: 2, ease: "power3.inOut" }, "-=1.2")
+        .to(".counter-val", { innerHTML: metricValue, snap: { innerHTML: 1 }, duration: 2, ease: "expo.out" }, "-=2.0")
+        .fromTo(".floating-badge", { y: 100, autoAlpha: 0, scale: 0.7, rotationZ: -10 }, { y: 0, autoAlpha: 1, scale: 1, rotationZ: 0, ease: "back.out(1.5)", duration: 1.5, stagger: 0.2 }, "-=2.0")
+        .fromTo(".card-left-text", { x: -50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, ease: "power4.out", duration: 1.5 }, "-=1.5")
+        .fromTo(".card-right-text", { x: 50, autoAlpha: 0, scale: 0.8 }, { x: 0, autoAlpha: 1, scale: 1, ease: "expo.out", duration: 1.5 }, "<")
+        .to({}, { duration: 2.5 })
         .set(".hero-text-wrapper", { autoAlpha: 0 })
+        .set(".cta-wrapper", { autoAlpha: 1 })
+        .to({}, { duration: 1.5 })
         .to([".mockup-scroll-wrapper", ".floating-badge", ".card-left-text", ".card-right-text"], {
-          scale: 0.9, y: -40, z: -200, autoAlpha: 0, ease: "power3.in", duration: 1, stagger: 0.04,
+          scale: 0.9, y: -40, z: -200, autoAlpha: 0, ease: "power3.in", duration: 1.2, stagger: 0.05,
         })
         .to(".main-card", {
           width: isMobile ? "92vw" : "85vw",
           height: isMobile ? "92vh" : "85vh",
-          borderRadius: isMobile ? 32 : 40,
+          borderRadius: isMobile ? "32px" : "40px",
           ease: "expo.inOut",
-          duration: 1.4,
+          duration: 1.8,
         }, "pullback")
-        .to(".cta-wrapper", { autoAlpha: 1, scale: 1, filter: "blur(0px)", ease: "expo.inOut", duration: 1.4 }, "pullback")
-        // Hold on CTA
-        .to({}, { duration: 3 })
-        // Phase 5 — exit (slide everything out before the loop resets)
-        .to(".cta-wrapper", { autoAlpha: 0, scale: 0.92, filter: "blur(20px)", duration: 0.8, ease: "power3.in" })
-        .to(".main-card", { y: -window.innerHeight - 300, ease: "power3.in", duration: 1.0 }, "<");
-
-      return () => {
-        tl.kill();
-      };
+        .to(".cta-wrapper", { scale: 1, filter: "blur(0px)", ease: "expo.inOut", duration: 1.8 }, "pullback")
+        .to(".main-card", { y: -window.innerHeight - 300, ease: "power3.in", duration: 1.5 });
     }, containerRef);
-    return () => ctx.revert();
+
+    // ── Auto-scroller (only when ?auto=1 is opted in OR on /standby) ──
+    // Drives `window.scrollTo` on a timer so the page scrolls itself
+    // top→bottom→top→… and ScrollTrigger advances the timeline. Pauses
+    // when the user touches the wheel/keyboard so it never fights them.
+    const isStandby =
+      typeof window !== "undefined" && window.location.pathname.startsWith("/standby");
+    let raf = 0;
+    let direction = 1;
+    let lastUserScroll = 0;
+    const speed = 1.4; // px per frame ≈ 84px/s
+    const onUserScroll = () => {
+      lastUserScroll = performance.now();
+    };
+    const tick = () => {
+      const now = performance.now();
+      const userActive = now - lastUserScroll < 1500;
+      if (!userActive) {
+        const max =
+          (document.documentElement.scrollHeight || 0) - window.innerHeight;
+        const next = window.scrollY + direction * speed;
+        if (next >= max) {
+          direction = -1;
+        } else if (next <= 0) {
+          direction = 1;
+        }
+        window.scrollTo({ top: Math.max(0, Math.min(max, next)), behavior: "auto" });
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    if (isStandby) {
+      window.addEventListener("wheel", onUserScroll, { passive: true });
+      window.addEventListener("touchmove", onUserScroll, { passive: true });
+      window.addEventListener("keydown", onUserScroll);
+      raf = requestAnimationFrame(tick);
+    }
+
+    return () => {
+      ctx.revert();
+      if (raf) cancelAnimationFrame(raf);
+      if (isStandby) {
+        window.removeEventListener("wheel", onUserScroll);
+        window.removeEventListener("touchmove", onUserScroll);
+        window.removeEventListener("keydown", onUserScroll);
+      }
+    };
   }, [metricValue]);
 
   return (
