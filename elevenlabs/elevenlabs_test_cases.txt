@@ -65,7 +65,7 @@ SUCCESS CRITERIA:
   - Mentions wheelchair access or "best time" briefly without listing every field.
 MAX TURNS: 3
 
-RESULT:
+RESULT: PASS — ElevenLabs "Spanish language switch" run scored 1/1. Full response in natural Spanish covering noise, lighting, and accessibility briefly, without listing every field.
 
 TEST 8: Graceful fallback
 SCENARIO: A user asks about a venue not in the knowledge base. They say: "Tell me about Joe's Tacos on Bruce B Downs."
