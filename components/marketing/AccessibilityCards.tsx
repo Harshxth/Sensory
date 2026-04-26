@@ -98,26 +98,26 @@ export function AccessibilityCards() {
   return (
     <section
       id="features"
-      className="w-full px-6 pb-16 md:pb-24 max-w-7xl mx-auto"
+      className="w-full px-5 sm:px-6 pb-16 md:pb-24 max-w-7xl mx-auto"
     >
-      <div className="text-center mb-12 md:mb-16 max-w-2xl mx-auto">
-        <span className="text-[11px] uppercase tracking-[0.4em] text-on-surface-variant/70 font-semibold">
+      <div className="text-center mb-8 sm:mb-12 md:mb-16 max-w-2xl mx-auto px-2">
+        <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.32em] sm:tracking-[0.4em] text-on-surface-variant/70 font-semibold">
           Built for every experience
         </span>
         <h2
-          className="mt-4 text-4xl md:text-6xl font-light tracking-tight leading-[1.05] text-on-surface"
+          className="mt-3 sm:mt-4 text-3xl sm:text-4xl md:text-6xl font-light tracking-tight leading-[1.05] text-on-surface"
           style={{ fontFamily: '"Playfair Display","Public Sans",serif' }}
         >
           A toolbox of accommodations,{" "}
           <span className="italic text-on-surface/45">all on by default.</span>
         </h2>
-        <p className="mt-6 text-base md:text-lg text-on-surface-variant leading-relaxed">
+        <p className="mt-4 sm:mt-6 text-sm sm:text-base md:text-lg text-on-surface-variant leading-relaxed">
           Tailored routing, venue details, and a map that respects how different
           bodies and minds move through space.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
         {CARDS.map((card) => (
           <ImageCard key={card.vol} card={card} />
         ))}
@@ -159,22 +159,26 @@ function ImageCard({ card }: { card: Card }) {
       {/* accent dot */}
       <div
         aria-hidden
-        className="absolute top-6 right-6"
         style={{
-          width: 12,
-          height: 12,
+          position: "absolute",
+          top: "clamp(14px, 4vw, 22px)",
+          right: "clamp(14px, 4vw, 22px)",
+          width: 10,
+          height: 10,
           borderRadius: "50%",
           background: card.accent,
-          boxShadow: `0 0 16px ${card.accent}`,
+          boxShadow: `0 0 14px ${card.accent}`,
         }}
       />
 
       {/* emoji glyph top-left for quick recognition */}
       <span
         aria-hidden
-        className="absolute top-5 left-6"
         style={{
-          fontSize: 22,
+          position: "absolute",
+          top: "clamp(12px, 3.5vw, 18px)",
+          left: "clamp(16px, 4.5vw, 24px)",
+          fontSize: 20,
           lineHeight: 1,
           filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.4))",
         }}
@@ -184,18 +188,23 @@ function ImageCard({ card }: { card: Card }) {
 
       {/* content */}
       <div
-        className="absolute left-7 right-7 bottom-7"
-        style={{ color: "#ffffff" }}
+        style={{
+          position: "absolute",
+          left: "clamp(18px, 5vw, 28px)",
+          right: "clamp(18px, 5vw, 28px)",
+          bottom: "clamp(18px, 5vw, 28px)",
+          color: "#ffffff",
+        }}
       >
         <span
           style={{
             display: "block",
             fontSize: 10,
             fontWeight: 600,
-            letterSpacing: "0.28em",
+            letterSpacing: "0.24em",
             textTransform: "uppercase",
             opacity: 0.7,
-            marginBottom: 10,
+            marginBottom: 8,
           }}
         >
           {card.vol}
@@ -204,7 +213,7 @@ function ImageCard({ card }: { card: Card }) {
           style={{
             fontFamily: '"Playfair Display","Public Sans",serif',
             fontWeight: 400,
-            fontSize: "clamp(28px, 3.3vw, 36px)",
+            fontSize: "clamp(24px, 6vw, 36px)",
             lineHeight: 1,
             letterSpacing: "-0.02em",
             margin: 0,
@@ -214,10 +223,10 @@ function ImageCard({ card }: { card: Card }) {
         </h3>
         <p
           style={{
-            marginTop: 12,
-            fontSize: 13,
+            marginTop: 10,
+            fontSize: "clamp(11px, 2.6vw, 13px)",
             lineHeight: 1.55,
-            color: "rgba(255,255,255,0.78)",
+            color: "rgba(255,255,255,0.82)",
             maxWidth: "42ch",
           }}
         >

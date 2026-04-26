@@ -60,22 +60,40 @@ const CARDS: Card[] = [
 ];
 
 const SWAP_MS = 4000;
-const CARD_DIST_X = 70;
-const CARD_DIST_Y = 12;
-const SKEW = 3;
 
-const slot = (i: number) => ({
-  x: i * CARD_DIST_X,
-  y: -i * CARD_DIST_Y,
-  z: -i * CARD_DIST_X * 1.5,
-  zIndex: CARDS.length - i,
-});
+// Stack offsets — smaller on phones so the tail doesn't crowd the screen.
+const SLOT = {
+  desktop: { distX: 70, distY: 12, skew: 3 },
+  mobile: { distX: 32, distY: 7, skew: 1.5 },
+};
+
+const slot = (i: number, total: number, isMobile: boolean) => {
+  const s = isMobile ? SLOT.mobile : SLOT.desktop;
+  return {
+    x: i * s.distX,
+    y: -i * s.distY,
+    z: -i * s.distX * 1.5,
+    zIndex: total - i,
+    skew: s.skew,
+  };
+};
 
 export function WorkflowCardSwap() {
   const [order, setOrder] = useState<number[]>(() => CARDS.map((_, i) => i));
   const [swapping, setSwapping] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const pausedRef = useRef(false);
   const timerRef = useRef<number | null>(null);
+
+  // Track viewport for stack-geometry tuning (small screens get tighter offsets).
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mql = window.matchMedia("(max-width: 640px)");
+    const handle = () => setIsMobile(mql.matches);
+    handle();
+    mql.addEventListener?.("change", handle);
+    return () => mql.removeEventListener?.("change", handle);
+  }, []);
 
   const swap = () => {
     if (swapping) return;
@@ -107,19 +125,19 @@ export function WorkflowCardSwap() {
   };
 
   return (
-    <section className="w-full px-6 pb-20 md:pb-32 max-w-7xl mx-auto">
-      <div className="text-center mb-12 md:mb-16 max-w-2xl mx-auto">
-        <span className="text-[11px] uppercase tracking-[0.4em] text-on-surface-variant/70 font-semibold">
+    <section className="w-full px-5 sm:px-6 pb-16 md:pb-32 max-w-7xl mx-auto">
+      <div className="text-center mb-8 sm:mb-12 md:mb-16 max-w-2xl mx-auto px-2">
+        <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.32em] sm:tracking-[0.4em] text-on-surface-variant/70 font-semibold">
           Product life cycle
         </span>
         <h2
-          className="mt-4 text-4xl md:text-6xl font-light tracking-tight leading-[1.05] text-on-surface"
+          className="mt-3 sm:mt-4 text-3xl sm:text-4xl md:text-6xl font-light tracking-tight leading-[1.05] text-on-surface"
           style={{ fontFamily: '"Playfair Display","Public Sans",serif' }}
         >
           One sequence,{" "}
           <span className="italic text-on-surface/45">every body.</span>
         </h2>
-        <p className="mt-6 text-base md:text-lg text-on-surface-variant leading-relaxed">
+        <p className="mt-4 sm:mt-6 text-sm sm:text-base md:text-lg text-on-surface-variant leading-relaxed">
           From the first tap to a shared journey — every stage of how Sensory
           learns a place and walks you through it.
         </p>
@@ -137,12 +155,12 @@ export function WorkflowCardSwap() {
             perspective: "1500px",
             transformStyle: "preserve-3d",
             width: "min(560px, 92vw)",
-            height: "360px",
+            height: "clamp(260px, 62vw, 360px)",
           }}
         >
           {CARDS.map((card, idx) => {
             const pos = order.indexOf(idx);
-            const s = slot(pos);
+            const s = slot(pos, CARDS.length, isMobile);
             return (
               <motion.div
                 key={idx}
@@ -152,7 +170,7 @@ export function WorkflowCardSwap() {
                   y: s.y,
                   z: s.z,
                   opacity: 1,
-                  skewY: SKEW,
+                  skewY: s.skew,
                 }}
                 transition={{
                   type: "spring",
@@ -172,10 +190,10 @@ export function WorkflowCardSwap() {
                   transformOrigin: "center center",
                   zIndex: s.zIndex,
                   willChange: "transform, opacity",
-                  borderRadius: "24px",
+                  borderRadius: "20px",
                   border: "1px solid rgba(255,255,255,0.4)",
                   boxShadow:
-                    "0 30px 60px -20px rgba(15,23,42,0.25), 0 12px 30px -10px rgba(15,23,42,0.15)",
+                    "0 24px 50px -16px rgba(15,23,42,0.25), 0 10px 24px -8px rgba(15,23,42,0.15)",
                   overflow: "hidden",
                   background: "#1f2937",
                 }}
@@ -189,7 +207,7 @@ export function WorkflowCardSwap() {
         <button
           type="button"
           onClick={swap}
-          className="mt-16 group flex flex-col items-center gap-3"
+          className="mt-10 sm:mt-16 group flex flex-col items-center gap-3"
           aria-label="Cycle workflow"
         >
           <span className="w-12 h-12 rounded-full border border-on-surface/20 flex items-center justify-center group-hover:bg-on-surface group-hover:text-background transition-all">
@@ -237,13 +255,13 @@ function CardBody({ card }: { card: Card }) {
         aria-hidden
         style={{
           position: "absolute",
-          top: 24,
-          right: 24,
-          width: 12,
-          height: 12,
+          top: "clamp(14px, 4vw, 24px)",
+          right: "clamp(14px, 4vw, 24px)",
+          width: 10,
+          height: 10,
           borderRadius: "50%",
           background: card.accent,
-          boxShadow: `0 0 16px ${card.accent}`,
+          boxShadow: `0 0 14px ${card.accent}`,
         }}
       />
 
@@ -251,9 +269,9 @@ function CardBody({ card }: { card: Card }) {
       <div
         style={{
           position: "absolute",
-          left: 32,
-          right: 32,
-          bottom: 32,
+          left: "clamp(18px, 5vw, 32px)",
+          right: "clamp(18px, 5vw, 32px)",
+          bottom: "clamp(18px, 5vw, 32px)",
           color: "#ffffff",
         }}
       >
@@ -262,10 +280,10 @@ function CardBody({ card }: { card: Card }) {
             display: "block",
             fontSize: 10,
             fontWeight: 600,
-            letterSpacing: "0.28em",
+            letterSpacing: "0.24em",
             textTransform: "uppercase",
             opacity: 0.7,
-            marginBottom: 10,
+            marginBottom: 8,
           }}
         >
           {card.vol}
@@ -274,7 +292,7 @@ function CardBody({ card }: { card: Card }) {
           style={{
             fontFamily: '"Playfair Display","Public Sans",serif',
             fontWeight: 400,
-            fontSize: "clamp(38px, 6vw, 56px)",
+            fontSize: "clamp(28px, 7vw, 56px)",
             lineHeight: 0.95,
             letterSpacing: "-0.02em",
             margin: 0,
@@ -284,10 +302,10 @@ function CardBody({ card }: { card: Card }) {
         </h3>
         <p
           style={{
-            marginTop: 14,
-            fontSize: 13,
+            marginTop: 10,
+            fontSize: "clamp(11px, 2.6vw, 13px)",
             lineHeight: 1.55,
-            color: "rgba(255,255,255,0.78)",
+            color: "rgba(255,255,255,0.82)",
             maxWidth: "42ch",
           }}
         >
