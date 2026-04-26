@@ -123,3 +123,47 @@ export const SENSORY_COLOR_STOPS: Array<[number, string]> = [
   [7, "#fb923c"], // orange-300
   [10, "#ea580c"], // orange-600 — intense
 ];
+
+export type WheelchairFeature = {
+  id: number;
+  lat: number;
+  lon: number;
+  status: "yes" | "limited" | "no" | "kerb_lowered";
+};
+
+// Pulls wheelchair / curb-cut data from /api/wheelchair (which proxies OSM Overpass).
+export async function fetchWheelchairOSM(bounds = TAMPA_BBOX): Promise<WheelchairFeature[]> {
+  try {
+    const res = await fetch(`/api/wheelchair?bounds=${bounds}`, { cache: "no-store" });
+    if (!res.ok) return [];
+    const data = (await res.json()) as {
+      features: { id: number; lat: number; lon: number; tags: Record<string, string> }[];
+    };
+    return (data.features ?? []).map((f) => {
+      const wc = f.tags.wheelchair as "yes" | "limited" | "no" | undefined;
+      const kerb = f.tags.kerb;
+      const status: WheelchairFeature["status"] =
+        wc === "yes" || wc === "limited" || wc === "no"
+          ? wc
+          : kerb === "lowered"
+            ? "kerb_lowered"
+            : "yes";
+      return { id: f.id, lat: f.lat, lon: f.lon, status };
+    });
+  } catch {
+    return [];
+  }
+}
+
+export function wheelchairToFeatureCollection(
+  features: WheelchairFeature[],
+): GeoJSON.FeatureCollection<GeoJSON.Point> {
+  return {
+    type: "FeatureCollection",
+    features: features.map((f) => ({
+      type: "Feature",
+      geometry: { type: "Point", coordinates: [f.lon, f.lat] },
+      properties: { id: String(f.id), status: f.status },
+    })),
+  };
+}

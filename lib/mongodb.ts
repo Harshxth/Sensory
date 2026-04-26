@@ -1,4 +1,14 @@
 import { MongoClient, Db } from "mongodb";
+import dns from "node:dns";
+
+// Some Windows setups (firewall / AV blocking node.exe's c-ares UDP) fail to
+// resolve mongo hostnames. Prepend Cloudflare + Google so DNS still works.
+try {
+  const existing = dns.getServers();
+  dns.setServers(["1.1.1.1", "8.8.8.8", ...existing]);
+} catch {
+  // setServers can throw if invoked before DNS is ready — non-fatal.
+}
 
 declare global {
   // eslint-disable-next-line no-var

@@ -203,7 +203,7 @@ export default function MapPage() {
         {/* Live alert banner */}
         {!navigation && activeAlert && !bannerDismissed && layers.alerts && !destination && (
           <div className="absolute top-20 md:top-24 left-1/2 -translate-x-1/2 w-[92%] max-w-md z-30">
-            <div className="bg-white/95 backdrop-blur-xl text-on-surface rounded-2xl p-4 shadow-2xl border border-orange-500/30 flex items-start gap-3">
+            <div className="bg-surface-container-lowest/95 backdrop-blur-xl text-on-surface rounded-2xl p-4 shadow-2xl border border-orange-500/30 flex items-start gap-3">
               <div className="w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center flex-shrink-0">
                 <Icon name="campaign" filled size={22} />
               </div>
@@ -290,8 +290,8 @@ function ToggleChip({
       onClick={onToggle}
       className={`min-h-[40px] backdrop-blur-xl rounded-full px-3 py-1.5 shadow-lg border flex items-center gap-2 text-xs font-bold transition-all active:scale-95 ${
         active
-          ? "bg-white text-on-surface border-on-surface/15"
-          : "bg-white/70 text-on-surface-variant border-on-surface/10 hover:bg-white/90"
+          ? "bg-surface-container-lowest text-on-surface border-on-surface/15"
+          : "bg-surface-container-lowest/70 text-on-surface-variant border-on-surface/10 hover:bg-surface-container-lowest/90"
       }`}
       style={
         active && accent

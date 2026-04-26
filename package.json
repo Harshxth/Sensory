@@ -17,6 +17,7 @@
     "@elevenlabs/elevenlabs-js": "^2.44.0",
     "@google/generative-ai": "^0.24.1",
     "@supabase/supabase-js": "^2.104.1",
+    "@vis.gl/react-google-maps": "^1.8.3",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.38.0",
     "mapbox-gl": "^3.22.0",

@@ -1,5 +1,21 @@
 @import "tailwindcss";
 
+/* OpenDyslexic — loaded only when toggled on (browsers download lazily). */
+@font-face {
+  font-family: "OpenDyslexic";
+  src: url("https://cdn.jsdelivr.net/npm/opendyslexic@1.0.3/woff/OpenDyslexic-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "OpenDyslexic";
+  src: url("https://cdn.jsdelivr.net/npm/opendyslexic@1.0.3/woff/OpenDyslexic-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ============================================================
    Verdant Expression — design tokens
    Source: stitch_sensory_inclusive_navigation/verdant_expression/DESIGN.md
@@ -156,6 +172,54 @@ html {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Accessibility preferences — applied as classes on <html> by PreferencesProvider. */
+html.a11y-text-1 {
+  font-size: 14px;
+}
+html.a11y-text-2 {
+  font-size: 15px;
+}
+html.a11y-text-3 {
+  font-size: 16px;
+}
+html.a11y-text-4 {
+  font-size: 18px;
+}
+html.a11y-text-5 {
+  font-size: 20px;
+}
+
+html.a11y-dyslexic,
+html.a11y-dyslexic body {
+  font-family: "OpenDyslexic", "Public Sans", system-ui, sans-serif;
+  letter-spacing: 0.02em;
+  word-spacing: 0.05em;
+}
+
+html.a11y-contrast {
+  --color-on-background: #000000;
+  --color-on-surface: #000000;
+  --color-on-surface-variant: #1a1a1a;
+  --color-outline: #000000;
+}
+
+@media (prefers-color-scheme: dark) {
+  html.a11y-contrast {
+    --color-on-background: #ffffff;
+    --color-on-surface: #ffffff;
+    --color-on-surface-variant: #f0f0f0;
+    --color-outline: #ffffff;
+  }
+}
+
+html.a11y-reduced-motion *,
+html.a11y-reduced-motion *::before,
+html.a11y-reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
 body {
   background: var(--color-background);
   color: var(--color-on-background);
@@ -216,6 +280,53 @@ body {
   line-height: 1.2;
 }
 
+/* Dark theme — follows system preference. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #011205;
+    --color-on-background: #d0f4cf;
+
+    --color-surface: #011205;
+    --color-surface-bright: #0c2d12;
+    --color-surface-dim: #001003;
+    --color-surface-container-lowest: #000d02;
+    --color-surface-container-low: #052e0d;
+    --color-surface-container: #0a3713;
+    --color-surface-container-high: #0f4019;
+    --color-surface-container-highest: #154920;
+    --color-surface-variant: #122e18;
+
+    --color-on-surface: #d0f4cf;
+    --color-on-surface-variant: #90bd96;
+    --color-inverse-surface: #d0f4cf;
+    --color-inverse-on-surface: #112a17;
+
+    --color-outline: #90bd96;
+    --color-outline-variant: #5a8461;
+
+    --color-primary: #b8fda6;
+    --color-on-primary: #084a08;
+    --color-primary-container: #2b6824;
+    --color-on-primary-container: #c8ffb8;
+    --color-primary-dim: #a2e591;
+
+    --color-secondary: #ffc9b1;
+    --color-on-secondary: #5c3623;
+    --color-secondary-container: #7d513d;
+    --color-on-secondary-container: #ffdbcc;
+
+    --color-tertiary: #fa8e67;
+    --color-on-tertiary: #722707;
+    --color-tertiary-container: #722707;
+    --color-on-tertiary-container: #ffa180;
+
+    --color-error: #fa7150;
+    --color-on-error: #671200;
+    --color-error-container: #821a01;
+    --color-on-error-container: #ffdad6;
+  }
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -225,4 +336,92 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Sensory marker animations — loud noise, dense crowd, harsh lighting */
+@keyframes sensory-wave-out {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+@keyframes sensory-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes sensory-shimmer {
+  0%,
+  100% {
+    opacity: 0.5;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(1.4);
+  }
+}
+
+.sensory-marker {
+  pointer-events: auto;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  background: var(--color-surface-bright);
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.12),
+    0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+}
+
+.sensory-marker:hover {
+  transform: scale(1.1);
+}
+
+.sensory-marker .ring {
+  position: absolute;
+  inset: -2px;
+  border-radius: 9999px;
+  border: 2px solid currentColor;
+  animation: sensory-wave-out 1.8s ease-out infinite;
+}
+
+.sensory-marker .ring.delayed {
+  animation-delay: 0.9s;
+}
+
+.sensory-marker--noise {
+  color: #ea580c;
+}
+.sensory-marker--crowd {
+  color: #d97706;
+}
+.sensory-marker--light {
+  color: #f59e0b;
+}
+
+.sensory-marker--noise svg {
+  animation: sensory-bounce 0.9s ease-in-out infinite;
+}
+.sensory-marker--crowd svg {
+  animation: sensory-bounce 1.1s ease-in-out infinite;
+}
+.sensory-marker--light svg {
+  animation: sensory-shimmer 1.6s ease-in-out infinite;
 }

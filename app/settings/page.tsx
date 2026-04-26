@@ -1,17 +1,41 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TopAppBar } from "@/components/layout/TopAppBar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Icon } from "@/components/ui/Icon";
+import {
+  applyPreferences,
+  loadPreferences,
+  savePreferences,
+  TEXT_SIZE_LABELS,
+  type Preferences,
+} from "@/lib/preferences";
 
 export default function SettingsPage() {
-  const [textSize, setTextSize] = useState(3);
-  const [highContrast, setHighContrast] = useState(false);
-  const [dyslexiaFont, setDyslexiaFont] = useState(true);
+  const [prefs, setPrefs] = useState<Preferences>(loadPreferences);
   const [screenReader, setScreenReader] = useState(true);
   const [audioDesc, setAudioDesc] = useState(false);
   const [haptics, setHaptics] = useState<"strong" | "subtle" | "off">("subtle");
+
+  const [savedFlash, setSavedFlash] = useState(false);
+
+  // Live-apply + persist on every change. Flash a "Saved" indicator briefly.
+  useEffect(() => {
+    applyPreferences(prefs);
+    savePreferences(prefs);
+    setSavedFlash(true);
+    const t = setTimeout(() => setSavedFlash(false), 1200);
+    return () => clearTimeout(t);
+  }, [prefs]);
+
+  const update = <K extends keyof Preferences>(key: K, value: Preferences[K]) =>
+    setPrefs((p) => ({ ...p, [key]: value }));
+
+  const textSize = prefs.textSize;
+  const highContrast = prefs.highContrast;
+  const dyslexiaFont = prefs.dyslexiaFont;
+  const reducedMotion = prefs.reducedMotion;
 
   return (
     <>
@@ -40,7 +64,7 @@ export default function SettingsPage() {
                   Text Size
                 </label>
                 <span className="text-sm font-bold bg-surface-container px-3 py-1 rounded-full text-on-surface-variant">
-                  {["XS", "S", "Standard", "L", "XL"][textSize - 1]}
+                  {TEXT_SIZE_LABELS[textSize - 1]}
                 </span>
               </div>
               <div className="flex items-center gap-4">
@@ -51,7 +75,7 @@ export default function SettingsPage() {
                   min={1}
                   max={5}
                   value={textSize}
-                  onChange={(e) => setTextSize(Number(e.target.value))}
+                  onChange={(e) => update("textSize", Number(e.target.value) as Preferences["textSize"])}
                   className="w-full h-2 bg-surface-container-high rounded-lg appearance-none cursor-pointer accent-primary"
                 />
                 <span className="text-xl font-bold text-on-surface">A</span>
@@ -65,15 +89,21 @@ export default function SettingsPage() {
               label="High Contrast Mode"
               hint="Increase color contrast for easier reading."
               checked={highContrast}
-              onChange={setHighContrast}
+              onChange={(v) => update("highContrast", v)}
             />
 
             <ToggleRow
               label="Dyslexia Friendly Font"
-              hint="Switch to a typeface optimized for dyslexia."
-              badge="New"
+              hint="Switch to OpenDyslexic, a typeface optimized for dyslexia."
               checked={dyslexiaFont}
-              onChange={setDyslexiaFont}
+              onChange={(v) => update("dyslexiaFont", v)}
+            />
+
+            <ToggleRow
+              label="Reduce Motion"
+              hint="Disable pulses, slides, and other animations across the app."
+              checked={reducedMotion}
+              onChange={(v) => update("reducedMotion", v)}
             />
           </section>
 
@@ -133,12 +163,33 @@ export default function SettingsPage() {
             </div>
           </section>
 
-          <div className="lg:col-span-12 flex flex-col-reverse sm:flex-row justify-end gap-3 mt-2 border-t border-surface-container pt-6">
-            <button className="px-6 py-3 rounded-lg border border-outline text-on-surface font-bold hover:bg-surface-container transition-colors min-h-[48px]">
+          <div className="lg:col-span-12 flex flex-col-reverse sm:flex-row sm:items-center justify-end gap-3 mt-2 border-t border-surface-container pt-6">
+            <span
+              role="status"
+              aria-live="polite"
+              className={`inline-flex items-center gap-1.5 text-xs font-bold transition-opacity ${
+                savedFlash ? "opacity-100 text-primary" : "opacity-0 text-transparent"
+              }`}
+            >
+              <Icon name="check_circle" filled size={16} /> Saved automatically
+            </span>
+            <button
+              type="button"
+              onClick={() =>
+                setPrefs({
+                  textSize: 3,
+                  highContrast: false,
+                  dyslexiaFont: false,
+                  reducedMotion: false,
+                  needs: prefs.needs,
+                  language: prefs.language,
+                  voiceCloneId: prefs.voiceCloneId,
+                  onboardingComplete: prefs.onboardingComplete,
+                })
+              }
+              className="px-6 py-3 rounded-lg border border-outline text-on-surface font-bold hover:bg-surface-container transition-colors min-h-[48px]"
+            >
               Reset Defaults
-            </button>
-            <button className="px-8 py-3 rounded-lg bg-primary text-on-primary font-bold hover:bg-primary-dim transition-colors min-h-[48px] shadow-sm">
-              Save Preferences
             </button>
           </div>
         </div>
