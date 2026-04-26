@@ -19,6 +19,7 @@ import type { RouteFlag } from "@/components/google/RouteFlags";
 import { PlaceInfoCard } from "@/components/google/PlaceInfoCard";
 import { SensoryDetailPanel } from "@/components/google/SensoryDetailPanel";
 import { TimeSlider } from "@/components/google/TimeSlider";
+import { UserLocationLayer } from "@/components/google/UserLocationLayer";
 import { SignReader } from "@/components/camera/SignReader";
 import { HapticWatcher } from "@/components/HapticWatcher";
 import { adjustVenuesForTime, isLive, nowKey, type TimeKey } from "@/lib/time-aware";
@@ -147,6 +148,7 @@ export default function MapPage() {
             <AlertMarkers visible={layers.alerts} />
             <WheelchairMarkers visible={layers.wheelchair} />
             <StreetlightHeatmap visible={layers.streetlights} />
+            <UserLocationLayer enabled={!navigation} />
             <DirectionsLayer
               destination={destination}
               venues={venues}

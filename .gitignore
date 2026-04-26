@@ -42,3 +42,5 @@ next-env.d.ts
 
 # Stitch design exports — local reference material only
 /stitch_sensory_inclusive_navigation/
+
+.vercel
