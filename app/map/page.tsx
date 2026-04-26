@@ -25,6 +25,7 @@ import { HapticWatcher } from "@/components/HapticWatcher";
 import { adjustVenuesForTime, isLive, nowKey, type TimeKey } from "@/lib/time-aware";
 import { fetchAlerts } from "@/lib/map-data";
 import { saveEntry as saveJournalEntry } from "@/lib/journal";
+import { MapTour } from "@/components/editorial/MapTour";
 import type { Alert, Venue } from "@/types";
 import type { GooglePlaceDetails } from "@/lib/google-places";
 
@@ -271,6 +272,7 @@ export default function MapPage() {
 
         {!navigation && <SignReader />}
         <HapticWatcher venues={displayedVenues} />
+        {!navigation && <MapTour />}
 
         {/* Live alert banner */}
         {!navigation && activeAlert && !bannerDismissed && layers.alerts && !destination && (
