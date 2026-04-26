@@ -1,0 +1,117 @@
+VENUE: USF Tampa Library
+LOCATION: USF Tampa campus, Tampa, Florida
+CATEGORY: library
+NOISE: 2 — soft murmurs, designated quiet floors
+LIGHTING: 4 — soft overhead, warm task lamps
+CROWD: 3 — calm except near midterms and finals
+EXITS: 4 main plus stairwells, clearly marked
+WHEELCHAIR: yes — automatic doors, elevators on every floor
+BEST TIME (QUIETER): weekday mornings before 10 a.m.
+SUMMARY: The library reads as very calm and predictable. Lighting is gentle, conversations stay low, and accessibility is full from entry to top floor.
+
+VENUE: Felicitous Coffee and Tea House
+LOCATION: North of USF Tampa, Tampa, Florida
+CATEGORY: cafe
+NOISE: 4 — gentle chatter, occasional grinder bursts
+LIGHTING: 5 — warm pendants mixed with daylight
+CROWD: 4 — steady but rarely packed
+SMELL: 5 — strong coffee and fresh pastry
+EXITS: 1 main and 1 side door, both visible
+WHEELCHAIR: yes — level entry, accessible restroom
+BEST TIME (QUIETER): weekday afternoons between 2 and 4 p.m.
+SUMMARY: A warm, moderate-energy cafe with low background music. Coffee aroma is strong, which can be a lot for scent-sensitive guests.
+
+VENUE: Bern's Steak House
+LOCATION: South Howard Avenue, Tampa, Florida
+CATEGORY: restaurant
+NOISE: 6 — lively conversation, low ambient music
+LIGHTING: 3 — very dim, candle-lit warm tones
+CROWD: 7 — most seatings full, reservations recommended
+SMELL: 6 — grilled meat and wine
+EXITS: 2 main entrances, subtly lit signage
+WHEELCHAIR: yes — main floor accessible, upstairs dessert room is stairs only
+BEST TIME (QUIETER): weekday early seatings around 5 p.m.
+SUMMARY: An intimate, dim, energetic steakhouse. Beautiful for a special meal, but lighting is low and the room gets loud once it fills.
+
+VENUE: Lettuce Lake Conservation Park
+LOCATION: East Fletcher Avenue, Tampa, Florida
+CATEGORY: park
+NOISE: 2 — bird calls, occasional boardwalk footsteps
+LIGHTING: 6 — bright sun in open areas, dappled shade on trails
+CROWD: 3 — quiet weekday mornings, busier weekends
+SMELL: 3 — pine, river water, light floral
+EXITS: open boardwalk loop with multiple trail returns
+WHEELCHAIR: yes — paved boardwalk and accessible observation tower with a ramp
+BEST TIME (QUIETER): weekday mornings before 11 a.m.
+SUMMARY: A peaceful nature park with a flat boardwalk and big skies. Bring a hat in summer; open stretches are very bright.
+
+VENUE: Marshall Student Center
+LOCATION: USF Tampa campus, Tampa, Florida
+CATEGORY: student_building
+NOISE: 6 — hallway chatter and food court echo
+LIGHTING: 7 — bright fluorescents and large skylights
+CROWD: 7 — steady traffic during class breaks
+SMELL: 5 — mixed food court aromas
+EXITS: 6 plus entrances, all clearly signed
+WHEELCHAIR: yes — automatic doors and elevators to every floor
+BEST TIME (QUIETER): weekday mornings before 9 a.m. or after 6 p.m.
+SUMMARY: The campus hub. Bright and busy, especially at lunch, with quieter pockets on upper floors and in the reading rooms.
+
+VENUE: Tampa International Airport
+LOCATION: Westshore, Tampa, Florida
+CATEGORY: transit
+NOISE: 7 — announcements, tram, rolling luggage
+LIGHTING: 8 — bright LED throughout, large windows
+CROWD: 7 — busy most of the day, much calmer after 9 p.m.
+SMELL: 4 — mild cleaning products, food court near gates
+EXITS: many emergency exits clearly marked, every airside has multiple
+WHEELCHAIR: yes — full ADA, free wheelchair assistance on request, accessible trams
+BEST TIME (QUIETER): weekday late evenings after 9 p.m.
+SUMMARY: A bright, modern airport with predictable wayfinding. Lots of stimulation, so noise-canceling headphones and back-of-airside seating help.
+
+VENUE: USF Recreation Center
+LOCATION: USF Tampa campus, Tampa, Florida
+CATEGORY: gym
+NOISE: 7 — weights, music, treadmill hum
+LIGHTING: 8 — bright overhead on courts, dimmer in studio rooms
+CROWD: 6 — peaks between 5 and 8 p.m., calmer mornings
+SMELL: 5 — gym sweat and cleaning sprays
+EXITS: 3 main exits, all signed
+WHEELCHAIR: yes — accessible cardio equipment, locker rooms, and pool lift
+BEST TIME (QUIETER): weekday mornings before 10 a.m.
+SUMMARY: The rec is energetic and bright. Studio rooms and the back stretching area are noticeably calmer than the main weights floor.
+
+VENUE: Tampa Museum of Art
+LOCATION: Curtis Hixon Waterfront, downtown Tampa, Florida
+CATEGORY: museum
+NOISE: 2 — quiet galleries and soft footsteps
+LIGHTING: 4 — controlled gallery lighting, dim in some rooms
+CROWD: 3 — calm on most weekdays
+EXITS: 2 main exits plus emergency exits, all clearly marked
+WHEELCHAIR: yes — elevator access to every gallery, accessible restrooms on each floor
+BEST TIME (QUIETER): weekday mornings shortly after opening
+SUMMARY: A calm, controlled environment. Some rooms are intentionally dim for the artwork, but staff are easy to spot at gallery entrances.
+
+VENUE: Chick-fil-A USF
+LOCATION: North Dale Mabry near USF, Tampa, Florida
+CATEGORY: restaurant
+NOISE: 7 — order calls, fryers, busy chatter
+LIGHTING: 9 — very bright fluorescent throughout
+CROWD: 8 — packed at lunch and dinner, line often out the door
+SMELL: 7 — strong fried chicken aroma
+EXITS: 2 — front and side patio door, both visible
+WHEELCHAIR: yes — automatic door, accessible counter and restrooms
+BEST TIME (QUIETER): weekday between 2 and 4 p.m.
+SUMMARY: Fast, very bright, very busy. Mid-afternoon is the calmest window; the drive-through is often smoother than the dining room.
+
+VENUE: Skipper's Smokehouse
+LOCATION: Skipper Road, north Tampa, Florida
+CATEGORY: bar
+NOISE: 8 — live music on most evenings, outdoor crowd noise
+LIGHTING: 5 — string lights and stage spotlights, mostly dim
+CROWD: 7 — packed during shows, much calmer mid-afternoon
+SMELL: 6 — wood smoke, fryer, cut grass
+EXITS: open-air venue with multiple gate paths to the lot
+WHEELCHAIR: limited — gravel and grass surfaces, picnic-style seating, no dedicated accessible path to the stage area
+BEST TIME (QUIETER): weekday afternoons before 6 p.m. with no show scheduled
+SUMMARY: A beloved outdoor music venue with a strong sensory footprint at night. Daytime is mellow; show nights are loud, smoky, and crowded.
