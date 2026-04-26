@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Icon } from "@/components/ui/Icon";
 import { TopAppBar } from "@/components/layout/TopAppBar";
 import { BottomNav } from "@/components/layout/BottomNav";
@@ -17,6 +17,8 @@ import { NavigationOverlay } from "@/components/google/NavigationOverlay";
 import type { RouteFlag } from "@/components/google/RouteFlags";
 import { PlaceInfoCard } from "@/components/google/PlaceInfoCard";
 import { SensoryDetailPanel } from "@/components/google/SensoryDetailPanel";
+import { TimeSlider } from "@/components/google/TimeSlider";
+import { adjustVenuesForTime, isLive, nowKey, type TimeKey } from "@/lib/time-aware";
 import { fetchAlerts } from "@/lib/map-data";
 import type { Alert, Venue } from "@/types";
 import type { GooglePlaceDetails } from "@/lib/google-places";
@@ -48,6 +50,14 @@ export default function MapPage() {
   const [venues, setVenues] = useState<Venue[]>([]);
   const [refreshKey, setRefreshKey] = useState(0);
   const [detailOpen, setDetailOpen] = useState(false);
+  const [timeKey, setTimeKey] = useState<TimeKey>(() => nowKey());
+  const [showTimeSlider, setShowTimeSlider] = useState(false);
+
+  const displayedVenues = useMemo(
+    () => adjustVenuesForTime(venues, timeKey),
+    [venues, timeKey],
+  );
+  const live = isLive(timeKey);
 
   useEffect(() => {
     fetchAlerts().then(setAlerts);
@@ -127,9 +137,9 @@ export default function MapPage() {
               onVenuesLoaded={setVenues}
               refreshKey={refreshKey}
             />
-            <NoiseHeatmap venues={venues} visible={layers.noise} />
-            <CrowdHeatmap venues={venues} visible={layers.crowd} />
-            <LightHeatmap venues={venues} visible={layers.light} />
+            <NoiseHeatmap venues={displayedVenues} visible={layers.noise} />
+            <CrowdHeatmap venues={displayedVenues} visible={layers.crowd} />
+            <LightHeatmap venues={displayedVenues} visible={layers.light} />
             <AlertMarkers visible={layers.alerts} />
             <WheelchairMarkers visible={layers.wheelchair} />
             <DirectionsLayer
@@ -204,7 +214,23 @@ export default function MapPage() {
             onToggle={() => toggle("alerts")}
             accent="#ef4444"
           />
+          <ToggleChip
+            icon="schedule"
+            label={live ? "Time" : "Time ●"}
+            active={showTimeSlider || !live}
+            onToggle={() => setShowTimeSlider((s) => !s)}
+            accent="#06b6d4"
+          />
         </div>
+        )}
+
+        {!navigation && showTimeSlider && (
+          <TimeSlider
+            value={timeKey}
+            onChange={setTimeKey}
+            onReset={() => setTimeKey(nowKey())}
+            isLive={live}
+          />
         )}
 
         {/* Live alert banner */}
