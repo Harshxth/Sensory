@@ -1,12 +1,20 @@
 import type { Metadata, Viewport } from "next";
-import { Public_Sans } from "next/font/google";
+import { Public_Sans, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import { PreferencesProvider } from "@/components/PreferencesProvider";
 
 const publicSans = Public_Sans({
   variable: "--font-public-sans",
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  weight: ["500", "600"],
+  style: ["italic"],
   subsets: ["latin"],
   display: "swap",
 });
@@ -37,7 +45,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${publicSans.variable} h-full antialiased`}>
+    <html lang="en" className={`${publicSans.variable} ${playfair.variable} h-full antialiased`}>
       <head>
         <link
           rel="stylesheet"
