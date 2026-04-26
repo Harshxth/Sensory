@@ -97,45 +97,86 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
         transition: "opacity 700ms ease-in-out, transform 800ms cubic-bezier(0.22,1,0.36,1)",
       }}
     >
-      <button
-        type="button"
-        onClick={triggerExit}
-        className="absolute top-4 right-4 z-20 px-4 h-9 rounded-full text-xs font-bold backdrop-blur-md transition-colors"
-        style={{ background: "rgba(17, 58, 30, 0.08)", color: "#113a1e" }}
-      >
-        Skip →
-      </button>
-
-      {/* Moving, brightening aura behind the wordmark */}
+      {/* Premium 3D layered glow — multiple orbs at different depths drift
+          and rotate, building a volumetric forest-green sphere of light. */}
       <div
         aria-hidden
-        className="absolute inset-0 pointer-events-none"
-        style={{ filter: "blur(60px)" }}
+        className="absolute inset-0 pointer-events-none overflow-hidden"
       >
+        {/* Outermost diffuse halo — sets the ambient glow */}
+        <div
+          className="absolute aura-rotate"
+          style={{
+            top: "50%",
+            left: "50%",
+            width: glowIntense ? "1600px" : "1100px",
+            height: glowIntense ? "1600px" : "1100px",
+            background:
+              "radial-gradient(circle, rgba(20, 83, 45, 0.55) 0%, rgba(20, 83, 45, 0.18) 35%, transparent 70%)",
+            transform: "translate(-50%, -50%)",
+            filter: "blur(80px)",
+            transition: "width 1.4s ease, height 1.4s ease",
+          }}
+        />
+        {/* Mid-depth orb — gives 3D body */}
         <div
           className="absolute aura-orb"
           style={{
             top: "50%",
             left: "50%",
-            width: glowIntense ? "780px" : "460px",
-            height: glowIntense ? "780px" : "460px",
+            width: glowIntense ? "900px" : "640px",
+            height: glowIntense ? "900px" : "640px",
             background:
-              "radial-gradient(circle, #14532d 0%, transparent 70%)",
-            opacity: glowIntense ? 0.6 : 0.35,
+              "radial-gradient(circle at 35% 35%, #22c55e 0%, #14532d 45%, transparent 75%)",
+            opacity: glowIntense ? 0.78 : 0.55,
             transform: "translate(-50%, -50%)",
+            filter: "blur(45px)",
             transition: "opacity 1.2s ease, width 1.2s ease, height 1.2s ease",
           }}
         />
+        {/* Specular highlight — top-left, brightens to fake a light source */}
+        <div
+          className="absolute aura-highlight"
+          style={{
+            top: "32%",
+            left: "32%",
+            width: "420px",
+            height: "420px",
+            background:
+              "radial-gradient(circle, rgba(220, 252, 231, 0.85) 0%, transparent 65%)",
+            opacity: glowIntense ? 0.6 : 0.3,
+            filter: "blur(40px)",
+            transition: "opacity 1.2s ease",
+          }}
+        />
+        {/* Deep-shadow orb — bottom-right, anchors the volumetric feel */}
+        <div
+          className="absolute aura-shadow"
+          style={{
+            top: "68%",
+            left: "60%",
+            width: "560px",
+            height: "560px",
+            background:
+              "radial-gradient(circle, #052e16 0%, transparent 65%)",
+            opacity: glowIntense ? 0.55 : 0.35,
+            filter: "blur(50px)",
+            mixBlendMode: "multiply",
+            transition: "opacity 1.2s ease",
+          }}
+        />
+        {/* Secondary drifting orb — adds parallax depth */}
         <div
           className="absolute aura-orb-secondary"
           style={{
-            top: "30%",
-            left: "30%",
-            width: "320px",
-            height: "320px",
+            top: "25%",
+            left: "70%",
+            width: "380px",
+            height: "380px",
             background:
               "radial-gradient(circle, #166534 0%, transparent 70%)",
-            opacity: glowIntense ? 0.45 : 0.18,
+            opacity: glowIntense ? 0.55 : 0.25,
+            filter: "blur(60px)",
             transition: "opacity 1.2s ease",
           }}
         />
@@ -184,32 +225,62 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
       </div>
 
       <style jsx>{`
-        @keyframes drift {
+        @keyframes drift-center {
           0% {
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%) scale(1);
           }
           25% {
-            transform: translate(-46%, -54%);
+            transform: translate(-46%, -54%) scale(1.04);
           }
           50% {
-            transform: translate(-52%, -50%);
+            transform: translate(-52%, -48%) scale(0.98);
           }
           75% {
-            transform: translate(-50%, -46%);
+            transform: translate(-50%, -52%) scale(1.05);
           }
           100% {
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%) scale(1);
           }
         }
-        @keyframes drift-secondary {
+        @keyframes rotate-slow {
+          0% {
+            transform: translate(-50%, -50%) rotate(0deg);
+          }
+          100% {
+            transform: translate(-50%, -50%) rotate(360deg);
+          }
+        }
+        @keyframes drift-highlight {
+          0% {
+            transform: translate(0, 0) scale(1);
+          }
+          50% {
+            transform: translate(40px, -30px) scale(1.1);
+          }
+          100% {
+            transform: translate(0, 0) scale(1);
+          }
+        }
+        @keyframes drift-shadow {
+          0% {
+            transform: translate(-50%, -50%) scale(1);
+          }
+          50% {
+            transform: translate(-58%, -42%) scale(1.08);
+          }
+          100% {
+            transform: translate(-50%, -50%) scale(1);
+          }
+        }
+        @keyframes drift-far {
           0% {
             transform: translate(0, 0);
           }
           33% {
-            transform: translate(80px, 60px);
+            transform: translate(-90px, 50px);
           }
           66% {
-            transform: translate(-60px, 40px);
+            transform: translate(60px, -40px);
           }
           100% {
             transform: translate(0, 0);
@@ -223,17 +294,29 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
             opacity: 0;
           }
         }
+        .aura-rotate {
+          animation: rotate-slow 24s linear infinite;
+        }
         .aura-orb {
-          animation: drift 6s ease-in-out infinite;
+          animation: drift-center 7s ease-in-out infinite;
+        }
+        .aura-highlight {
+          animation: drift-highlight 5s ease-in-out infinite;
+        }
+        .aura-shadow {
+          animation: drift-shadow 8s ease-in-out infinite;
         }
         .aura-orb-secondary {
-          animation: drift-secondary 9s ease-in-out infinite;
+          animation: drift-far 11s ease-in-out infinite;
         }
         .caret {
           animation: blink 1s steps(2) infinite;
         }
         @media (prefers-reduced-motion: reduce) {
+          .aura-rotate,
           .aura-orb,
+          .aura-highlight,
+          .aura-shadow,
           .aura-orb-secondary,
           .caret {
             animation: none;
