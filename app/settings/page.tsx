@@ -16,7 +16,6 @@ export default function SettingsPage() {
   const [prefs, setPrefs] = useState<Preferences>(loadPreferences);
   const [screenReader, setScreenReader] = useState(true);
   const [audioDesc, setAudioDesc] = useState(false);
-  const [haptics, setHaptics] = useState<"strong" | "subtle" | "off">("subtle");
 
   const [savedFlash, setSavedFlash] = useState(false);
 
@@ -36,6 +35,7 @@ export default function SettingsPage() {
   const highContrast = prefs.highContrast;
   const dyslexiaFont = prefs.dyslexiaFont;
   const reducedMotion = prefs.reducedMotion;
+  const hapticWarnings = prefs.hapticWarnings;
 
   return (
     <>
@@ -114,35 +114,17 @@ export default function SettingsPage() {
               <ToggleRow compact label="Audio Descriptions" checked={audioDesc} onChange={setAudioDesc} />
             </section>
 
-            <section className="bg-surface-container-lowest rounded-2xl shadow-sm border border-surface-container p-6 flex flex-col gap-6">
+            <section className="bg-surface-container-lowest rounded-2xl shadow-sm border border-surface-container p-6 flex flex-col gap-4">
               <SectionHeader icon="vibration" container="bg-tertiary-container text-on-tertiary-container" title="Haptics" />
-              <div className="flex flex-col gap-3">
-                {[
-                  { v: "strong", label: "Strong Vibrations" },
-                  { v: "subtle", label: "Subtle Haptics" },
-                  { v: "off", label: "Off" },
-                ].map((opt) => {
-                  const selected = haptics === opt.v;
-                  return (
-                    <label
-                      key={opt.v}
-                      className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors ${
-                        selected
-                          ? "bg-surface-container border border-primary-container"
-                          : "hover:bg-surface-container border border-transparent"
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="haptics"
-                        checked={selected}
-                        onChange={() => setHaptics(opt.v as typeof haptics)}
-                        className="w-5 h-5 accent-primary"
-                      />
-                      <span className="font-medium text-on-surface">{opt.label}</span>
-                    </label>
-                  );
-                })}
+              <ToggleRow
+                compact
+                label="Vibrate on high-sensory zones"
+                hint="Brief buzz when you enter a venue's bubble that matches your needs."
+                checked={hapticWarnings}
+                onChange={(v) => update("hapticWarnings", v)}
+              />
+              <div className="text-[11px] text-on-surface-variant">
+                Pattern strength: stronger when both noise and crowd peak together.
               </div>
             </section>
           </div>
@@ -181,6 +163,7 @@ export default function SettingsPage() {
                   highContrast: false,
                   dyslexiaFont: false,
                   reducedMotion: false,
+                  hapticWarnings: true,
                   needs: prefs.needs,
                   language: prefs.language,
                   voiceCloneId: prefs.voiceCloneId,

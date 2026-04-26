@@ -5,6 +5,7 @@ export type Preferences = {
   highContrast: boolean;
   dyslexiaFont: boolean;
   reducedMotion: boolean;
+  hapticWarnings: boolean;
   // Profile from onboarding
   needs: AccessibilityNeed[];
   language: Language;
@@ -19,6 +20,7 @@ export const DEFAULT_PREFERENCES: Preferences = {
   highContrast: false,
   dyslexiaFont: false,
   reducedMotion: false,
+  hapticWarnings: true,
   needs: [],
   language: "en",
   voiceCloneId: null,

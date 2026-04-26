@@ -19,6 +19,7 @@ import { PlaceInfoCard } from "@/components/google/PlaceInfoCard";
 import { SensoryDetailPanel } from "@/components/google/SensoryDetailPanel";
 import { TimeSlider } from "@/components/google/TimeSlider";
 import { SignReader } from "@/components/camera/SignReader";
+import { HapticWatcher } from "@/components/HapticWatcher";
 import { adjustVenuesForTime, isLive, nowKey, type TimeKey } from "@/lib/time-aware";
 import { fetchAlerts } from "@/lib/map-data";
 import type { Alert, Venue } from "@/types";
@@ -235,6 +236,7 @@ export default function MapPage() {
         )}
 
         {!navigation && <SignReader />}
+        <HapticWatcher venues={displayedVenues} />
 
         {/* Live alert banner */}
         {!navigation && activeAlert && !bannerDismissed && layers.alerts && !destination && (
