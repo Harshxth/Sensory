@@ -7,10 +7,12 @@ import { Icon } from "@/components/ui/Icon";
 type Card = {
   vol: string;
   title: string;
-  body: string;
-  icon: string;
-  bg: string;
-  ink: string;
+  caption: string;
+  /** Background image URL (Unsplash). */
+  image: string;
+  /** Tint color used in the bottom gradient — keeps each card visually distinct. */
+  tint: string;
+  /** Sensory accent color used in the corner glyph. */
   accent: string;
 };
 
@@ -18,37 +20,41 @@ const CARDS: Card[] = [
   {
     vol: "Vol. 01",
     title: "Sense",
-    body: "Live noise, light, crowd, smell and exit data layered over the map you already know.",
-    icon: "graphic_eq",
-    bg: "linear-gradient(140deg,#f5f7f9 0%,#e7eaef 100%)",
-    ink: "#0f172a",
-    accent: "#1d72f5",
+    caption: "Live noise, light, crowd, smell, and exit data — layered over the streets you already know.",
+    // Topographic map-paper texture
+    image:
+      "https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1200&auto=format&fit=crop",
+    tint: "rgba(15,23,42,0.85)",
+    accent: "#f97316",
   },
   {
     vol: "Vol. 02",
     title: "Plan",
-    body: "Profile-aware routing picks the calmest, step-free, well-lit path your body can handle.",
-    icon: "route",
-    bg: "linear-gradient(140deg,#e6efe2 0%,#cfdcc6 100%)",
-    ink: "#0f1c11",
-    accent: "#225f1c",
+    caption: "Profile-aware routing picks the calmest, step-free, well-lit path your body can handle.",
+    // Quiet forest path / softly lit walkway
+    image:
+      "https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80&w=1200&auto=format&fit=crop",
+    tint: "rgba(15,28,17,0.82)",
+    accent: "#22c55e",
   },
   {
     vol: "Vol. 03",
     title: "Walk",
-    body: "Turn-by-turn with haptic warnings before high-sensory zones and voice in your language.",
-    icon: "directions_walk",
-    bg: "linear-gradient(140deg,#fff4e0 0%,#f4d8a2 100%)",
-    ink: "#231505",
-    accent: "#aa371c",
+    caption: "Turn-by-turn with haptic warnings before high-sensory zones and voice cues in your language.",
+    // Solo walker on quiet street
+    image:
+      "https://images.unsplash.com/photo-1494522855154-9297ac14b55f?q=80&w=1200&auto=format&fit=crop",
+    tint: "rgba(35,21,5,0.85)",
+    accent: "#fb923c",
   },
   {
     vol: "Vol. 04",
     title: "Share",
-    body: "Caregiver mode lets a trusted person follow your live journey and check in with one tap.",
-    icon: "ios_share",
-    bg: "linear-gradient(140deg,#0f172a 0%,#1e293b 100%)",
-    ink: "#f8fafc",
+    caption: "Caregiver mode lets a trusted person follow your live journey and check in with one tap.",
+    // Phone in hand showing navigation
+    image:
+      "https://images.unsplash.com/photo-1551295022-de5522c94e08?q=80&w=1200&auto=format&fit=crop",
+    tint: "rgba(15,23,42,0.85)",
     accent: "#22d3ee",
   },
 ];
@@ -166,12 +172,12 @@ export function WorkflowCardSwap() {
                   transformOrigin: "center center",
                   zIndex: s.zIndex,
                   willChange: "transform, opacity",
-                  background: card.bg,
                   borderRadius: "24px",
                   border: "1px solid rgba(255,255,255,0.4)",
                   boxShadow:
                     "0 30px 60px -20px rgba(15,23,42,0.25), 0 12px 30px -10px rgba(15,23,42,0.15)",
                   overflow: "hidden",
+                  background: "#1f2937",
                 }}
               >
                 <CardBody card={card} />
@@ -199,42 +205,93 @@ export function WorkflowCardSwap() {
 }
 
 function CardBody({ card }: { card: Card }) {
-  const onDark = card.ink !== "#0f172a" && card.ink !== "#0f1c11" && card.ink !== "#231505";
   return (
-    <div className="relative w-full h-full p-8 md:p-10 flex flex-col justify-between">
-      <div className="flex items-start justify-between">
+    <div className="relative w-full h-full">
+      {/* Background image */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={card.image}
+        alt=""
+        loading="lazy"
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          filter: "saturate(1.05) contrast(1.02)",
+        }}
+      />
+      {/* Bottom-up gradient for text legibility */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: `linear-gradient(to top, ${card.tint} 0%, ${card.tint.replace(/[\d.]+\)$/, "0.55)")} 35%, rgba(0,0,0,0) 70%)`,
+        }}
+      />
+
+      {/* Top-right accent dot */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          top: 24,
+          right: 24,
+          width: 12,
+          height: 12,
+          borderRadius: "50%",
+          background: card.accent,
+          boxShadow: `0 0 16px ${card.accent}`,
+        }}
+      />
+
+      {/* Bottom-left content stack */}
+      <div
+        style={{
+          position: "absolute",
+          left: 32,
+          right: 32,
+          bottom: 32,
+          color: "#ffffff",
+        }}
+      >
         <span
-          className="text-[10px] font-semibold uppercase tracking-[0.25em] opacity-60"
-          style={{ color: card.ink }}
+          style={{
+            display: "block",
+            fontSize: 10,
+            fontWeight: 600,
+            letterSpacing: "0.28em",
+            textTransform: "uppercase",
+            opacity: 0.7,
+            marginBottom: 10,
+          }}
         >
           {card.vol}
         </span>
-        <span
-          className="w-11 h-11 rounded-full flex items-center justify-center"
-          style={{
-            background: onDark ? "rgba(255,255,255,0.08)" : "rgba(15,23,42,0.06)",
-            color: card.accent,
-          }}
-        >
-          <Icon name={card.icon} filled size={22} />
-        </span>
-      </div>
-
-      <div>
         <h3
-          className="text-4xl md:text-5xl font-light tracking-tight leading-none"
           style={{
             fontFamily: '"Playfair Display","Public Sans",serif',
-            color: card.ink,
+            fontWeight: 400,
+            fontSize: "clamp(38px, 6vw, 56px)",
+            lineHeight: 0.95,
+            letterSpacing: "-0.02em",
+            margin: 0,
           }}
         >
           {card.title}
         </h3>
         <p
-          className="mt-3 text-sm md:text-base leading-relaxed max-w-[34ch] opacity-65"
-          style={{ color: card.ink }}
+          style={{
+            marginTop: 14,
+            fontSize: 13,
+            lineHeight: 1.55,
+            color: "rgba(255,255,255,0.78)",
+            maxWidth: "42ch",
+          }}
         >
-          {card.body}
+          {card.caption}
         </p>
       </div>
     </div>

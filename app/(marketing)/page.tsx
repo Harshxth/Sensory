@@ -4,37 +4,11 @@ import { MapView } from "@/components/map/MapView";
 import { SensoryLayer } from "@/components/map/SensoryLayer";
 import { BootSplash } from "@/components/BootSplash";
 import { WorkflowCardSwap } from "@/components/marketing/WorkflowCardSwap";
+import { AccessibilityCards } from "@/components/marketing/AccessibilityCards";
 import { SensoryLockup, SensoryGlyph } from "@/components/brand/SensoryMark";
 
-const FEATURES = [
-  {
-    icon: "accessible",
-    container: "bg-primary-container text-on-primary-container",
-    title: "Mobility Safe",
-    body: "Step-free routes, ramp locations, and verified accessible entrances updated in real-time.",
-  },
-  {
-    icon: "blind",
-    container: "bg-secondary-container text-on-secondary-container",
-    title: "Vision Support",
-    body: "High-contrast modes, audible turn-by-turn directions, and tactile paving identifiers.",
-  },
-  {
-    icon: "hearing",
-    container: "bg-tertiary-container text-on-tertiary-container",
-    title: "Hearing Friendly",
-    body: "Visual alerts, vibration cues, and environments optimized for sign language visibility.",
-  },
-  {
-    icon: "font_download",
-    container: "bg-primary-container text-on-primary-container",
-    title: "Dyslexia Optimized",
-    body: "Customizable typography, specialized fonts, and icon-first navigation designed for readability.",
-  },
-];
-
 const STATS = [
-  { label: "Venues mapped", value: "29+", sub: "Tampa & USF" },
+  { label: "Venues mapped", value: "148", sub: "USF + Tampa, 5–10 mi radius" },
   { label: "Sensory dimensions", value: "5", sub: "Noise · Light · Crowd · Smell · Exits" },
   { label: "Languages", value: "3", sub: "EN · ES · 中文" },
 ];
@@ -151,67 +125,9 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="features" className="w-full px-6 pb-16 md:pb-24 max-w-7xl mx-auto">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-5xl font-bold text-on-background mb-4 tracking-tight">
-              Built for every experience
-            </h2>
-            <p className="text-lg text-on-surface-variant max-w-2xl mx-auto">
-              Tailored routing, venue details, and a map that respects how different bodies and
-              minds move through space.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {FEATURES.slice(0, 3).map((f) => (
-              <article
-                key={f.title}
-                className="group bg-surface-container-low rounded-3xl p-7 flex flex-col gap-4 border border-outline/10 hover:border-primary/30 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 transition-all"
-              >
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${f.container}`}>
-                  <Icon name={f.icon} filled size={28} />
-                </div>
-                <h3 className="text-xl font-bold text-on-background">{f.title}</h3>
-                <p className="text-on-surface-variant leading-relaxed">{f.body}</p>
-              </article>
-            ))}
-
-            <article className="md:col-span-2 group bg-gradient-to-br from-primary-container via-surface-container to-surface-container-high rounded-3xl p-8 flex flex-col md:flex-row gap-8 items-stretch border border-primary/20 hover:shadow-xl hover:shadow-primary/15 transition-all overflow-hidden relative">
-              <div className="flex-1 flex flex-col gap-4 z-10">
-                <div className="w-14 h-14 bg-primary text-on-primary rounded-2xl flex items-center justify-center">
-                  <Icon name="volume_off" filled size={28} />
-                </div>
-                <h3 className="text-2xl md:text-3xl font-bold text-on-background tracking-tight">
-                  Sensory Calm Routing
-                </h3>
-                <p className="text-on-surface-variant text-lg leading-relaxed">
-                  Navigate away from loud construction, heavy traffic, and crowded areas to find
-                  the quietest path to your destination.
-                </p>
-              </div>
-              <div className="flex-1 min-h-[200px] rounded-2xl overflow-hidden relative bg-surface-container-low border border-outline/10">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-primary-container to-surface-container-low" />
-                <div className="absolute top-1/3 left-1/4 w-32 h-32 bg-primary/30 rounded-full blur-2xl animate-pulse" />
-                <div className="absolute bottom-1/3 right-1/4 w-24 h-24 bg-tertiary/20 rounded-full blur-xl animate-pulse" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-on-primary-container text-center">
-                    <Icon name="route" filled size={56} className="text-primary" />
-                  </div>
-                </div>
-              </div>
-            </article>
-
-            <article className="group bg-surface-container-low rounded-3xl p-7 flex flex-col gap-4 border border-outline/10 hover:border-primary/30 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 transition-all">
-              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${FEATURES[3].container}`}>
-                <Icon name={FEATURES[3].icon} filled size={28} />
-              </div>
-              <h3 className="text-xl font-bold text-on-background">{FEATURES[3].title}</h3>
-              <p className="text-on-surface-variant leading-relaxed">{FEATURES[3].body}</p>
-            </article>
-          </div>
-        </section>
-
         <WorkflowCardSwap />
+
+        <AccessibilityCards />
 
         <section id="how" className="w-full px-6 pb-16 md:pb-24 max-w-5xl mx-auto">
           <div className="bg-on-background text-background rounded-3xl p-8 md:p-12 relative overflow-hidden">

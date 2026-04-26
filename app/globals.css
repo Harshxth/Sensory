@@ -284,7 +284,8 @@ html {
   line-height: 1.2;
 }
 
-/* Dark theme — slate near-black with green accent */
+/* Dark theme — slate near-black with green accent.
+   Follows system color-scheme preference. */
 @media (prefers-color-scheme: dark) {
   :root {
     --color-background: #0f172a;
@@ -313,6 +314,11 @@ html {
     --color-primary-container: #14532d;
     --color-on-primary-container: #bbf7d0;
     --color-primary-dim: #22c55e;
+  }
+
+  body,
+  html {
+    background: var(--color-background);
   }
 }
 
