@@ -28,6 +28,7 @@ async function main() {
   await db.collection(COLLECTIONS.alerts).createIndex({ geo_bounds: "2dsphere" });
   await db.collection(COLLECTIONS.alerts).createIndex({ start: 1, end: 1 });
   await db.collection(COLLECTIONS.reviews).createIndex({ venue_id: 1, timestamp: -1 });
+  await db.collection(COLLECTIONS.users).createIndex({ supabase_id: 1 }, { unique: true });
 
   console.log("indexes created");
   process.exit(0);
