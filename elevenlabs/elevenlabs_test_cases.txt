@@ -45,7 +45,7 @@ SUCCESS CRITERIA:
   - Does not over-claim "Deaf-friendly"; describes conditions instead.
 MAX TURNS: 3
 
-RESULT:
+RESULT: PASS — ElevenLabs "Deaf user support check" run scored 1/1. Agent framed the noise level around lip-reading viability and called out signage and line of sight to staff.
 
 TEST 6: Simple English / ESL
 SCENARIO: A user new to English asks for help. They say: "Please explain simply. The library — is it loud?"
