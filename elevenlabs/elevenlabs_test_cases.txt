@@ -55,7 +55,7 @@ SUCCESS CRITERIA:
   - Stays in simple-English mode for any follow-up turn in the same test.
 MAX TURNS: 4
 
-RESULT:
+RESULT: PASS — ElevenLabs "Simple English explanation" run scored 1/1. Agent immediately switched to short common-word sentences, dropped idioms, and stayed in simple-English mode through the follow-up.
 
 TEST 7: Spanish language switch
 SCENARIO: A Spanish-speaking user opens with: "Hola, ¿cómo es la biblioteca de USF en las mañanas?"
