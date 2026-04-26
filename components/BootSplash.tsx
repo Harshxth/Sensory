@@ -84,9 +84,11 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
       /* ignore */
     }
     setPhase("exit");
-    // First-timers go through the field guide before the map; returning users
-    // jump straight in. Either way, the marketing landing never shows.
-    router.push(needsOnboarding ? "/how-it-works" : "/map");
+    // Always run the full demo flow: how-it-works → onboarding → map.
+    // Every page has its own Skip button for users who want to shortcut.
+    router.push("/how-it-works");
+    // suppress unused var warning while keeping the prefs read for future use
+    void needsOnboarding;
     setTimeout(() => {
       setPhase("gone");
       onDone?.();

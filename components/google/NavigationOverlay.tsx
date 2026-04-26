@@ -271,9 +271,14 @@ function stripHtml(s: string): string {
   return s.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 }
 
-function speak(text: string) {
-  if (typeof window === "undefined") return;
-  if (!("speechSynthesis" in window)) return;
+// Default ElevenLabs voice (Bella) — used when the user hasn't cloned one yet.
+const DEFAULT_VOICE_ID = "EXAVITQu4vr4xnSDxMaL";
+
+let _audioEl: HTMLAudioElement | null = null;
+let _audioUrl: string | null = null;
+
+function fallbackBrowserSpeak(text: string) {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
   try {
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
@@ -283,6 +288,69 @@ function speak(text: string) {
   } catch {
     /* ignore */
   }
+}
+
+/**
+ * Speak a navigation cue. Priority:
+ *   1. User's cloned ElevenLabs voice (preferences.voiceCloneId)
+ *   2. Stock ElevenLabs voice (Bella)
+ *   3. Browser SpeechSynthesis (last resort)
+ *
+ * Calls /api/voice/speak which streams MP3 from ElevenLabs. The previous
+ * audio is canceled before playing the next cue so we never overlap.
+ */
+function speak(text: string) {
+  if (typeof window === "undefined" || !text) return;
+  let voiceId = DEFAULT_VOICE_ID;
+  let lang: "en" | "es" | "zh" = "en";
+  try {
+    const raw = window.localStorage.getItem("sensory:preferences");
+    if (raw) {
+      const p = JSON.parse(raw) as { voiceCloneId?: string; language?: "en" | "es" | "zh" };
+      if (p.voiceCloneId && typeof p.voiceCloneId === "string") voiceId = p.voiceCloneId;
+      if (p.language) lang = p.language;
+    }
+  } catch {
+    /* ignore */
+  }
+
+  // Stop any in-flight audio
+  if (_audioEl) {
+    try {
+      _audioEl.pause();
+      _audioEl.src = "";
+    } catch {
+      /* ignore */
+    }
+  }
+  if (_audioUrl) {
+    try {
+      URL.revokeObjectURL(_audioUrl);
+    } catch {
+      /* ignore */
+    }
+    _audioUrl = null;
+  }
+
+  fetch("/api/voice/speak", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text, voice_id: voiceId, lang }),
+  })
+    .then(async (res) => {
+      if (!res.ok) throw new Error(`speak ${res.status}`);
+      const blob = await res.blob();
+      _audioUrl = URL.createObjectURL(blob);
+      const audio = new Audio(_audioUrl);
+      audio.preload = "auto";
+      _audioEl = audio;
+      await audio.play();
+    })
+    .catch(() => {
+      // ElevenLabs unavailable (no key, network, quota) — fall back so the
+      // user still hears the cue. Better robotic than silent.
+      fallbackBrowserSpeak(text);
+    });
 }
 
 function haversine(

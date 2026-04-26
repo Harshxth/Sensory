@@ -31,6 +31,8 @@ type Props = {
   onClose: () => void;
   /** Lift navigation up to the parent so it can hide other chrome and render fullscreen. */
   onStartNavigation: (payload: { route: Route; flags: RouteFlag[] }) => void;
+  /** When true, hide the directions card so NavigationOverlay can take over the screen. */
+  navigationActive?: boolean;
 };
 
 export function DirectionsLayer({
@@ -39,6 +41,7 @@ export function DirectionsLayer({
   alerts,
   onClose,
   onStartNavigation,
+  navigationActive = false,
 }: Props) {
   const map = useMap();
   const geometry = useMapsLibrary("geometry");
@@ -128,6 +131,9 @@ export function DirectionsLayer({
   }, [map, geometry, route, venues, alerts]);
 
   if (!destination) return null;
+  // While fullscreen navigation is active, the parent renders NavigationOverlay
+  // and expects the directions card to step out of the way.
+  if (navigationActive) return null;
 
   const minutes = route ? Math.round(route.durationSec / 60) : null;
   const miles = route ? (route.distanceMeters / 1609.344).toFixed(1) : null;

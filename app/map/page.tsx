@@ -153,6 +153,7 @@ export default function MapPage() {
               destination={destination}
               venues={venues}
               alerts={alerts}
+              navigationActive={!!navigation}
               onClose={() => setDestination(null)}
               onStartNavigation={({ route, flags }) => {
                 setNavigation({
