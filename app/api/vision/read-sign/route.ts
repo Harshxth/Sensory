@@ -27,14 +27,31 @@ export async function POST(req: NextRequest) {
       },
       {
         text:
-          `Read every piece of visible text in this image — signs, menus, transit boards, posters, anything. ` +
-          `Translate to natural ${langName} if not already in that language. ` +
-          `Format as a short, scannable readout. If there are multiple distinct items, separate with periods. ` +
-          `If no readable text, return exactly "No text found".`,
+          `You are reading a photo a low-vision or ESL user just took. Return STRICT JSON ` +
+          `(no markdown fences, no commentary) of shape:\n` +
+          `{"text": string, "place_name": string | null}\n\n` +
+          `"text" — every readable sign / menu / poster, transcribed and translated to natural ${langName}. ` +
+          `Short, scannable, separate distinct items with periods. If nothing is readable, set "text" to "No text found".\n\n` +
+          `"place_name" — if the image clearly shows a business / building / venue NAME (e.g. "Felicitous Coffee", ` +
+          `"USF Library", "Mr. Dunderbak's"), return that name as a clean string. Otherwise return null. ` +
+          `Do NOT invent — only return a name that is literally visible. Do not include addresses, slogans, or hours.`,
       },
     ]);
-    const text = result.response.text().trim();
-    return NextResponse.json({ text, language });
+    const raw = result.response.text().trim();
+    // Gemini sometimes wraps JSON in ```json fences despite the instruction. Strip + parse defensively.
+    const cleaned = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
+    let text = cleaned;
+    let placeName: string | null = null;
+    try {
+      const parsed = JSON.parse(cleaned) as { text?: string; place_name?: string | null };
+      if (typeof parsed.text === "string") text = parsed.text;
+      if (typeof parsed.place_name === "string" && parsed.place_name.trim().length > 0) {
+        placeName = parsed.place_name.trim();
+      }
+    } catch {
+      // Not JSON — fall back to treating the whole response as the readout text.
+    }
+    return NextResponse.json({ text, place_name: placeName, language });
   } catch (e) {
     return NextResponse.json(
       { error: (e as Error).message ?? "Vision request failed" },

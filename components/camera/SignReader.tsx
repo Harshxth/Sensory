@@ -6,14 +6,33 @@ import { loadPreferences } from "@/lib/preferences";
 
 type Stage = "idle" | "live" | "capturing" | "result" | "error";
 
+type Wayfinding = {
+  match?: { name: string; lat: number; lng: number; distanceMeters: number } | null;
+  verdict: "at_destination" | "approaching" | "off_track" | "no_match";
+  spoken: string;
+  bearingFromUser?: string;
+  distanceMeters?: number;
+};
+
+type Props = {
+  /** Active navigation destination — when present, sign reads also do
+   *  wayfinding ("you're heading right toward it" / "head left instead"). */
+  destination?: { lat: number; lng: number; name: string } | null;
+};
+
 /**
- * Floating camera button + camera-capture flow that uses Gemini Vision to
- * read signs/menus/boards and reads them aloud via SpeechSynthesis (or via
- * ElevenLabs TTS in the user's cloned voice — TODO once voice agent is wired).
+ * Floating camera button + camera-capture flow.
+ *
+ * 1. Gemini Vision transcribes the sign and extracts a place name.
+ * 2. Geolocation + active destination feed /api/wayfinding/check.
+ * 3. The result — sign text + wayfinding sentence — is read aloud through
+ *    ElevenLabs (cloned voice if available, Bella otherwise; falls back to
+ *    browser TTS only if the API errors).
  */
-export function SignReader() {
+export function SignReader({ destination }: Props = {}) {
   const [stage, setStage] = useState<Stage>("idle");
   const [text, setText] = useState<string>("");
+  const [wayfinding, setWayfinding] = useState<Wayfinding | null>(null);
   const [error, setError] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -53,10 +72,9 @@ export function SignReader() {
     stopStream();
     setStage("idle");
     setText("");
+    setWayfinding(null);
     setError(null);
-    if (typeof window !== "undefined" && "speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-    }
+    cancelSpeech();
   };
 
   const capture = async () => {
@@ -73,16 +91,55 @@ export function SignReader() {
 
     const lang = loadPreferences().language ?? "en";
     try {
-      const res = await fetch("/api/vision/read-sign", {
+      const visionRes = await fetch("/api/vision/read-sign", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ image_b64: dataUrl, language: lang }),
       });
-      if (!res.ok) throw new Error(String(res.status));
-      const data = (await res.json()) as { text: string };
-      setText(data.text);
+      if (!visionRes.ok) throw new Error(String(visionRes.status));
+      const visionData = (await visionRes.json()) as {
+        text: string;
+        place_name?: string | null;
+      };
+      setText(visionData.text);
+
+      // Try wayfinding if we have a place name candidate AND geolocation. We
+      // don't fail the whole flow on a wayfinding miss — just speak the text.
+      let way: Wayfinding | null = null;
+      if (visionData.place_name && navigator.geolocation) {
+        try {
+          const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+              enableHighAccuracy: true,
+              maximumAge: 5000,
+              timeout: 8000,
+            });
+          });
+          const checkRes = await fetch("/api/wayfinding/check", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              place_name: visionData.place_name,
+              user: { lat: pos.coords.latitude, lng: pos.coords.longitude },
+              destination,
+            }),
+          });
+          if (checkRes.ok) {
+            way = (await checkRes.json()) as Wayfinding;
+          }
+        } catch {
+          // No location permission, GPS timeout, or DB hiccup — skip wayfinding.
+        }
+      }
+      setWayfinding(way);
       setStage("result");
-      speak(data.text, lang);
+
+      // Speak: wayfinding line first (if any), then the raw sign text. Both
+      // go through ElevenLabs so the cloned/comfort voice is what's heard.
+      const utterance = way?.spoken
+        ? `${way.spoken} The sign reads: ${visionData.text}`
+        : visionData.text;
+      speak(utterance, lang);
     } catch (e) {
       setError((e as Error).message ?? "Couldn't read the sign");
       setStage("error");
@@ -138,16 +195,52 @@ export function SignReader() {
         )}
         {stage === "result" && (
           <div className="absolute inset-0 flex items-center justify-center p-6">
-            <div className="bg-surface-container-lowest text-on-surface rounded-2xl p-6 max-w-lg w-full shadow-2xl space-y-3">
-              <div className="text-xs font-bold uppercase tracking-wider text-primary">
-                Sensory read this
+            <div className="bg-surface-container-lowest text-on-surface rounded-2xl p-6 max-w-lg w-full shadow-2xl space-y-4">
+              {wayfinding && (
+                <div
+                  className="rounded-xl p-3 flex items-start gap-3"
+                  style={{
+                    background: VERDICT_BG[wayfinding.verdict],
+                    border: `1px solid ${VERDICT_BORDER[wayfinding.verdict]}`,
+                  }}
+                >
+                  <Icon
+                    name={VERDICT_ICON[wayfinding.verdict]}
+                    filled
+                    size={22}
+                    className="mt-0.5"
+                    style={{ color: VERDICT_FG[wayfinding.verdict] }}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div
+                      className="text-[10px] font-bold uppercase tracking-wider"
+                      style={{ color: VERDICT_FG[wayfinding.verdict] }}
+                    >
+                      {VERDICT_LABEL[wayfinding.verdict]}
+                    </div>
+                    <p className="text-sm font-semibold mt-0.5 leading-snug">
+                      {wayfinding.spoken}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wider text-primary mb-1">
+                  Sensory read this
+                </div>
+                <p className="text-base leading-relaxed">{text || "No text found."}</p>
               </div>
-              <p className="text-base leading-relaxed">{text || "No text found."}</p>
-              <div className="flex gap-2 pt-2">
+
+              <div className="flex gap-2 pt-1">
                 <button
                   type="button"
                   onClick={() => {
-                    if (text) speak(text, loadPreferences().language ?? "en");
+                    const lang = loadPreferences().language ?? "en";
+                    const utterance = wayfinding?.spoken
+                      ? `${wayfinding.spoken} The sign reads: ${text}`
+                      : text;
+                    if (utterance) speak(utterance, lang);
                   }}
                   className="flex-1 h-11 rounded-full bg-primary text-on-primary font-bold text-sm hover:bg-primary-dim flex items-center justify-center gap-2"
                 >
@@ -159,6 +252,7 @@ export function SignReader() {
                   onClick={() => {
                     setStage("live");
                     setText("");
+                    setWayfinding(null);
                   }}
                   className="flex-1 h-11 rounded-full border border-on-surface/15 text-on-surface font-bold text-sm hover:bg-on-surface/5"
                 >
@@ -201,9 +295,42 @@ export function SignReader() {
   );
 }
 
-function speak(text: string, language: string) {
-  if (typeof window === "undefined") return;
-  if (!("speechSynthesis" in window)) return;
+// ─── Speech ────────────────────────────────────────────────────────
+// Same priority as NavigationOverlay: cloned voice → Bella → browser TTS.
+
+const DEFAULT_VOICE_ID = "EXAVITQu4vr4xnSDxMaL"; // ElevenLabs "Bella"
+let _audioEl: HTMLAudioElement | null = null;
+let _audioUrl: string | null = null;
+
+function cancelSpeech() {
+  if (_audioEl) {
+    try {
+      _audioEl.pause();
+      _audioEl.src = "";
+    } catch {
+      /* ignore */
+    }
+    _audioEl = null;
+  }
+  if (_audioUrl) {
+    try {
+      URL.revokeObjectURL(_audioUrl);
+    } catch {
+      /* ignore */
+    }
+    _audioUrl = null;
+  }
+  if (typeof window !== "undefined" && "speechSynthesis" in window) {
+    try {
+      window.speechSynthesis.cancel();
+    } catch {
+      /* ignore */
+    }
+  }
+}
+
+function fallbackBrowserSpeak(text: string, language: string) {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
   try {
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
@@ -214,3 +341,68 @@ function speak(text: string, language: string) {
     /* ignore */
   }
 }
+
+function speak(text: string, language: string) {
+  if (typeof window === "undefined" || !text) return;
+  let voiceId = DEFAULT_VOICE_ID;
+  try {
+    const raw = window.localStorage.getItem("sensory:preferences");
+    if (raw) {
+      const p = JSON.parse(raw) as { voiceCloneId?: string };
+      if (p.voiceCloneId && typeof p.voiceCloneId === "string") voiceId = p.voiceCloneId;
+    }
+  } catch {
+    /* ignore */
+  }
+
+  cancelSpeech();
+
+  fetch("/api/voice/speak", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text, voice_id: voiceId, lang: language }),
+  })
+    .then(async (res) => {
+      if (!res.ok) throw new Error(`speak ${res.status}`);
+      const blob = await res.blob();
+      _audioUrl = URL.createObjectURL(blob);
+      const audio = new Audio(_audioUrl);
+      audio.preload = "auto";
+      _audioEl = audio;
+      await audio.play();
+    })
+    .catch(() => fallbackBrowserSpeak(text, language));
+}
+
+// ─── Verdict styling ───────────────────────────────────────────────
+
+const VERDICT_LABEL: Record<Wayfinding["verdict"], string> = {
+  at_destination: "Arrived",
+  approaching: "On track",
+  off_track: "Heads up",
+  no_match: "Not matched",
+};
+const VERDICT_ICON: Record<Wayfinding["verdict"], string> = {
+  at_destination: "where_to_vote",
+  approaching: "trending_flat",
+  off_track: "u_turn_left",
+  no_match: "info",
+};
+const VERDICT_BG: Record<Wayfinding["verdict"], string> = {
+  at_destination: "rgba(34,197,94,0.10)",
+  approaching: "rgba(34,197,94,0.10)",
+  off_track: "rgba(251,146,60,0.12)",
+  no_match: "rgba(148,163,184,0.10)",
+};
+const VERDICT_BORDER: Record<Wayfinding["verdict"], string> = {
+  at_destination: "rgba(34,197,94,0.30)",
+  approaching: "rgba(34,197,94,0.30)",
+  off_track: "rgba(251,146,60,0.30)",
+  no_match: "rgba(148,163,184,0.25)",
+};
+const VERDICT_FG: Record<Wayfinding["verdict"], string> = {
+  at_destination: "#16a34a",
+  approaching: "#16a34a",
+  off_track: "#c2410c",
+  no_match: "#475569",
+};

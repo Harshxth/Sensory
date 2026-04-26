@@ -248,7 +248,15 @@ export default function MapPage() {
           />
         )}
 
-        {!navigation && <SignReader />}
+        <SignReader
+          destination={
+            navigation
+              ? destination
+                ? { lat: destination.lat, lng: destination.lng, name: navigation.destinationName }
+                : null
+              : destination
+          }
+        />
         <HapticWatcher venues={displayedVenues} />
 
         {/* Live alert banner */}
