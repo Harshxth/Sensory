@@ -278,11 +278,11 @@ export function CinematicHero({
     let direction = 1;
     let lastUserScroll = 0;
     const startedAt = performance.now();
-    // Two-stage speed: gentle for the first ~3s so the intro reveal reads
-    // calmly, then ~3× faster for the rest so the cinematic doesn't drag.
-    const introMs = 3000;
-    const slowSpeed = 1.4; // px / frame  ≈ 84 px/s
-    const fastSpeed = 4.5; // px / frame  ≈ 270 px/s
+    // Two-stage speed: a brief gentle window so the intro hero reads, then
+    // we accelerate aggressively so the rest of the cinematic doesn't drag.
+    const introMs = 1400;
+    const slowSpeed = 1.6; // px / frame
+    const fastSpeed = 5.5; // px / frame  ≈ 330 px/s
     const onUserScroll = () => {
       lastUserScroll = performance.now();
     };
@@ -341,7 +341,9 @@ export function CinematicHero({
           {tagline1}
         </h1>
         <h1 className="text-days gsap-reveal text-silver-matte text-5xl md:text-7xl lg:text-[6rem] font-extrabold tracking-tighter">
-          <Typewriter text={tagline2} speed={70} startDelay={400} loop holdMs={2400} />
+          {/* Type once, then stay. The auto-scroll moves past this part of
+              the page so a looping cycle just looked busy. */}
+          <Typewriter text={tagline2} speed={55} startDelay={300} caret={false} />
         </h1>
       </div>
 
