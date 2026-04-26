@@ -72,10 +72,10 @@ export function DirectionsLayer({
     setLoading(true);
     setError(null);
     setActiveRouteIdx(0);
-    fetchRoutes(origin, destination, mode)
+    const prefs = loadPreferences();
+    fetchRoutes(origin, destination, mode, prefs.needs)
       .then((routes) => {
         if (routes.length === 0) throw new Error("No routes found");
-        const prefs = loadPreferences();
         const scored = scoreRoutes(
           routes.map((r, i) => ({
             index: i,
@@ -272,9 +272,25 @@ async function fetchRoutes(
   origin: { lat: number; lng: number },
   destination: { lat: number; lng: number },
   mode: Mode,
+  needs: string[] = [],
 ): Promise<Route[]> {
   const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
   if (!key) throw new Error("Maps API key missing");
+
+  const body: Record<string, unknown> = {
+    origin: { location: { latLng: { latitude: origin.lat, longitude: origin.lng } } },
+    destination: {
+      location: { latLng: { latitude: destination.lat, longitude: destination.lng } },
+    },
+    travelMode: mode,
+    computeAlternativeRoutes: true,
+  };
+
+  // For wheelchair users on transit, prefer accessible routes (Routes API
+  // honors WHEELCHAIR_ACCESSIBLE as a transitPreference).
+  if (mode === "TRANSIT" && needs.includes("wheelchair")) {
+    body.transitPreferences = { routingPreference: "WHEELCHAIR_ACCESSIBLE" };
+  }
 
   const res = await fetch("https://routes.googleapis.com/directions/v2:computeRoutes", {
     method: "POST",
@@ -282,18 +298,9 @@ async function fetchRoutes(
       "Content-Type": "application/json",
       "X-Goog-Api-Key": key,
       "X-Goog-FieldMask":
-        "routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline,routes.legs.steps.navigationInstruction,routes.legs.steps.distanceMeters,routes.legs.steps.staticDuration",
+        "routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline,routes.legs.steps.navigationInstruction,routes.legs.steps.distanceMeters,routes.legs.steps.staticDuration,routes.legs.steps.transitDetails",
     },
-    body: JSON.stringify({
-      origin: {
-        location: { latLng: { latitude: origin.lat, longitude: origin.lng } },
-      },
-      destination: {
-        location: { latLng: { latitude: destination.lat, longitude: destination.lng } },
-      },
-      travelMode: mode,
-      computeAlternativeRoutes: true,
-    }),
+    body: JSON.stringify(body),
   });
 
   if (!res.ok) {
