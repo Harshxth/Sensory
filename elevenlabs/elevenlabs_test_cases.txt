@@ -15,7 +15,7 @@ SUCCESS CRITERIA:
   - Does not dump every cafe in the knowledge base; gives one clear pick.
 MAX TURNS: 3
 
-RESULT:
+RESULT: PASS — ElevenLabs "Quiet place nearby" run scored 1/1. Agent named a specific cafe and surfaced a quieter time window without dumping every option.
 
 TEST 3: Wheelchair accessibility
 SCENARIO: A wheelchair user is planning a meal out and wants to know if a specific restaurant is workable. They say: "Is Bern's Steak House wheelchair accessible?"
