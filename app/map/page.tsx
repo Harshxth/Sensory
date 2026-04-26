@@ -188,7 +188,9 @@ export default function MapPage() {
           )}
         </GoogleMapsProvider>
 
-        {/* All map chrome hides when fullscreen navigation is active */}
+        {/* All map chrome hides when fullscreen navigation is active.
+            When a destination is selected (directions panel visible), we
+            collapse to icon-only chips so the route card has room to breathe. */}
         {!navigation && (
         <div className="absolute right-4 top-20 md:top-24 z-30 flex flex-col gap-2">
           <ToggleChip
@@ -197,6 +199,7 @@ export default function MapPage() {
             active={layers.noise}
             onToggle={() => toggle("noise")}
             accent="#fb923c"
+            compact={!!destination}
           />
           <ToggleChip
             icon="groups"
@@ -204,6 +207,7 @@ export default function MapPage() {
             active={layers.crowd}
             onToggle={() => toggle("crowd")}
             accent="#a855f7"
+            compact={!!destination}
           />
           <ToggleChip
             icon="lightbulb"
@@ -211,6 +215,7 @@ export default function MapPage() {
             active={layers.light}
             onToggle={() => toggle("light")}
             accent="#fde047"
+            compact={!!destination}
           />
           <ToggleChip
             icon="accessible"
@@ -218,6 +223,7 @@ export default function MapPage() {
             active={layers.wheelchair}
             onToggle={() => toggle("wheelchair")}
             accent="#22d3ee"
+            compact={!!destination}
           />
           <ToggleChip
             icon="campaign"
@@ -225,6 +231,7 @@ export default function MapPage() {
             active={layers.alerts}
             onToggle={() => toggle("alerts")}
             accent="#ef4444"
+            compact={!!destination}
           />
           <ToggleChip
             icon="lightbulb_circle"
@@ -232,6 +239,7 @@ export default function MapPage() {
             active={layers.streetlights}
             onToggle={() => toggle("streetlights")}
             accent="#facc15"
+            compact={!!destination}
           />
           <ToggleChip
             icon="schedule"
@@ -239,6 +247,7 @@ export default function MapPage() {
             active={showTimeSlider || !live}
             onToggle={() => setShowTimeSlider((s) => !s)}
             accent="#06b6d4"
+            compact={!!destination}
           />
         </div>
         )}
@@ -345,12 +354,16 @@ function ToggleChip({
   active,
   onToggle,
   accent,
+  compact = false,
 }: {
   icon: string;
   label: string;
   active: boolean;
   onToggle: () => void;
   accent?: string;
+  /** When true, render as an icon-only puck (no text) so we save horizontal
+   *  real estate next to a directions card or other competing chrome. */
+  compact?: boolean;
 }) {
   return (
     <button
@@ -358,8 +371,13 @@ function ToggleChip({
       role="switch"
       aria-checked={active}
       aria-label={`Toggle ${label}`}
+      title={label}
       onClick={onToggle}
-      className={`min-h-[40px] backdrop-blur-xl rounded-full px-3 py-1.5 shadow-lg border flex items-center gap-2 text-xs font-bold transition-all active:scale-95 ${
+      className={`backdrop-blur-xl shadow-lg border flex items-center transition-all active:scale-95 ${
+        compact
+          ? "rounded-full p-2 w-9 h-9 justify-center"
+          : "min-h-[40px] rounded-full px-3 py-1.5 gap-2 text-xs font-bold"
+      } ${
         active
           ? "bg-surface-container-lowest text-on-surface border-on-surface/15"
           : "bg-surface-container-lowest/70 text-on-surface-variant border-on-surface/10 hover:bg-surface-container-lowest/90"
@@ -370,17 +388,28 @@ function ToggleChip({
           : undefined
       }
     >
-      <span
-        aria-hidden
-        className="w-2.5 h-2.5 rounded-full transition-opacity"
-        style={{
-          background: accent ?? "#22d3ee",
-          opacity: active ? 1 : 0.35,
-          boxShadow: active && accent ? `0 0 8px ${accent}` : "none",
-        }}
+      {!compact && (
+        <span
+          aria-hidden
+          className="w-2.5 h-2.5 rounded-full transition-opacity"
+          style={{
+            background: accent ?? "#22d3ee",
+            opacity: active ? 1 : 0.35,
+            boxShadow: active && accent ? `0 0 8px ${accent}` : "none",
+          }}
+        />
+      )}
+      <Icon
+        name={icon}
+        filled={active}
+        size={compact ? 18 : 14}
+        style={
+          compact && active && accent
+            ? { color: accent, filter: `drop-shadow(0 0 6px ${accent}66)` }
+            : undefined
+        }
       />
-      <Icon name={icon} filled={active} size={14} />
-      {label}
+      {!compact && label}
     </button>
   );
 }
