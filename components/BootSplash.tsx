@@ -120,7 +120,7 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
             width: glowIntense ? "780px" : "460px",
             height: glowIntense ? "780px" : "460px",
             background:
-              "radial-gradient(circle, var(--color-primary) 0%, transparent 70%)",
+              "radial-gradient(circle, #14532d 0%, transparent 70%)",
             opacity: glowIntense ? 0.6 : 0.35,
             transform: "translate(-50%, -50%)",
             transition: "opacity 1.2s ease, width 1.2s ease, height 1.2s ease",
@@ -134,7 +134,7 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
             width: "320px",
             height: "320px",
             background:
-              "radial-gradient(circle, var(--color-tertiary-container) 0%, transparent 70%)",
+              "radial-gradient(circle, #166534 0%, transparent 70%)",
             opacity: glowIntense ? 0.45 : 0.18,
             transition: "opacity 1.2s ease",
           }}
@@ -148,10 +148,10 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
             wordmarkVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
           }`}
           style={{
-            color: "var(--color-primary)",
+            color: "#000000",
             textShadow: glowIntense
-              ? "0 0 90px var(--color-primary), 0 0 30px var(--color-primary)"
-              : "0 0 40px var(--color-primary)",
+              ? "0 0 90px #14532d, 0 0 30px #14532d"
+              : "0 0 40px #14532d",
             transition: "text-shadow 1s ease-in-out",
           }}
         >
