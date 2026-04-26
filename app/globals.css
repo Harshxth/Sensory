@@ -22,43 +22,43 @@
    ============================================================ */
 
 :root {
-  /* Surfaces */
-  --color-surface: #eaffe9;
-  --color-surface-dim: #b3e7b9;
-  --color-surface-bright: #eaffe9;
+  /* Surfaces — white/slate system, green used only as accent */
+  --color-surface: #ffffff;
+  --color-surface-dim: #f1f5f9;
+  --color-surface-bright: #ffffff;
   --color-surface-container-lowest: #ffffff;
-  --color-surface-container-low: #ddfcde;
-  --color-surface-container: #d3f7d5;
-  --color-surface-container-high: #caf3cd;
-  --color-surface-container-highest: #c0eec5;
-  --color-surface-variant: #c0eec5;
-  --color-surface-tint: #2f6c27;
+  --color-surface-container-low: #f8fafc;
+  --color-surface-container: #f1f5f9;
+  --color-surface-container-high: #e2e8f0;
+  --color-surface-container-highest: #cbd5e1;
+  --color-surface-variant: #f1f5f9;
+  --color-surface-tint: #225f1c;
 
   /* Background */
-  --color-background: #eaffe9;
-  --color-on-background: #113a1e;
+  --color-background: #f8fafc;
+  --color-on-background: #0f172a;
 
-  /* On-surface */
-  --color-on-surface: #113a1e;
-  --color-on-surface-variant: #3f6847;
-  --color-inverse-surface: #011205;
-  --color-inverse-on-surface: #8ba38c;
+  /* On-surface ink */
+  --color-on-surface: #0f172a;
+  --color-on-surface-variant: #475569;
+  --color-inverse-surface: #0f172a;
+  --color-inverse-on-surface: #f8fafc;
 
-  /* Outline */
-  --color-outline: #5a8461;
-  --color-outline-variant: #90bd96;
+  /* Outline (slate-200 / 300) */
+  --color-outline: #cbd5e1;
+  --color-outline-variant: #e2e8f0;
 
-  /* Primary — Leafy Green */
-  --color-primary: #2f6c27;
-  --color-on-primary: #ebffe0;
-  --color-primary-container: #aff49e;
-  --color-on-primary-container: #205e1b;
-  --color-inverse-primary: #b8fda6;
-  --color-primary-dim: #225f1c;
-  --color-primary-fixed: #aff49e;
-  --color-primary-fixed-dim: #a2e591;
-  --color-on-primary-fixed: #084a08;
-  --color-on-primary-fixed-variant: #2b6824;
+  /* Primary — Forest Green (used sparingly as accent) */
+  --color-primary: #225f1c;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #ecfdf5;
+  --color-on-primary-container: #225f1c;
+  --color-inverse-primary: #aff49e;
+  --color-primary-dim: #1c4f17;
+  --color-primary-fixed: #d1fae5;
+  --color-primary-fixed-dim: #a7f3d0;
+  --color-on-primary-fixed: #052e16;
+  --color-on-primary-fixed-variant: #14532d;
 
   /* Secondary — Earth Brown */
   --color-secondary: #815440;
@@ -108,11 +108,11 @@
   --radius-xl: 1.5rem;
   --radius-full: 9999px;
 
-  /* Shadows — Forest Shadows (low-opacity sage-tinted) */
-  --shadow-sm: 0 1px 2px rgba(24, 97, 21, 0.06);
-  --shadow-md: 0 4px 12px rgba(24, 97, 21, 0.08);
-  --shadow-lg: 0 8px 24px rgba(24, 97, 21, 0.1);
-  --shadow-primary: 0 8px 20px rgba(24, 97, 21, 0.15);
+  /* Shadows — neutral slate, not green-tinted */
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 1px 2px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 1px 2px rgba(15, 23, 42, 0.06), 0 8px 24px rgba(15, 23, 42, 0.08);
+  --shadow-primary: 0 1px 2px rgba(15, 23, 42, 0.06), 0 12px 32px rgba(15, 23, 42, 0.10);
 }
 
 /* Tailwind v4 — register custom tokens as utilities */
@@ -280,50 +280,35 @@ body {
   line-height: 1.2;
 }
 
-/* Dark theme — follows system preference. */
+/* Dark theme — slate near-black with green accent */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-background: #011205;
-    --color-on-background: #d0f4cf;
+    --color-background: #0f172a;
+    --color-on-background: #e2e8f0;
 
-    --color-surface: #011205;
-    --color-surface-bright: #0c2d12;
-    --color-surface-dim: #001003;
-    --color-surface-container-lowest: #000d02;
-    --color-surface-container-low: #052e0d;
-    --color-surface-container: #0a3713;
-    --color-surface-container-high: #0f4019;
-    --color-surface-container-highest: #154920;
-    --color-surface-variant: #122e18;
+    --color-surface: #0f172a;
+    --color-surface-bright: #1e293b;
+    --color-surface-dim: #020617;
+    --color-surface-container-lowest: #1e293b;
+    --color-surface-container-low: #1a253b;
+    --color-surface-container: #1e293b;
+    --color-surface-container-high: #334155;
+    --color-surface-container-highest: #475569;
+    --color-surface-variant: #1e293b;
 
-    --color-on-surface: #d0f4cf;
-    --color-on-surface-variant: #90bd96;
-    --color-inverse-surface: #d0f4cf;
-    --color-inverse-on-surface: #112a17;
+    --color-on-surface: #f1f5f9;
+    --color-on-surface-variant: #94a3b8;
+    --color-inverse-surface: #f1f5f9;
+    --color-inverse-on-surface: #0f172a;
 
-    --color-outline: #90bd96;
-    --color-outline-variant: #5a8461;
+    --color-outline: #475569;
+    --color-outline-variant: #334155;
 
-    --color-primary: #b8fda6;
-    --color-on-primary: #084a08;
-    --color-primary-container: #2b6824;
-    --color-on-primary-container: #c8ffb8;
-    --color-primary-dim: #a2e591;
-
-    --color-secondary: #ffc9b1;
-    --color-on-secondary: #5c3623;
-    --color-secondary-container: #7d513d;
-    --color-on-secondary-container: #ffdbcc;
-
-    --color-tertiary: #fa8e67;
-    --color-on-tertiary: #722707;
-    --color-tertiary-container: #722707;
-    --color-on-tertiary-container: #ffa180;
-
-    --color-error: #fa7150;
-    --color-on-error: #671200;
-    --color-error-container: #821a01;
-    --color-on-error-container: #ffdad6;
+    --color-primary: #4ade80;
+    --color-on-primary: #052e16;
+    --color-primary-container: #14532d;
+    --color-on-primary-container: #bbf7d0;
+    --color-primary-dim: #22c55e;
   }
 }
 
