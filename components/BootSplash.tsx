@@ -28,18 +28,15 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
   const [typed, setTyped] = useState("");
   const dismissedRef = useRef(false);
 
-  // First-mount: check session flag, load profile, kick off animation, prefetch next route
+  // First-mount: load profile, kick off animation, prefetch next route.
+  // Splash plays on every visit to "/" — no sessionStorage skip — so the
+  // user always sees the boot animation when they open the site.
   useEffect(() => {
     if (typeof window === "undefined") return;
     const onboard = !loadPreferences().onboardingComplete;
     setNeedsOnboarding(onboard);
     // Prefetch the next route so the transition is seamless (no flash of unstyled content).
-    if (onboard) router.prefetch("/how-it-works");
-    if (sessionStorage.getItem(STORAGE_KEY)) {
-      setPhase("gone");
-      onDone?.();
-      return;
-    }
+    router.prefetch(onboard ? "/how-it-works" : "/map");
     const t1 = window.setTimeout(() => setMapIn(true), 60);
     const t2 = window.setTimeout(() => setWordmarkIn(true), 200);
     const t3 = window.setTimeout(() => setTaglineIn(true), 1100);
