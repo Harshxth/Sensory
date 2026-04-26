@@ -25,7 +25,7 @@ SUCCESS CRITERIA:
   - Surfaces the upstairs-stairs-only caveat for Bern's honestly, without claiming the place is "safe."
 MAX TURNS: 2
 
-RESULT:
+RESULT: PASS — ElevenLabs "Wheelchair-friendly venue check" run scored 1/1. Agent led with the wheelchair field, then surfaced exits and the upstairs-stairs-only caveat honestly.
 
 TEST 4: Light sensitivity
 SCENARIO: A user with chronic migraines is deciding whether to meet a friend at Chick-fil-A USF. They say: "Bright lights trigger my migraines. Is Chick-fil-A USF okay?"
