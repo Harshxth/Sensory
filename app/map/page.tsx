@@ -15,7 +15,8 @@ import { WheelchairMarkers } from "@/components/google/WheelchairMarkers";
 import { DirectionsLayer, type Route } from "@/components/google/DirectionsLayer";
 import { NavigationOverlay } from "@/components/google/NavigationOverlay";
 import type { RouteFlag } from "@/components/google/RouteFlags";
-import { VenuePanel } from "@/components/venue/VenuePanel";
+import { PlaceInfoCard } from "@/components/google/PlaceInfoCard";
+import { SensoryDetailPanel } from "@/components/google/SensoryDetailPanel";
 import { fetchAlerts } from "@/lib/map-data";
 import type { Alert, Venue } from "@/types";
 import type { GooglePlaceDetails } from "@/lib/google-places";
@@ -46,6 +47,7 @@ export default function MapPage() {
   });
   const [venues, setVenues] = useState<Venue[]>([]);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [detailOpen, setDetailOpen] = useState(false);
 
   useEffect(() => {
     fetchAlerts().then(setAlerts);
@@ -59,6 +61,11 @@ export default function MapPage() {
     if (fresh && fresh !== selected) setSelected(fresh);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [venues]);
+
+  // Reset detail panel when switching places.
+  useEffect(() => {
+    setDetailOpen(false);
+  }, [selected?._id, googlePlace?.place_id]);
 
   const toggle = (k: ToggleKey) => setLayers((s) => ({ ...s, [k]: !s[k] }));
   const bumpRefresh = () => setRefreshKey((k) => k + 1);
@@ -235,31 +242,39 @@ export default function MapPage() {
         )}
 
         {!navigation && (
-        <VenuePanel
-          venue={selected}
-          google={googlePlace}
-          onClose={() => {
-            setSelected(null);
-            setGooglePlace(null);
-          }}
-          onDirections={openDirections}
-          onUpdated={bumpRefresh}
-          onVenueCreated={async (newId) => {
-            // Refetch venues, find the new one, and switch the panel to the
-            // freshly-scored venue (clearing the Google-only state).
-            bumpRefresh();
-            try {
-              const res = await fetch(`/api/venues/${newId}`, { cache: "no-store" });
-              if (res.ok) {
-                const data = (await res.json()) as { venue: Venue };
+          <>
+            <PlaceInfoCard
+              venue={selected}
+              google={googlePlace}
+              onClose={() => {
+                setSelected(null);
                 setGooglePlace(null);
-                setSelected(data.venue);
-              }
-            } catch {
-              // ignore
-            }
-          }}
-        />
+                setDetailOpen(false);
+              }}
+              onDirections={openDirections}
+              onMore={() => setDetailOpen(true)}
+            />
+            <SensoryDetailPanel
+              venue={selected}
+              google={googlePlace}
+              open={detailOpen && (!!selected || !!googlePlace)}
+              onClose={() => setDetailOpen(false)}
+              onUpdated={bumpRefresh}
+              onVenueCreated={async (newId) => {
+                bumpRefresh();
+                try {
+                  const res = await fetch(`/api/venues/${newId}`, { cache: "no-store" });
+                  if (res.ok) {
+                    const data = (await res.json()) as { venue: Venue };
+                    setGooglePlace(null);
+                    setSelected(data.venue);
+                  }
+                } catch {
+                  // ignore
+                }
+              }}
+            />
+          </>
         )}
       </main>
 
