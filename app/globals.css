@@ -34,8 +34,8 @@
   --color-surface-variant: #f1f5f9;
   --color-surface-tint: #225f1c;
 
-  /* Background */
-  --color-background: #f8fafc;
+  /* Background — pure white */
+  --color-background: #ffffff;
   --color-on-background: #0f172a;
 
   /* On-surface ink */
@@ -221,10 +221,14 @@ html.a11y-reduced-motion *::after {
 }
 
 body {
-  background: var(--color-background);
+  background: #ffffff;
   color: var(--color-on-background);
   font-family: var(--font-sans);
   min-height: 100dvh;
+}
+
+html {
+  background: #ffffff;
 }
 
 /* Material Symbols sizing */

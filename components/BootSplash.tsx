@@ -28,10 +28,13 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
   const [typed, setTyped] = useState("");
   const dismissedRef = useRef(false);
 
-  // First-mount: check session flag, load profile, kick off animation
+  // First-mount: check session flag, load profile, kick off animation, prefetch next route
   useEffect(() => {
     if (typeof window === "undefined") return;
-    setNeedsOnboarding(!loadPreferences().onboardingComplete);
+    const onboard = !loadPreferences().onboardingComplete;
+    setNeedsOnboarding(onboard);
+    // Prefetch the next route so the transition is seamless (no flash of unstyled content).
+    if (onboard) router.prefetch("/how-it-works");
     if (sessionStorage.getItem(STORAGE_KEY)) {
       setPhase("gone");
       onDone?.();
@@ -84,13 +87,14 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
       /* ignore */
     }
     setPhase("exit");
+    // Start the route push immediately while the splash is still mid-fade —
+    // both pages share the same white background so there's no visible flash.
+    if (needsOnboarding) {
+      router.push("/how-it-works");
+    }
     setTimeout(() => {
       setPhase("gone");
       onDone?.();
-      // First-time visitors see the "How it works" carousel before onboarding.
-      if (needsOnboarding) {
-        setTimeout(() => router.push("/how-it-works"), 50);
-      }
     }, 1060);
   };
 
