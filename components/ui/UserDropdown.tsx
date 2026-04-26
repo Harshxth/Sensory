@@ -13,8 +13,10 @@ import {
   Bell,
   Check,
   Sparkles,
+  Mic,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { loadPreferences } from "@/lib/preferences";
 
 type Props = {
   /** Display name shown in the header. Defaults to "Anonymous explorer". */
@@ -39,6 +41,22 @@ export function UserDropdown({
   status = "online",
   onAction,
 }: Props) {
+  // Re-read preferences when the menu opens so the voice-clone badge reflects
+  // the latest onboarding step (cloning happens client-side).
+  const [voiceCloneId, setVoiceCloneId] = React.useState<string | null>(null);
+  const refreshPrefs = React.useCallback(() => {
+    setVoiceCloneId(loadPreferences().voiceCloneId ?? null);
+  }, []);
+  React.useEffect(() => {
+    refreshPrefs();
+    if (typeof window === "undefined") return;
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "sensory:prefs") refreshPrefs();
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, [refreshPrefs]);
+
   const initials = name
     .split(" ")
     .map((p) => p[0])
@@ -60,7 +78,7 @@ export function UserDropdown({
   };
 
   return (
-    <DropdownMenuPrimitive.Root>
+    <DropdownMenuPrimitive.Root onOpenChange={(open) => open && refreshPrefs()}>
       <DropdownMenuPrimitive.Trigger asChild>
         <button
           aria-label="Open profile menu"
@@ -101,6 +119,46 @@ export function UserDropdown({
             >
               {status}
             </span>
+          </div>
+
+          <Separator />
+
+          {/* Voice-clone status row — visible at a glance so the user knows
+              their cloned voice is wired up to nav + the sign reader. */}
+          <div className="px-2 py-2">
+            <div
+              className={cn(
+                "flex items-center gap-2 px-3 py-2 rounded-xl border text-xs",
+                voiceCloneId
+                  ? "bg-primary-container/40 text-on-primary-container border-primary/30"
+                  : "bg-on-surface/5 text-on-surface-variant border-on-surface/10",
+              )}
+            >
+              <span
+                className={cn(
+                  "flex items-center justify-center w-7 h-7 rounded-full",
+                  voiceCloneId ? "bg-primary text-on-primary" : "bg-on-surface/10",
+                )}
+              >
+                <Mic className="size-3.5" />
+              </span>
+              <div className="flex-1 min-w-0">
+                <div className="font-bold text-[11px] uppercase tracking-wider">
+                  Comfort voice
+                </div>
+                <div className="text-[11px] truncate">
+                  {voiceCloneId
+                    ? "Active — used for nav + signs"
+                    : "Not set yet"}
+                </div>
+              </div>
+              <Link
+                href="/onboarding"
+                className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full bg-on-surface/8 hover:bg-on-surface/12"
+              >
+                {voiceCloneId ? "Change" : "Add"}
+              </Link>
+            </div>
           </div>
 
           <Separator />

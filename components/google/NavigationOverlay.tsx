@@ -344,7 +344,7 @@ function speak(text: string) {
   let voiceId = DEFAULT_VOICE_ID;
   let lang: "en" | "es" | "zh" = "en";
   try {
-    const raw = window.localStorage.getItem("sensory:preferences");
+    const raw = window.localStorage.getItem("sensory:prefs");
     if (raw) {
       const p = JSON.parse(raw) as { voiceCloneId?: string; language?: "en" | "es" | "zh" };
       if (p.voiceCloneId && typeof p.voiceCloneId === "string") voiceId = p.voiceCloneId;

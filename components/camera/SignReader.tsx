@@ -361,7 +361,7 @@ function speak(text: string, language: string) {
   if (typeof window === "undefined" || !text) return;
   let voiceId = DEFAULT_VOICE_ID;
   try {
-    const raw = window.localStorage.getItem("sensory:preferences");
+    const raw = window.localStorage.getItem("sensory:prefs");
     if (raw) {
       const p = JSON.parse(raw) as { voiceCloneId?: string };
       if (p.voiceCloneId && typeof p.voiceCloneId === "string") voiceId = p.voiceCloneId;
