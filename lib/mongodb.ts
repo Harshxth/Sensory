@@ -1,13 +1,18 @@
 import { MongoClient, Db } from "mongodb";
 import dns from "node:dns";
 
-// Some Windows setups (firewall / AV blocking node.exe's c-ares UDP) fail to
-// resolve mongo hostnames. Prepend Cloudflare + Google so DNS still works.
-try {
-  const existing = dns.getServers();
-  dns.setServers(["1.1.1.1", "8.8.8.8", ...existing]);
-} catch {
-  // setServers can throw if invoked before DNS is ready — non-fatal.
+// Local dev workaround: some Windows setups (firewall / AV blocking node.exe's
+// c-ares UDP) fail to resolve mongo hostnames. Prepend Cloudflare + Google so
+// DNS still works. We do NOT do this in serverless runtimes (Vercel etc) —
+// they have their own DNS plumbing and forcing public resolvers there can
+// add latency or cause egress weirdness.
+if (process.platform === "win32" && !process.env.VERCEL) {
+  try {
+    const existing = dns.getServers();
+    dns.setServers(["1.1.1.1", "8.8.8.8", ...existing]);
+  } catch {
+    // setServers can throw if invoked before DNS is ready — non-fatal.
+  }
 }
 
 declare global {

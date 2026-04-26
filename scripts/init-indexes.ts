@@ -2,7 +2,9 @@
 // Run with: npx tsx scripts/init-indexes.ts
 
 import { config } from "dotenv";
-config({ path: ".env.local" });
+import { existsSync } from "node:fs";
+if (existsSync(".env.local")) config({ path: ".env.local" });
+else if (existsSync(".env.production.local")) config({ path: ".env.production.local" });
 import { COLLECTIONS, getDb } from "../lib/mongodb";
 
 async function main() {
