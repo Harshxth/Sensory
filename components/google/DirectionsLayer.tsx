@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useMap, useMapsLibrary } from "@vis.gl/react-google-maps";
 import { Icon } from "@/components/ui/Icon";
 import { RouteFlags, computeRouteFlags, type RouteFlag } from "./RouteFlags";
+import { scoreRoutes, buildExplainer, type ScoredRoute } from "@/lib/route-scoring";
+import { loadPreferences } from "@/lib/preferences";
 import type { Alert, Venue } from "@/types";
 
 type Mode = "WALK" | "DRIVE" | "TRANSIT" | "BICYCLE";
@@ -48,6 +50,9 @@ export function DirectionsLayer({
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [flags, setFlags] = useState<RouteFlag[]>([]);
+  const [explainer, setExplainer] = useState<string | null>(null);
+  const [scoredRoutes, setScoredRoutes] = useState<ScoredRoute[]>([]);
+  const [activeRouteIdx, setActiveRouteIdx] = useState(0);
 
   useEffect(() => {
     if (!destination) return;
@@ -66,17 +71,37 @@ export function DirectionsLayer({
     if (!destination || !origin) return;
     setLoading(true);
     setError(null);
-    fetchRoute(origin, destination, mode)
-      .then((r) => {
-        setRoute(r);
+    setActiveRouteIdx(0);
+    fetchRoutes(origin, destination, mode)
+      .then((routes) => {
+        if (routes.length === 0) throw new Error("No routes found");
+        const prefs = loadPreferences();
+        const scored = scoreRoutes(
+          routes.map((r, i) => ({
+            index: i,
+            encodedPolyline: r.encodedPolyline,
+            durationSec: r.durationSec,
+            distanceMeters: r.distanceMeters,
+          })),
+          prefs,
+          venues,
+          alerts,
+        );
+        setScoredRoutes(scored);
+        const best = routes[scored[0]?.index ?? 0];
+        setRoute(best);
+        const baseline = scored.find((s) => s.index === 0) ?? null;
+        setExplainer(buildExplainer(scored[0], baseline, prefs));
         setError(null);
       })
       .catch((e: Error) => {
         setError(e.message);
         setRoute(null);
+        setScoredRoutes([]);
+        setExplainer(null);
       })
       .finally(() => setLoading(false));
-  }, [origin, destination, mode]);
+  }, [origin, destination, mode, venues, alerts]);
 
   useEffect(() => {
     if (!map || !geometry || !route) return;
@@ -180,6 +205,21 @@ export function DirectionsLayer({
                   <span className="text-sm text-on-surface-variant">· {miles} mi</span>
                 </div>
 
+                {explainer && (
+                  <div className="bg-primary/10 border border-primary/25 rounded-xl p-2.5 flex items-start gap-2 text-xs text-on-surface">
+                    <Icon name="auto_awesome" filled size={14} className="text-primary flex-shrink-0 mt-0.5" />
+                    <span className="leading-snug">
+                      <strong className="text-primary">Sensory-aware route:</strong> {explainer}
+                    </span>
+                  </div>
+                )}
+
+                {scoredRoutes.length > 1 && (
+                  <div className="text-[11px] text-on-surface-variant">
+                    {scoredRoutes.length} route options · using the lowest-impact one
+                  </div>
+                )}
+
                 {flags.length > 0 && (
                   <div className="bg-orange-50 border border-orange-200 rounded-xl p-3">
                     <div className="flex items-center gap-1.5 text-orange-800 text-xs font-bold mb-1">
@@ -228,11 +268,11 @@ export function DirectionsLayer({
   );
 }
 
-async function fetchRoute(
+async function fetchRoutes(
   origin: { lat: number; lng: number },
   destination: { lat: number; lng: number },
   mode: Mode,
-): Promise<Route> {
+): Promise<Route[]> {
   const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
   if (!key) throw new Error("Maps API key missing");
 
@@ -252,6 +292,7 @@ async function fetchRoute(
         location: { latLng: { latitude: destination.lat, longitude: destination.lng } },
       },
       travelMode: mode,
+      computeAlternativeRoutes: true,
     }),
   });
 
@@ -273,28 +314,30 @@ async function fetchRoute(
       }[];
     }[];
   };
-  const r = data.routes?.[0];
-  if (!r?.polyline?.encodedPolyline) throw new Error("No route found");
+  if (!data.routes || data.routes.length === 0) throw new Error("No route found");
 
-  const durationSec = parseInt(String(r.duration ?? "0").replace(/[^\d]/g, ""), 10) || 0;
-  const steps: Step[] =
-    r.legs?.flatMap(
-      (leg) =>
-        leg.steps?.map((s) => ({
-          instruction: s.navigationInstruction?.instructions ?? "Continue",
-          maneuver: s.navigationInstruction?.maneuver,
-          distanceMeters: s.distanceMeters ?? 0,
-          durationSec:
-            parseInt(String(s.staticDuration ?? "0").replace(/[^\d]/g, ""), 10) || 0,
-        })) ?? [],
-    ) ?? [];
-
-  return {
-    durationSec,
-    distanceMeters: r.distanceMeters ?? 0,
-    encodedPolyline: r.polyline.encodedPolyline,
-    steps,
-  };
+  return data.routes
+    .filter((r) => r.polyline?.encodedPolyline)
+    .map((r) => {
+      const durationSec = parseInt(String(r.duration ?? "0").replace(/[^\d]/g, ""), 10) || 0;
+      const steps: Step[] =
+        r.legs?.flatMap(
+          (leg) =>
+            leg.steps?.map((s) => ({
+              instruction: s.navigationInstruction?.instructions ?? "Continue",
+              maneuver: s.navigationInstruction?.maneuver,
+              distanceMeters: s.distanceMeters ?? 0,
+              durationSec:
+                parseInt(String(s.staticDuration ?? "0").replace(/[^\d]/g, ""), 10) || 0,
+            })) ?? [],
+        ) ?? [];
+      return {
+        durationSec,
+        distanceMeters: r.distanceMeters ?? 0,
+        encodedPolyline: r.polyline?.encodedPolyline ?? "",
+        steps,
+      };
+    });
 }
 
 function buildGoogleMapsUrl(
