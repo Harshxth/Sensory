@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 
-const HIDDEN_ROUTES = ["/map", "/settings"];
+const HIDDEN_ROUTES = ["/map", "/settings", "/standby"];
 
 const SQUARE_SIZE = 60;
 const SPEED = 0.15;

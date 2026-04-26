@@ -2,7 +2,20 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Player } from "@remotion/player";
 import { loadPreferences } from "@/lib/preferences";
+import { MaskedSlideReveal } from "@/components/ui/masked-slide-reveal";
+
+const SensoryReveal = () => (
+  <MaskedSlideReveal
+    text="Sensory"
+    fontSize={200}
+    color="#0a0f0c"
+    fontWeight={800}
+    speed={1}
+    letterSpacing="-0.045em"
+  />
+);
 
 type Phase = "in" | "ready" | "exit" | "gone";
 
@@ -213,22 +226,31 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
 
         {/* Wordmark + tagline + tap hint */}
         <div className="relative z-10 flex flex-col items-center gap-6 px-6 text-center">
-          <h1
+          <div
             id="boot-title"
+            aria-label="Sensory"
+            role="img"
             style={{
-              fontFamily: '"Public Sans", system-ui, sans-serif',
-              fontWeight: 800,
-              fontSize: "clamp(72px, 14vw, 200px)",
-              lineHeight: 0.95,
-              letterSpacing: "-0.045em",
-              color: "#0a0f0c",
+              width: "min(900px, 92vw)",
+              aspectRatio: "1200 / 280",
               opacity: wordmarkIn ? 1 : 0,
-              transform: wordmarkIn ? "translateY(0) scale(1)" : "translateY(12px) scale(0.985)",
-              transition: "opacity 1100ms cubic-bezier(0.16,1,0.3,1), transform 1100ms cubic-bezier(0.16,1,0.3,1)",
+              transition: "opacity 600ms ease",
             }}
           >
-            Sensory
-          </h1>
+            {wordmarkIn && (
+              <Player
+                component={SensoryReveal}
+                durationInFrames={45}
+                fps={30}
+                compositionWidth={1200}
+                compositionHeight={280}
+                autoPlay
+                loop={false}
+                controls={false}
+                style={{ width: "100%", height: "100%" }}
+              />
+            )}
+          </div>
 
           <div
             aria-live="polite"
