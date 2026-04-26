@@ -125,19 +125,19 @@ export function WorkflowCardSwap() {
   };
 
   return (
-    <section className="w-full px-5 sm:px-6 pb-16 md:pb-32 max-w-7xl mx-auto">
-      <div className="text-center mb-8 sm:mb-12 md:mb-16 max-w-2xl mx-auto px-2">
-        <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.32em] sm:tracking-[0.4em] text-on-surface-variant/70 font-semibold">
+    <section className="w-full px-5 sm:px-6 pb-4 md:pb-32 max-w-7xl mx-auto">
+      <div className="text-center mb-4 sm:mb-12 md:mb-16 max-w-2xl mx-auto px-2">
+        <span className="hidden sm:block text-[10px] sm:text-[11px] uppercase tracking-[0.32em] sm:tracking-[0.4em] text-on-surface-variant/70 font-semibold">
           Product life cycle
         </span>
         <h2
-          className="mt-3 sm:mt-4 text-3xl sm:text-4xl md:text-6xl font-light tracking-tight leading-[1.05] text-on-surface"
+          className="sm:mt-4 text-2xl sm:text-4xl md:text-6xl font-light tracking-tight leading-[1.05] text-on-surface"
           style={{ fontFamily: '"Playfair Display","Public Sans",serif' }}
         >
           One sequence,{" "}
           <span className="italic text-on-surface/45">every body.</span>
         </h2>
-        <p className="mt-4 sm:mt-6 text-sm sm:text-base md:text-lg text-on-surface-variant leading-relaxed">
+        <p className="hidden sm:block mt-4 sm:mt-6 text-sm sm:text-base md:text-lg text-on-surface-variant leading-relaxed">
           From the first tap to a shared journey — every stage of how Sensory
           learns a place and walks you through it.
         </p>
@@ -154,8 +154,8 @@ export function WorkflowCardSwap() {
           style={{
             perspective: "1500px",
             transformStyle: "preserve-3d",
-            width: "min(560px, 92vw)",
-            height: "clamp(260px, 62vw, 360px)",
+            width: "min(560px, 88vw)",
+            height: "clamp(220px, 56vw, 360px)",
           }}
         >
           {CARDS.map((card, idx) => {
@@ -204,10 +204,13 @@ export function WorkflowCardSwap() {
           })}
         </div>
 
+        {/* Desktop-only manual cycle button — on mobile we save the vertical
+            real estate so the parent's Continue button sits right under the
+            card stack. Tapping the cards themselves still cycles them. */}
         <button
           type="button"
           onClick={swap}
-          className="mt-10 sm:mt-16 group flex flex-col items-center gap-3"
+          className="hidden sm:flex mt-10 sm:mt-12 group flex-col items-center gap-3"
           aria-label="Cycle workflow"
         >
           <span className="w-12 h-12 rounded-full border border-on-surface/20 flex items-center justify-center group-hover:bg-on-surface group-hover:text-background transition-all">

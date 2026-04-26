@@ -48,8 +48,8 @@ export function PlaceInfoCard({ venue, google, onMore, onDirections, onClose }: 
       role="dialog"
       aria-label={`Place card for ${name}`}
       className="fixed z-40 bg-surface-container-lowest text-on-surface border border-on-surface/10 shadow-2xl
-                 md:left-4 md:top-20 md:w-[360px] md:rounded-2xl
-                 bottom-0 left-0 right-0 rounded-t-3xl
+                 md:left-4 md:top-20 md:bottom-auto md:w-[360px] md:rounded-2xl md:max-h-[calc(100vh-6rem)]
+                 bottom-20 left-0 right-0 rounded-t-3xl max-h-[72vh]
                  flex flex-col overflow-hidden"
     >
       <div className="md:hidden flex justify-center pt-2 pb-1">

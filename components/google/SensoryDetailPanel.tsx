@@ -125,7 +125,10 @@ export function SensoryDetailPanel({
               </section>
             )}
           </>
-        ) : (
+        ) : !venueId ? (
+          // Google place not yet in our DB — Score CTA creates the venue,
+          // and the parent's onVenueCreated swaps the panel to the real
+          // venue so QuickUpdate (below) immediately appears for first input.
           <div className="bg-primary/15 border border-primary/30 rounded-xl p-4 space-y-3">
             <div>
               <div className="flex items-center gap-2 text-primary font-bold text-sm mb-1">
@@ -141,7 +144,7 @@ export function SensoryDetailPanel({
               type="button"
               onClick={createVenueFromGoogle}
               disabled={creating}
-              className="w-full inline-flex items-center justify-center gap-2 h-11 rounded-full bg-primary text-on-primary text-sm font-bold hover:bg-primary-dim disabled:opacity-50 transition-colors shadow-sm"
+              className="w-full inline-flex items-center justify-center gap-2 h-11 rounded-full bg-primary text-on-primary text-sm font-bold hover:bg-primary-dim disabled:opacity-50 transition-colors shadow-sm active:scale-95"
             >
               {creating ? (
                 "Adding…"
@@ -152,6 +155,19 @@ export function SensoryDetailPanel({
                 </>
               )}
             </button>
+          </div>
+        ) : (
+          // Venue exists in DB but no sensory data yet — quick prompt
+          // before the QuickUpdate form below.
+          <div className="bg-primary/10 border border-primary/30 rounded-xl p-4 text-sm">
+            <div className="flex items-center gap-2 text-primary font-bold mb-1">
+              <Icon name="add_circle" filled size={18} />
+              Be the first to score this venue
+            </div>
+            <p className="text-xs text-on-surface-variant leading-relaxed">
+              Use the form below to share how it feels — noise, lighting, crowd. Your
+              input becomes the baseline everyone else sees.
+            </p>
           </div>
         )}
 
