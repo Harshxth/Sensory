@@ -3,7 +3,7 @@
  * mock reviews, and 24h of noise samples per venue. Designed to make the map
  * look rich during demos. Run with: npm run seed:usf
  *
- * Idempotent — uses google_place_id as upsert key (synthetic ids for fake places).
+ * Idempotent - uses google_place_id as upsert key (synthetic ids for fake places).
  */
 import { config } from "dotenv";
 import { existsSync } from "node:fs";
@@ -135,13 +135,13 @@ const VENUES: SeedVenue[] = [
   { name: "USF Recreation & Wellness Aquatic Center", category: "gym", address: "12851 USF Recreation Pl, Tampa, FL", lng: -82.4124, lat: 28.0612, profile: "gym", wheelchair: "yes" },
   { name: "USF Genshaft Drive Garage", category: "transit", address: "USF Genshaft Dr, Tampa, FL", lng: -82.4135, lat: 28.0612, profile: "transit", wheelchair: "yes" },
   { name: "USF Crescent Hill", category: "park", address: "USF Genshaft Dr, Tampa, FL", lng: -82.4131, lat: 28.0628, profile: "park", wheelchair: "yes" },
-  { name: "USF Bull Runner Stop — Library", category: "transit", address: "USF Library, Tampa, FL", lng: -82.4129, lat: 28.0606, profile: "transit", wheelchair: "yes" },
-  { name: "USF Bull Runner Stop — Marshall Center", category: "transit", address: "USF MSC, Tampa, FL", lng: -82.4108, lat: 28.0640, profile: "transit", wheelchair: "yes" },
+  { name: "USF Bull Runner Stop - Library", category: "transit", address: "USF Library, Tampa, FL", lng: -82.4129, lat: 28.0606, profile: "transit", wheelchair: "yes" },
+  { name: "USF Bull Runner Stop - Marshall Center", category: "transit", address: "USF MSC, Tampa, FL", lng: -82.4108, lat: 28.0640, profile: "transit", wheelchair: "yes" },
   { name: "USF Embassy Suites", category: "office", address: "3705 Spectrum Blvd, Tampa, FL", lng: -82.4239, lat: 28.0590, profile: "office", wheelchair: "yes" },
   { name: "Hilton Garden Inn USF", category: "office", address: "13770 N 46th St, Tampa, FL", lng: -82.4158, lat: 28.0671, profile: "office", wheelchair: "yes" },
 
   // ============================================================
-  // GREATER TAMPA — 5-10 miles outside USF Tampa campus
+  // GREATER TAMPA - 5-10 miles outside USF Tampa campus
   // ============================================================
 
   // ── Temple Terrace / New Tampa (3-6mi NE) ──────────────────────
@@ -181,7 +181,7 @@ const VENUES: SeedVenue[] = [
   { name: "Armature Works", category: "restaurant", address: "1910 N Ola Ave, Tampa, FL", lng: -82.4647, lat: 27.9577, profile: "restaurant", wheelchair: "yes" },
   { name: "Oxford Exchange", category: "cafe", address: "420 W Kennedy Blvd, Tampa, FL", lng: -82.4709, lat: 27.9469, profile: "cafe", wheelchair: "yes" },
   { name: "John F. Germany Public Library", category: "library", address: "900 N Ashley Dr, Tampa, FL", lng: -82.4625, lat: 27.9509, profile: "library", wheelchair: "yes" },
-  { name: "TECO Streetcar — Centro Ybor", category: "transit", address: "1601 E 8th Ave, Tampa, FL", lng: -82.4445, lat: 27.9621, profile: "transit", wheelchair: "yes" },
+  { name: "TECO Streetcar - Centro Ybor", category: "transit", address: "1601 E 8th Ave, Tampa, FL", lng: -82.4445, lat: 27.9621, profile: "transit", wheelchair: "yes" },
 
   // ── Hyde Park / Bayshore / SoHo (8-10mi SW) ────────────────────
   { name: "Hyde Park Village", category: "store", address: "1602 W Snow Cir, Tampa, FL", lng: -82.4779, lat: 27.9376, profile: "store", wheelchair: "yes" },
@@ -225,7 +225,7 @@ const VENUES: SeedVenue[] = [
   { name: "Cypress Creek Town Center", category: "store", address: "8210 Cypress Creek Town Center Way, Lutz, FL", lng: -82.3540, lat: 28.1887, profile: "store", wheelchair: "yes" },
 ];
 
-// Profiles drive realistic baseline scores — libraries are quiet, stadiums are loud, etc.
+// Profiles drive realistic baseline scores - libraries are quiet, stadiums are loud, etc.
 const PROFILES: Record<
   SeedVenue["profile"],
   {
@@ -290,7 +290,7 @@ const PROFILES: Record<
 const REVIEW_TEMPLATES = [
   "Quieter on weekday mornings, packed at lunch.",
   "Lighting in the back corner is much softer than the entrance.",
-  "Avoid right after class lets out — gets crowded fast.",
+  "Avoid right after class lets out - gets crowded fast.",
   "Coffee smell is strong but not overwhelming.",
   "Two clear step-free exits, easy navigation.",
   "Construction next door has been loud this week.",
@@ -355,7 +355,7 @@ async function main() {
 
     const venueDoc = result as unknown as { _id?: ObjectId };
     if (!venueDoc?._id) {
-      // older driver shape — fetch again
+      // older driver shape - fetch again
       const found = await venuesCol.findOne({ google_place_id: synthGoogleId });
       if (!found?._id) continue;
       venueDoc._id = found._id;

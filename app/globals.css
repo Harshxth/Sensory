@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* OpenDyslexic — loaded only when toggled on (browsers download lazily). */
+/* OpenDyslexic - loaded only when toggled on (browsers download lazily). */
 @font-face {
   font-family: "OpenDyslexic";
   src: url("https://cdn.jsdelivr.net/npm/opendyslexic@1.0.3/woff/OpenDyslexic-Regular.woff") format("woff");
@@ -17,12 +17,12 @@
 }
 
 /* ============================================================
-   Verdant Expression — design tokens
+   Verdant Expression - design tokens
    Source: stitch_sensory_inclusive_navigation/verdant_expression/DESIGN.md
    ============================================================ */
 
 :root {
-  /* Surfaces — white/slate system, green used only as accent */
+  /* Surfaces - white/slate system, green used only as accent */
   --color-surface: #ffffff;
   --color-surface-dim: #f1f5f9;
   --color-surface-bright: #ffffff;
@@ -34,7 +34,7 @@
   --color-surface-variant: #f1f5f9;
   --color-surface-tint: #225f1c;
 
-  /* Background — pure white */
+  /* Background - pure white */
   --color-background: #ffffff;
   --color-on-background: #0f172a;
 
@@ -48,7 +48,7 @@
   --color-outline: #cbd5e1;
   --color-outline-variant: #e2e8f0;
 
-  /* Primary — Forest Green (used sparingly as accent) */
+  /* Primary - Forest Green (used sparingly as accent) */
   --color-primary: #225f1c;
   --color-on-primary: #ffffff;
   --color-primary-container: #ecfdf5;
@@ -60,7 +60,7 @@
   --color-on-primary-fixed: #052e16;
   --color-on-primary-fixed-variant: #14532d;
 
-  /* Secondary — Earth Brown */
+  /* Secondary - Earth Brown */
   --color-secondary: #815440;
   --color-on-secondary: #fff7f5;
   --color-secondary-container: #ffdbcc;
@@ -71,7 +71,7 @@
   --color-on-secondary-fixed: #5c3623;
   --color-on-secondary-fixed-variant: #7d513d;
 
-  /* Tertiary — Rust Orange */
+  /* Tertiary - Rust Orange */
   --color-tertiary: #9c4524;
   --color-on-tertiary: #fff7f5;
   --color-tertiary-container: #ffa180;
@@ -108,14 +108,14 @@
   --radius-xl: 1.5rem;
   --radius-full: 9999px;
 
-  /* Shadows — neutral slate, not green-tinted */
+  /* Shadows - neutral slate, not green-tinted */
   --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
   --shadow-md: 0 1px 2px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(15, 23, 42, 0.06);
   --shadow-lg: 0 1px 2px rgba(15, 23, 42, 0.06), 0 8px 24px rgba(15, 23, 42, 0.08);
   --shadow-primary: 0 1px 2px rgba(15, 23, 42, 0.06), 0 12px 32px rgba(15, 23, 42, 0.10);
 }
 
-/* Tailwind v4 — register custom tokens as utilities */
+/* Tailwind v4 - register custom tokens as utilities */
 @theme inline {
   /* Colors */
   --color-background: var(--color-background);
@@ -172,7 +172,7 @@ html {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Accessibility preferences — applied as classes on <html> by PreferencesProvider. */
+/* Accessibility preferences - applied as classes on <html> by PreferencesProvider. */
 html.a11y-text-1 {
   font-size: 14px;
 }
@@ -294,7 +294,7 @@ html {
 }
 
 /* ============================================================
-   Google Places Autocomplete dropdown — must float above the map
+   Google Places Autocomplete dropdown - must float above the map
    chrome (z-index 30/40). Without this override, predictions are
    hidden behind layers and the search box looks broken.
    ============================================================ */
@@ -356,7 +356,7 @@ html {
   line-height: 1.2;
 }
 
-/* Dark theme — slate near-black with green accent.
+/* Dark theme - slate near-black with green accent.
    Follows system color-scheme preference. */
 @media (prefers-color-scheme: dark) {
   :root {
@@ -405,7 +405,7 @@ html {
   }
 }
 
-/* Sensory marker animations — loud noise, dense crowd, harsh lighting */
+/* Sensory marker animations - loud noise, dense crowd, harsh lighting */
 @keyframes sensory-wave-out {
   0% {
     transform: scale(0.6);

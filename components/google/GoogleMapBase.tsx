@@ -17,7 +17,7 @@ export function GoogleMapsProvider({ children }: { children: ReactNode }) {
   if (!apiKey) {
     return (
       <div className="absolute inset-0 flex items-center justify-center bg-surface-container-low text-on-surface-variant text-sm p-4 text-center">
-        NEXT_PUBLIC_GOOGLE_MAPS_API_KEY missing — add it to .env.local and restart the dev server.
+        NEXT_PUBLIC_GOOGLE_MAPS_API_KEY missing - add it to .env.local and restart the dev server.
       </div>
     );
   }

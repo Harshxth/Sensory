@@ -10,7 +10,7 @@ type Props = {
 };
 
 /**
- * Crowd density visualization — pulsing orange/amber halos around busy venues,
+ * Crowd density visualization - pulsing orange/amber halos around busy venues,
  * size + brightness scale with crowd score. Implemented as overlapping
  * google.maps.Circle objects (rendered cheaply on the map plane).
  */

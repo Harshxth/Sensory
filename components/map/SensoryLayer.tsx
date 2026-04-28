@@ -87,7 +87,7 @@ export function SensoryLayer({ visible = true, onSelectVenue, refreshKey = 0 }: 
       },
     });
 
-    // Halo for individual venues — calm teal → amber → orange
+    // Halo for individual venues - calm teal → amber → orange
     map.addLayer({
       id: HALO_LAYER,
       type: "circle",

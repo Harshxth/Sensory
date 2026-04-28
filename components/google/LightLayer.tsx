@@ -10,7 +10,7 @@ type Props = {
 };
 
 /**
- * Lighting glow visualization — soft yellow halos for venues with strong/harsh
+ * Lighting glow visualization - soft yellow halos for venues with strong/harsh
  * lighting. The radius and opacity scale with the lighting score.
  */
 export function LightLayer({ venues, visible = true }: Props) {

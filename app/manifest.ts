@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Sensory — The map for how a place feels",
+    name: "Sensory - The map for how a place feels",
     short_name: "Sensory",
     description:
       "Accessibility map for autistic, sensory-sensitive, wheelchair, deaf, blind, and ESL communities.",

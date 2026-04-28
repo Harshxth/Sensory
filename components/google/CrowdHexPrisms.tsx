@@ -10,7 +10,7 @@ type Props = {
 };
 
 /**
- * Crowd visualization — isometric 3D hex prisms rising from each venue.
+ * Crowd visualization - isometric 3D hex prisms rising from each venue.
  * The hex's height + color scale with crowd score, giving an "Uber HexagonLayer"
  * feel that's clearly distinct from noise heatmaps and light glow.
  */
@@ -48,7 +48,7 @@ export function CrowdHexPrisms({ venues, visible = true, onSelect }: Props) {
           >
             <div
               role="button"
-              aria-label={`${v.name} — crowd ${score.toFixed(1)} of 10`}
+              aria-label={`${v.name} - crowd ${score.toFixed(1)} of 10`}
               className="cursor-pointer relative"
               style={{
                 width: `${r * 2 + 8}px`,
@@ -80,7 +80,7 @@ export function CrowdHexPrisms({ venues, visible = true, onSelect }: Props) {
  * SVG so AdvancedMarker's anchor places the base of the prism on the venue
  * point.
  *
- * Geometry — pointy-top hex with radius r, extruded up by h:
+ * Geometry - pointy-top hex with radius r, extruded up by h:
  *   Top hex:   6 vertices around (cx, cy_top)
  *   Side faces: front-right, front, front-left rectangles
  */

@@ -10,7 +10,7 @@ const TAMPA_BBOX = "-82.55,27.95,-82.30,28.15";
 /**
  * Heatmap showing where street lamps are densest. Useful for low-vision /
  * blind users planning night walks. Data caveat: OSM coverage is spotty in
- * many US areas — the legend will note this.
+ * many US areas - the legend will note this.
  */
 export function StreetlightHeatmap({ visible = true }: { visible?: boolean }) {
   const map = useMap();

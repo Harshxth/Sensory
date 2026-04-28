@@ -23,13 +23,13 @@ type Props = {
   name?: string;
   /** Subtle handle / sub-label, e.g. "@anonymous". */
   username?: string;
-  /** Status badge — drives a colored dot. */
+  /** Status badge - drives a colored dot. */
   status?: "online" | "offline" | "focus";
   onAction?: (action: string) => void;
 };
 
 /**
- * Sensory user dropdown — opens from the profile avatar in the top app bar.
+ * Sensory user dropdown - opens from the profile avatar in the top app bar.
  *
  * Built on @radix-ui/react-dropdown-menu (already in deps). Items render
  * with our existing token system (`bg-surface-container-lowest`,
@@ -123,7 +123,7 @@ export function UserDropdown({
 
           <Separator />
 
-          {/* Voice-clone status row — visible at a glance so the user knows
+          {/* Voice-clone status row - visible at a glance so the user knows
               their cloned voice is wired up to nav + the sign reader. */}
           <div className="px-2 py-2">
             <div
@@ -148,7 +148,7 @@ export function UserDropdown({
                 </div>
                 <div className="text-[11px] truncate">
                   {voiceCloneId
-                    ? "Active — used for nav + signs"
+                    ? "Active - used for nav + signs"
                     : "Not set yet"}
                 </div>
               </div>
@@ -253,7 +253,7 @@ async function testCloneVoice(voiceId: string) {
     await audio.play();
   } catch (e) {
     console.error("[voice] test threw", e);
-    alert("Voice test threw — check the console.");
+    alert("Voice test threw - check the console.");
   }
 }
 

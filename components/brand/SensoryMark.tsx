@@ -13,7 +13,7 @@ type GlyphProps = {
 
 /**
  * The Sensory glyph: a folded map tile with a calm route + sensory pin.
- * Adapts detail to size — at 16-24px we drop the grid/secondary route so
+ * Adapts detail to size - at 16-24px we drop the grid/secondary route so
  * it stays legible as a favicon. From 32px+ we layer more in.
  */
 export function SensoryGlyph({

@@ -9,7 +9,7 @@ export type OsmFeature = {
   tags: Record<string, string>;
 };
 
-// F1.6 — wheelchair-accessible nodes within bbox.
+// F1.6 - wheelchair-accessible nodes within bbox.
 export async function fetchWheelchairFeatures(b: Bounds): Promise<OsmFeature[]> {
   const bbox = `${b.lat1},${b.lng1},${b.lat2},${b.lng2}`;
   const query = `[out:json][timeout:25];
@@ -22,7 +22,7 @@ out;`;
   return data.elements;
 }
 
-// F2.3 — streetlight density (Tier 2, stub for now).
+// F2.3 - streetlight density (Tier 2, stub for now).
 export async function fetchStreetlights(_b: Bounds): Promise<OsmFeature[]> {
   return [];
 }

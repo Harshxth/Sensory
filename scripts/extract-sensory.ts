@@ -1,4 +1,4 @@
-// F1.4 step 2 — for each venue, batch-call Gemini on its reviews → sensory dimensions.
+// F1.4 step 2 - for each venue, batch-call Gemini on its reviews → sensory dimensions.
 // Run with: npx tsx scripts/extract-sensory.ts
 // This writes results to MongoDB so the demo never live-calls Gemini.
 

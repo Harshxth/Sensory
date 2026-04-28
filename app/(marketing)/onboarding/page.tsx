@@ -146,7 +146,7 @@ function Step4VisualKey() {
           icon="graphic_eq"
           accent="thermal"
           title="Noise"
-          description="A thermal heatmap — cool blue for quiet, warm orange and red for loud zones."
+          description="A thermal heatmap - cool blue for quiet, warm orange and red for loud zones."
           preview={
             <div className="w-full h-full rounded-lg bg-gradient-to-r from-cyan-400 via-amber-400 to-rose-500 opacity-90" />
           }
@@ -191,7 +191,7 @@ function Step4VisualKey() {
           icon="campaign"
           accent="orange"
           title="Live alerts"
-          description="A red badge appears for active events nearby — street fairs, construction, anything that changes the sensory profile."
+          description="A red badge appears for active events nearby - street fairs, construction, anything that changes the sensory profile."
           preview={
             <div className="w-full h-full rounded-lg bg-rose-50 flex items-center justify-center">
               <span className="flex items-center justify-center w-6 h-6 rounded-full bg-rose-500 text-white font-bold text-xs">
@@ -304,7 +304,7 @@ function Step2Voice() {
           Add a comfort voice
         </h1>
         <p className="text-on-surface-variant">
-          Optional. Record 30 seconds of a voice you find calming — Sensory will read venue
+          Optional. Record 30 seconds of a voice you find calming - Sensory will read venue
           summaries in this voice, in any language.
         </p>
       </div>

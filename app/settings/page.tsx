@@ -143,7 +143,7 @@ export default function SettingsPage() {
             <SectionHeader icon="shield_lock" container="bg-secondary-container text-on-secondary-container" title="Privacy & Voice" />
             <p className="text-sm text-on-surface-variant">
               Voice IDs are AES-256-GCM encrypted at rest. Audio captured by the noise sampler
-              never leaves your device — only the computed dB number is uploaded.
+              never leaves your device - only the computed dB number is uploaded.
             </p>
             <div className="flex flex-wrap gap-3">
               <button className="px-5 h-12 rounded-lg border border-outline text-on-surface font-bold hover:bg-surface-container transition-colors">

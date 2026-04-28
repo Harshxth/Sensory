@@ -22,7 +22,7 @@ type Props = {
 };
 
 /**
- * Lightweight typewriter — types text char by char, holds, optionally
+ * Lightweight typewriter - types text char by char, holds, optionally
  * erases, and loops. No external deps.
  */
 export function Typewriter({

@@ -1,6 +1,6 @@
 // Client-side mirror of the time-aware sensory heuristic from
 // app/api/venues/[id]/sensory-at/route.ts. Used to recompute heatmap-friendly
-// venue scores as the user scrubs the time slider — too many API calls
+// venue scores as the user scrubs the time slider - too many API calls
 // otherwise. The server endpoint is reserved for venue detail views where
 // historical noise_samples data can override the heuristic.
 

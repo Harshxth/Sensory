@@ -71,7 +71,7 @@ export async function GET(
     adjustedNoise = Math.max(0, Math.min(10, (aggregated[0].avg_db - 30) / 6));
     derivedFrom = "live";
   } else {
-    // No live data — apply heuristic: louder for evenings on weekends, quieter early mornings.
+    // No live data - apply heuristic: louder for evenings on weekends, quieter early mornings.
     const isEvening = hour >= 17 && hour <= 22;
     const isLateNight = hour >= 22 || hour <= 5;
     const isWeekend = target === 0 || target === 6;

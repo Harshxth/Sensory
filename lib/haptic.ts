@@ -47,7 +47,7 @@ function forceVibrate(pattern: number | number[]) {
   }
 }
 
-/** A tiny tap (UI feedback — button press, marker select). */
+/** A tiny tap (UI feedback - button press, marker select). */
 export function tap() {
   if (canVibrate()) forceVibrate(15);
 }
@@ -72,7 +72,7 @@ export function offTrack() {
   if (canVibrate()) forceVibrate([200, 100, 200, 100, 200]);
 }
 
-/** Bypasses the user-pref gate — only call from explicit user gestures. */
+/** Bypasses the user-pref gate - only call from explicit user gestures. */
 export function tapAlwaysOn() {
   forceVibrate(15);
 }

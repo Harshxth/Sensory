@@ -44,3 +44,4 @@ next-env.d.ts
 /stitch_sensory_inclusive_navigation/
 
 .vercel
+.worktrees

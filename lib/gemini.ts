@@ -7,7 +7,7 @@ export function getGemini() {
   return new GoogleGenerativeAI(apiKey);
 }
 
-// F1.4 — produce sensory dimensions for a venue.
+// F1.4 - produce sensory dimensions for a venue.
 // Run via scripts/extract-sensory.ts at seed time so the demo never live-calls.
 // If reviewTexts are provided, ground the score in them; otherwise have Gemini
 // synthesize plausible defaults from the venue type.
@@ -25,7 +25,7 @@ export async function extractSensory(args: {
   const reviewBlock =
     reviewTexts && reviewTexts.length > 0
       ? `Reviews:\n${reviewTexts.map((r, i) => `${i + 1}. ${r}`).join("\n")}`
-      : `No reviews provided — infer realistic typical values for a venue of this category.`;
+      : `No reviews provided - infer realistic typical values for a venue of this category.`;
 
   const prompt = `You score venues on sensory accessibility for autistic, sensory-sensitive users.
 Venue: ${name}
@@ -44,7 +44,7 @@ Return strict JSON with keys:
   return JSON.parse(result.response.text());
 }
 
-// composite score weights — tuned for heatmap color (master plan §4 F1.2)
+// composite score weights - tuned for heatmap color (master plan §4 F1.2)
 export function compositeScore(d: Omit<SensoryDimensions, "composite">): number {
   return d.noise * 0.35 + d.crowd * 0.25 + d.lighting * 0.2 + d.smell * 0.1 + (10 - d.exits) * 0.1;
 }

@@ -82,7 +82,7 @@ export default async function VenuePage({ params }: { params: Promise<{ id: stri
           <div className="p-6 bg-surface grid grid-cols-2 md:grid-cols-4 gap-4 divide-x divide-outline/10 text-center">
             <Stat label="Composite">
               <Icon name="analytics" filled size={20} className="text-primary" />
-              <span className="text-xl font-bold">{venue.sensory?.composite?.toFixed(1) ?? "—"}</span>
+              <span className="text-xl font-bold">{venue.sensory?.composite?.toFixed(1) ?? "-"}</span>
             </Stat>
             <Stat label="Status">
               <span className="w-3 h-3 rounded-full bg-primary-container border-2 border-primary" />

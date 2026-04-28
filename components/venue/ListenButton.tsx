@@ -1,6 +1,6 @@
 "use client";
 
-// F1.5 — sends summary text + voice_id + lang to /api/voice/speak, plays via <audio>.
+// F1.5 - sends summary text + voice_id + lang to /api/voice/speak, plays via <audio>.
 import { useState } from "react";
 
 export function ListenButton({ text }: { text: string }) {

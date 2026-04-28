@@ -1,4 +1,4 @@
-// F1.8 — seed 2-3 realistic Tampa alerts for the demo.
+// F1.8 - seed 2-3 realistic Tampa alerts for the demo.
 // Run with: npx tsx scripts/seed-alerts.ts
 
 import { config } from "dotenv";

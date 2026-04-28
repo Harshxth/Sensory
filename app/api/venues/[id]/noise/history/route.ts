@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import { COLLECTIONS, getDb } from "@/lib/mongodb";
 
-// F1.10 — 24h hourly aggregation from the time-series collection.
+// F1.10 - 24h hourly aggregation from the time-series collection.
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> },

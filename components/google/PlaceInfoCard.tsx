@@ -17,7 +17,7 @@ type Props = {
 /**
  * Lightweight Google-Maps-style mini card. Always shows Google's place data
  * with a small sensory chip overlay. Does NOT contain detailed sensory bars
- * or reviews — those live in SensoryDetailPanel which slides in beside this
+ * or reviews - those live in SensoryDetailPanel which slides in beside this
  * card when the user clicks "More".
  */
 export function PlaceInfoCard({ venue, google, onMore, onDirections, onClose }: Props) {
@@ -104,7 +104,7 @@ export function PlaceInfoCard({ venue, google, onMore, onDirections, onClose }: 
         </button>
       </header>
 
-      {/* Sensory chip — the headline sensory insight */}
+      {/* Sensory chip - the headline sensory insight */}
       <div className="px-5 pb-3">
         <button
           type="button"
@@ -125,7 +125,7 @@ export function PlaceInfoCard({ venue, google, onMore, onDirections, onClose }: 
         </button>
       </div>
 
-      {/* Action row — Google-Maps-style circular icons */}
+      {/* Action row - Google-Maps-style circular icons */}
       <div className="grid grid-cols-4 gap-1 px-5 pb-4">
         <Action icon="directions" label="Directions" onClick={onDirections} primary disabled={!onDirections} />
         {website ? (

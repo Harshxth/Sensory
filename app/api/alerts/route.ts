@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { COLLECTIONS, getDb } from "@/lib/mongodb";
 
-// F1.8 — active alerts in bbox + time window.
+// F1.8 - active alerts in bbox + time window.
 export async function GET(req: NextRequest) {
   const bounds = req.nextUrl.searchParams.get("bounds");
   const now = new Date();

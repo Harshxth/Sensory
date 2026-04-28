@@ -8,12 +8,12 @@ import { COLLECTIONS, getDb } from "@/lib/mongodb";
  * via Gemini Vision; their phone has GPS; nav (if active) has a destination.
  * This endpoint compares those three signals and returns spoken guidance:
  *
- *   - "yes you're at it" / "you're heading right toward it" — when the
+ *   - "yes you're at it" / "you're heading right toward it" - when the
  *     visible sign matches the destination.
- *   - "this is X, but your destination is Y, head <bearing>" — when the
+ *   - "this is X, but your destination is Y, head <bearing>" - when the
  *     sign matches a known venue but it isn't the destination.
  *   - "I can't match this sign to a nearby venue, your destination is
- *     about <distance> to your <bearing>" — when nothing matches.
+ *     about <distance> to your <bearing>" - when nothing matches.
  *
  * Body:
  *   {
@@ -95,7 +95,7 @@ export async function POST(req: NextRequest) {
         match = { name: top.name, lat: top.lat, lng: top.lng, distanceMeters: Math.round(top.d) };
       }
     } catch {
-      // DB hiccup — fall through; we'll still return a useful response.
+      // DB hiccup - fall through; we'll still return a useful response.
     }
   }
 
@@ -123,7 +123,7 @@ export async function POST(req: NextRequest) {
         spoken = `Yes, you're at ${cleanName(destination.name)}. You've arrived.`;
       } else {
         verdict = "approaching";
-        spoken = `Good — that sign is for ${cleanName(destination.name)}. You're heading the right way, about ${roundDistanceSpoken(distanceMeters ?? match.distanceMeters)} to go.`;
+        spoken = `Good - that sign is for ${cleanName(destination.name)}. You're heading the right way, about ${roundDistanceSpoken(distanceMeters ?? match.distanceMeters)} to go.`;
       }
     } else {
       verdict = "off_track";

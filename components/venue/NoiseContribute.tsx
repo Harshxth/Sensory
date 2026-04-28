@@ -1,6 +1,6 @@
 "use client";
 
-// F1.9 — 10s capture using lib/audio.ts, posts only the average dB.
+// F1.9 - 10s capture using lib/audio.ts, posts only the average dB.
 import { useState } from "react";
 import { startDbCapture } from "@/lib/audio";
 

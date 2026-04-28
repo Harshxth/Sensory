@@ -10,7 +10,7 @@ type Props = {
 };
 
 /**
- * Crowd visualization — vertical 3D-styled towers rising from each venue.
+ * Crowd visualization - vertical 3D-styled towers rising from each venue.
  * Tower height scales with crowd score. Inspired by population-density
  * choropleths where peaks rise out of the surface.
  */
@@ -50,11 +50,11 @@ export function CrowdTowers({ venues, visible = true, onSelect }: Props) {
                 the lat/lng. So we just stack the tower upward from here. */}
             <div
               role="button"
-              aria-label={`${v.name} — crowd ${score.toFixed(1)} of 10`}
+              aria-label={`${v.name} - crowd ${score.toFixed(1)} of 10`}
               className="cursor-pointer flex flex-col items-center"
               style={{ width: `${width + 16}px` }}
             >
-              {/* Tower body — rises from baseline */}
+              {/* Tower body - rises from baseline */}
               <div
                 aria-hidden
                 className="relative"

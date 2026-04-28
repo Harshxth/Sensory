@@ -10,7 +10,7 @@ export interface MaskedSlideRevealProps {
   fontWeight?: number;
   speed?: number;
   className?: string;
-  /** Override letter-spacing (default: -0.03em — tight display setting). */
+  /** Override letter-spacing (default: -0.03em - tight display setting). */
   letterSpacing?: string;
   /** Override font-family (default: app's display sans). */
   fontFamily?: string;

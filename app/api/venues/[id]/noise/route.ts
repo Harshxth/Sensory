@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import { COLLECTIONS, getDb } from "@/lib/mongodb";
 
-// F1.9 — record a single dB sample. Audio never leaves the client (master plan §15 #5).
+// F1.9 - record a single dB sample. Audio never leaves the client (master plan §15 #5).
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> },

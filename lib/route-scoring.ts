@@ -27,7 +27,7 @@ function needWeights(needs: Preferences["needs"]) {
   };
 }
 
-// Decode an encoded polyline (Google's algorithm) — returns lat/lng pairs.
+// Decode an encoded polyline (Google's algorithm) - returns lat/lng pairs.
 function decodePolyline(encoded: string): { lat: number; lng: number }[] {
   const points: { lat: number; lng: number }[] = [];
   let index = 0;
@@ -186,7 +186,7 @@ export function buildExplainer(
   if (preferences.needs.length === 0) return null;
   if (!baseline || baseline === chosen) {
     if (chosen.penalty === 0) return null;
-    return `Picked the only available route — ${chosen.reasons.join(", ")} on the way`;
+    return `Picked the only available route - ${chosen.reasons.join(", ")} on the way`;
   }
   const saved = baseline.penalty - chosen.penalty;
   if (saved <= 0) return null;

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { fetchWheelchairFeatures } from "@/lib/osm";
 
-// F1.6 — passthrough to OSM Overpass for wheelchair-tagged features in bbox.
+// F1.6 - passthrough to OSM Overpass for wheelchair-tagged features in bbox.
 export async function GET(req: NextRequest) {
   const bounds = req.nextUrl.searchParams.get("bounds");
   if (!bounds) return NextResponse.json({ error: "bounds required" }, { status: 400 });

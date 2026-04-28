@@ -16,7 +16,7 @@ type Wayfinding = {
 };
 
 type Props = {
-  /** Active navigation destination — when present, sign reads also do
+  /** Active navigation destination - when present, sign reads also do
    *  wayfinding ("you're heading right toward it" / "head left instead"). */
   destination?: { lat: number; lng: number; name: string } | null;
 };
@@ -26,7 +26,7 @@ type Props = {
  *
  * 1. Gemini Vision transcribes the sign and extracts a place name.
  * 2. Geolocation + active destination feed /api/wayfinding/check.
- * 3. The result — sign text + wayfinding sentence — is read aloud through
+ * 3. The result - sign text + wayfinding sentence - is read aloud through
  *    ElevenLabs (cloned voice if available, Bella otherwise; falls back to
  *    browser TTS only if the API errors).
  */
@@ -105,7 +105,7 @@ export function SignReader({ destination }: Props = {}) {
       setText(visionData.text);
 
       // Try wayfinding if we have a place name candidate AND geolocation. We
-      // don't fail the whole flow on a wayfinding miss — just speak the text.
+      // don't fail the whole flow on a wayfinding miss - just speak the text.
       let way: Wayfinding | null = null;
       if (visionData.place_name && navigator.geolocation) {
         try {
@@ -129,7 +129,7 @@ export function SignReader({ destination }: Props = {}) {
             way = (await checkRes.json()) as Wayfinding;
           }
         } catch {
-          // No location permission, GPS timeout, or DB hiccup — skip wayfinding.
+          // No location permission, GPS timeout, or DB hiccup - skip wayfinding.
         }
       }
       setWayfinding(way);

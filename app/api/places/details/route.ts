@@ -43,5 +43,5 @@ export async function GET(req: NextRequest) {
 }
 
 // GET /api/places/details/photo?ref=...&maxwidth=400
-// (Not implemented here — photos use a separate Google endpoint that requires
+// (Not implemented here - photos use a separate Google endpoint that requires
 // streaming the binary response. We construct a public URL on the client.)

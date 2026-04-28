@@ -9,7 +9,7 @@ const SQUARE_SIZE = 60;
 const SPEED = 0.15;
 
 /**
- * Animated grid background — a slow-drifting grid of squares with a
+ * Animated grid background - a slow-drifting grid of squares with a
  * cursor-hover highlight and a soft radial vignette. Theme tokens come
  * from CSS variables in globals.css (`--grid-line`, `--grid-hover`,
  * `--grid-vignette-start/end`) so it adapts to system light/dark.

@@ -95,7 +95,7 @@ export function QuickUpdate({ venueId, predicted, onSubmitted }: Props) {
   };
 
   const confirm = async () => {
-    const text = `Confirmed conditions match — ${summarize(predicted)}.`;
+    const text = `Confirmed conditions match - ${summarize(predicted)}.`;
     const tags: Record<Dim, number | null> = {
       noise: predicted?.noise ?? null,
       lighting: predicted?.lighting ?? null,
@@ -120,7 +120,7 @@ export function QuickUpdate({ venueId, predicted, onSubmitted }: Props) {
     if (hazards.size) phrasings.push(`watch out for ${Array.from(hazards).join(", ")}`);
     if (note.trim()) phrasings.push(note.trim());
     const text = phrasings.length
-      ? `Correction — ${phrasings.join("; ")}.`
+      ? `Correction - ${phrasings.join("; ")}.`
       : `Conditions don't quite match the profile.`;
     await post(text, adjusted);
   };

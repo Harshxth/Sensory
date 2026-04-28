@@ -18,7 +18,7 @@ type Props = {
   onClose: () => void;
   onDirections?: () => void;
   onUpdated?: () => void;
-  /** Called after the user creates a venue from a Google place — receives the new venue ID. */
+  /** Called after the user creates a venue from a Google place - receives the new venue ID. */
   onVenueCreated?: (venueId: string) => void;
 };
 
@@ -172,7 +172,7 @@ export function VenuePanel({
               </Stat>
             ) : (
               <Stat label="Rating">
-                <span className="text-on-surface-variant text-sm">—</span>
+                <span className="text-on-surface-variant text-sm">-</span>
               </Stat>
             )}
             <Stat label="Sensory">
@@ -245,7 +245,7 @@ export function VenuePanel({
             </>
           )}
 
-          {/* No-data prompt for Google-only places — actionable */}
+          {/* No-data prompt for Google-only places - actionable */}
           {!venue && google && (
             <div className="bg-primary/15 border border-primary/30 rounded-xl p-4 space-y-3">
               <div>
@@ -254,7 +254,7 @@ export function VenuePanel({
                   Be the first to score this venue
                 </div>
                 <p className="text-xs text-on-surface-variant leading-relaxed">
-                  Sensory hasn&apos;t mapped this place yet. Share what it&apos;s like —
+                  Sensory hasn&apos;t mapped this place yet. Share what it&apos;s like -
                   your input creates the sensory profile other people rely on.
                 </p>
               </div>
@@ -286,7 +286,7 @@ export function VenuePanel({
             </section>
           )}
 
-          {/* Quick update — confirm/correct cascades to a real-time refresh */}
+          {/* Quick update - confirm/correct cascades to a real-time refresh */}
           {venueId && (
             <section>
               <QuickUpdate

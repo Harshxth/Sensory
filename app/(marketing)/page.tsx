@@ -1,7 +1,7 @@
 import { BootSplash } from "@/components/BootSplash";
 
 export const metadata = {
-  title: "Sensory — The map for how a place feels",
+  title: "Sensory - The map for how a place feels",
   description:
     "Accessibility map for autistic, sensory-sensitive, wheelchair, deaf, blind, and ESL communities.",
 };

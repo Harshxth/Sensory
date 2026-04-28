@@ -143,7 +143,7 @@ function startPinging(token: string, ref: React.MutableRefObject<number | null>)
           lng: pos.coords.longitude,
         }),
       }).catch(() => {
-        /* ignore network errors — next tick will retry */
+        /* ignore network errors - next tick will retry */
       });
     },
     () => {

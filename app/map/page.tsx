@@ -163,7 +163,7 @@ export default function MapPage() {
               positioning fills the viewport instead of being trapped inside
               the map's tile container. It still has access to useMap()
               because it's inside the same <GoogleMapsProvider>. */}
-          {/* Search box — sits inside the provider so its `useMap()` works.
+          {/* Search box - sits inside the provider so its `useMap()` works.
               Hidden during nav or whenever a card / panel is already active. */}
           {!navigation && !destination && !selected && !googlePlace && (
             <PlaceSearchBox

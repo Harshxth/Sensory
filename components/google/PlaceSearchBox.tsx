@@ -12,7 +12,7 @@ type Props = {
 
 /**
  * Search box that floats over the top of the map. Uses Google Places
- * Autocomplete (legacy widget — battle-tested) attached to a styled input.
+ * Autocomplete (legacy widget - battle-tested) attached to a styled input.
  * On selection, fires `onSelect({ lat, lng, name })` so the parent can
  * setDestination → DirectionsLayer kicks in automatically.
  */

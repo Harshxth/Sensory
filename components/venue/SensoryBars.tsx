@@ -1,6 +1,6 @@
 "use client";
 
-// F1.3 — five horizontal bars (noise/lighting/crowd/smell/exits) 0–10.
+// F1.3 - five horizontal bars (noise/lighting/crowd/smell/exits) 0–10.
 import type { SensoryDimensions } from "@/types";
 
 const ROWS: { key: keyof Omit<SensoryDimensions, "composite">; label: string }[] = [

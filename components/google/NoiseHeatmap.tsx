@@ -34,7 +34,7 @@ export function NoiseHeatmap({ venues, visible = true }: Props) {
       data: points,
       radius: 55,
       opacity: 0.82,
-      // Banded thermal palette — discrete steps create the geothermal-style bands
+      // Banded thermal palette - discrete steps create the geothermal-style bands
       // visible on the reference map (cool green → yellow → orange → red → magenta).
       gradient: [
         "rgba(0, 0, 0, 0)",

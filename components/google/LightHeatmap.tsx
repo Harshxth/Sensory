@@ -10,7 +10,7 @@ type Props = {
 };
 
 /**
- * Lighting visualization — gold/sunlight palette. Pale yellow for soft, deep
+ * Lighting visualization - gold/sunlight palette. Pale yellow for soft, deep
  * gold for harsh. Distinct from noise (red spectrum) and crowd (blue/purple).
  */
 export function LightHeatmap({ venues, visible = true }: Props) {

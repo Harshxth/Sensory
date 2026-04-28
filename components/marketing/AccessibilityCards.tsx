@@ -2,7 +2,7 @@
 
 /**
  * Accessibility feature cards in the same image-embedded card style as
- * WorkflowCardSwap — so the "Built for every experience" section feels
+ * WorkflowCardSwap - so the "Built for every experience" section feels
  * cohesive with the Sensory product life cycle cards above it.
  *
  * Each card: full-bleed Unsplash photo, bottom gradient tint, white text
@@ -24,8 +24,8 @@ const CARDS: Card[] = [
     vol: "Need · 01",
     title: "Mobility safe",
     caption:
-      "Step-free routes, ramp locations, and verified accessible entrances — updated in real time.",
-    // Warm sunlit walkway with no steps — feel of an accessible path
+      "Step-free routes, ramp locations, and verified accessible entrances - updated in real time.",
+    // Warm sunlit walkway with no steps - feel of an accessible path
     image:
       "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1400&auto=format&fit=crop",
     tint: "rgba(35,21,5,0.78)",
@@ -37,7 +37,7 @@ const CARDS: Card[] = [
     title: "Vision support",
     caption:
       "High-contrast modes, audible turn-by-turn, and a camera that reads any sign aloud in your language.",
-    // Warm reading nook / soft window light — vision-as-comfort
+    // Warm reading nook / soft window light - vision-as-comfort
     image:
       "https://images.unsplash.com/photo-1490818387583-1baba5e638af?q=80&w=1400&auto=format&fit=crop",
     tint: "rgba(28,14,4,0.78)",
@@ -49,7 +49,7 @@ const CARDS: Card[] = [
     title: "Hearing friendly",
     caption:
       "Visual alerts, vibration cues, and environments tagged for sign-language visibility.",
-    // Warm intimate conversation — hands + faces in soft light
+    // Warm intimate conversation - hands + faces in soft light
     image:
       "https://images.unsplash.com/photo-1454944338482-a69bb95894af?q=80&w=1400&auto=format&fit=crop",
     tint: "rgba(28,14,4,0.78)",
@@ -60,8 +60,8 @@ const CARDS: Card[] = [
     vol: "Need · 04",
     title: "Sensory calm routing",
     caption:
-      "Navigate away from loud construction, heavy traffic, and crowded areas — to the quietest path that fits your body.",
-    // Soft empty bench / golden-hour path — the literal calm
+      "Navigate away from loud construction, heavy traffic, and crowded areas - to the quietest path that fits your body.",
+    // Soft empty bench / golden-hour path - the literal calm
     image:
       "https://images.unsplash.com/photo-1437428948595-93b67d4c34a3?q=80&w=1400&auto=format&fit=crop",
     tint: "rgba(28,42,18,0.80)",
@@ -73,7 +73,7 @@ const CARDS: Card[] = [
     title: "Dyslexia optimized",
     caption:
       "OpenDyslexic option, icon-first navigation, and plain-language summaries on every venue.",
-    // Warm coffee + open book — reading as comfort
+    // Warm coffee + open book - reading as comfort
     image:
       "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1400&auto=format&fit=crop",
     tint: "rgba(35,21,5,0.78)",
@@ -85,7 +85,7 @@ const CARDS: Card[] = [
     title: "ESL ready",
     caption:
       "Map UI and live navigation in English, Spanish, and Mandarin. Sign reader translates as it speaks.",
-    // Warm group of friends sharing a meal — multilingual community
+    // Warm group of friends sharing a meal - multilingual community
     image:
       "https://images.unsplash.com/photo-1444459094717-a39f1e3e0903?q=80&w=1400&auto=format&fit=crop",
     tint: "rgba(28,14,4,0.78)",

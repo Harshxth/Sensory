@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     location: { type: "Point", coordinates: [body.lng, body.lat] },
     osm_tags: { wheelchair: null, kerb: null },
     updated_at: new Date(),
-    // No sensory yet — first community submission will populate via PATCH cascade
+    // No sensory yet - first community submission will populate via PATCH cascade
   });
 
   return NextResponse.json({ id: String(result.insertedId), created: true });

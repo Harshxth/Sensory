@@ -69,7 +69,7 @@ export function MapProvider({
     instance.on("load", () => setLoaded(true));
     setMap(instance);
 
-    // Adapt to container size changes (handles initial 0Ã—0 render race).
+    // Adapt to container size changes (handles initial 0Ã-0 render race).
     const ro = new ResizeObserver(() => {
       try {
         instance.resize();

@@ -6,7 +6,7 @@ import type { Alert, Venue } from "@/types";
 
 const TAMPA_BBOX = "-82.55,27.95,-82.30,28.15";
 
-// Fall back to seeded demo data if /api/venues 500s — the map should never appear empty.
+// Fall back to seeded demo data if /api/venues 500s - the map should never appear empty.
 const DEMO_VENUES: Venue[] = [
   {
     _id: "demo-1",
@@ -115,13 +115,13 @@ export function alertsToFeatureCollection(
   };
 }
 
-// Sensory color stops — calm teal → amber → orange. NEVER red/green.
+// Sensory color stops - calm teal → amber → orange. NEVER red/green.
 export const SENSORY_COLOR_STOPS: Array<[number, string]> = [
-  [0, "#14b8a6"], // teal — calm
+  [0, "#14b8a6"], // teal - calm
   [3, "#22d3ee"], // cyan
-  [5, "#f59e0b"], // amber — moderate
+  [5, "#f59e0b"], // amber - moderate
   [7, "#fb923c"], // orange-300
-  [10, "#ea580c"], // orange-600 — intense
+  [10, "#ea580c"], // orange-600 - intense
 ];
 
 export type WheelchairFeature = {

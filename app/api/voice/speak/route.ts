@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { synthesize } from "@/lib/elevenlabs";
 import type { Language } from "@/types";
 
-// F1.5 — POST { text, voice_id, lang } → multilingual TTS audio stream.
+// F1.5 - POST { text, voice_id, lang } → multilingual TTS audio stream.
 export async function POST(req: NextRequest) {
   const { text, voice_id, lang } = (await req.json()) as {
     text: string;

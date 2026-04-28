@@ -10,7 +10,7 @@ type Card = {
   caption: string;
   /** Background image URL (Unsplash). */
   image: string;
-  /** Tint color used in the bottom gradient — keeps each card visually distinct. */
+  /** Tint color used in the bottom gradient - keeps each card visually distinct. */
   tint: string;
   /** Sensory accent color used in the corner glyph. */
   accent: string;
@@ -20,8 +20,8 @@ const CARDS: Card[] = [
   {
     vol: "Vol. 01",
     title: "Sense",
-    caption: "Live noise, light, crowd, smell, and exit data — layered over the streets you already know.",
-    // Warm books + coffee on a soft window-lit table — a quiet morning read
+    caption: "Live noise, light, crowd, smell, and exit data - layered over the streets you already know.",
+    // Warm books + coffee on a soft window-lit table - a quiet morning read
     image:
       "https://images.unsplash.com/photo-1481277542470-605612bd2d61?q=80&w=1400&auto=format&fit=crop",
     tint: "rgba(35,21,5,0.78)",
@@ -31,7 +31,7 @@ const CARDS: Card[] = [
     vol: "Vol. 02",
     title: "Plan",
     caption: "Profile-aware routing picks the calmest, step-free, well-lit path your body can handle.",
-    // Soft golden-hour countryside road — calm planning vibe
+    // Soft golden-hour countryside road - calm planning vibe
     image:
       "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1400&auto=format&fit=crop",
     tint: "rgba(35,21,5,0.78)",
@@ -41,7 +41,7 @@ const CARDS: Card[] = [
     vol: "Vol. 03",
     title: "Walk",
     caption: "Turn-by-turn with haptic warnings before high-sensory zones and voice cues in your language.",
-    // Warm cobbled street at golden hour — intimate "walking in your city" feel
+    // Warm cobbled street at golden hour - intimate "walking in your city" feel
     image:
       "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=1400&auto=format&fit=crop",
     tint: "rgba(28,14,4,0.78)",
@@ -51,7 +51,7 @@ const CARDS: Card[] = [
     vol: "Vol. 04",
     title: "Share",
     caption: "Caregiver mode lets a trusted person follow your live journey and check in with one tap.",
-    // Two pairs of hands meeting over a warm wooden table — the sharing motif
+    // Two pairs of hands meeting over a warm wooden table - the sharing motif
     image:
       "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1400&auto=format&fit=crop",
     tint: "rgba(28,14,4,0.78)",
@@ -61,7 +61,7 @@ const CARDS: Card[] = [
 
 const SWAP_MS = 4000;
 
-// Stack offsets — smaller on phones so the tail doesn't crowd the screen.
+// Stack offsets - smaller on phones so the tail doesn't crowd the screen.
 const SLOT = {
   desktop: { distX: 70, distY: 12, skew: 3 },
   mobile: { distX: 32, distY: 7, skew: 1.5 },
@@ -138,7 +138,7 @@ export function WorkflowCardSwap() {
           <span className="italic text-on-surface/45">every body.</span>
         </h2>
         <p className="hidden sm:block mt-4 sm:mt-6 text-sm sm:text-base md:text-lg text-on-surface-variant leading-relaxed">
-          From the first tap to a shared journey — every stage of how Sensory
+          From the first tap to a shared journey - every stage of how Sensory
           learns a place and walks you through it.
         </p>
       </div>
@@ -204,7 +204,7 @@ export function WorkflowCardSwap() {
           })}
         </div>
 
-        {/* Desktop-only manual cycle button — on mobile we save the vertical
+        {/* Desktop-only manual cycle button - on mobile we save the vertical
             real estate so the parent's Continue button sits right under the
             card stack. Tapping the cards themselves still cycles them. */}
         <button

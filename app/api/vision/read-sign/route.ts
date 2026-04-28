@@ -30,11 +30,11 @@ export async function POST(req: NextRequest) {
           `You are reading a photo a low-vision or ESL user just took. Return STRICT JSON ` +
           `(no markdown fences, no commentary) of shape:\n` +
           `{"text": string, "place_name": string | null}\n\n` +
-          `"text" — every readable sign / menu / poster, transcribed and translated to natural ${langName}. ` +
+          `"text" - every readable sign / menu / poster, transcribed and translated to natural ${langName}. ` +
           `Short, scannable, separate distinct items with periods. If nothing is readable, set "text" to "No text found".\n\n` +
-          `"place_name" — if the image clearly shows a business / building / venue NAME (e.g. "Felicitous Coffee", ` +
+          `"place_name" - if the image clearly shows a business / building / venue NAME (e.g. "Felicitous Coffee", ` +
           `"USF Library", "Mr. Dunderbak's"), return that name as a clean string. Otherwise return null. ` +
-          `Do NOT invent — only return a name that is literally visible. Do not include addresses, slogans, or hours.`,
+          `Do NOT invent - only return a name that is literally visible. Do not include addresses, slogans, or hours.`,
       },
     ]);
     const raw = result.response.text().trim();
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
         placeName = parsed.place_name.trim();
       }
     } catch {
-      // Not JSON — fall back to treating the whole response as the readout text.
+      // Not JSON - fall back to treating the whole response as the readout text.
     }
     return NextResponse.json({ text, place_name: placeName, language });
   } catch (e) {

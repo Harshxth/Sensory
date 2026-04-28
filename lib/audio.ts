@@ -1,4 +1,4 @@
-// F1.9 — Web Audio dB sampling (client-only).
+// F1.9 - Web Audio dB sampling (client-only).
 // Privacy: raw audio never leaves the device. Only the computed dB number is uploaded.
 
 export type DbSample = { db: number; at: number };

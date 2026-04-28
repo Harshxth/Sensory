@@ -2,11 +2,11 @@ import { CinematicHero } from "@/components/ui/cinematic-landing-hero";
 
 export const metadata = {
   title: "Sensory · Standby",
-  description: "Demo screensaver for Sensory — runs on the laptop while the live app demos on the phone.",
+  description: "Demo screensaver for Sensory - runs on the laptop while the live app demos on the phone.",
 };
 
 /**
- * /standby — full-screen cinematic screensaver. Load this on a second
+ * /standby - full-screen cinematic screensaver. Load this on a second
  * device (laptop / monitor) while the live app demos on a phone.
  * Scroll down to drive the GSAP timeline through its phases.
  */

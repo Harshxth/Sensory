@@ -126,7 +126,7 @@ export function SensoryDetailPanel({
             )}
           </>
         ) : !venueId ? (
-          // Google place not yet in our DB — Score CTA creates the venue,
+          // Google place not yet in our DB - Score CTA creates the venue,
           // and the parent's onVenueCreated swaps the panel to the real
           // venue so QuickUpdate (below) immediately appears for first input.
           <div className="bg-primary/15 border border-primary/30 rounded-xl p-4 space-y-3">
@@ -136,7 +136,7 @@ export function SensoryDetailPanel({
                 Be the first to score this venue
               </div>
               <p className="text-xs text-on-surface-variant leading-relaxed">
-                Sensory hasn&apos;t mapped this place yet. Share what it&apos;s like — your input
+                Sensory hasn&apos;t mapped this place yet. Share what it&apos;s like - your input
                 creates the sensory profile other people rely on.
               </p>
             </div>
@@ -157,7 +157,7 @@ export function SensoryDetailPanel({
             </button>
           </div>
         ) : (
-          // Venue exists in DB but no sensory data yet — quick prompt
+          // Venue exists in DB but no sensory data yet - quick prompt
           // before the QuickUpdate form below.
           <div className="bg-primary/10 border border-primary/30 rounded-xl p-4 text-sm">
             <div className="flex items-center gap-2 text-primary font-bold mb-1">
@@ -165,7 +165,7 @@ export function SensoryDetailPanel({
               Be the first to score this venue
             </div>
             <p className="text-xs text-on-surface-variant leading-relaxed">
-              Use the form below to share how it feels — noise, lighting, crowd. Your
+              Use the form below to share how it feels - noise, lighting, crowd. Your
               input becomes the baseline everyone else sees.
             </p>
           </div>

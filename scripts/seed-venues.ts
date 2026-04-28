@@ -1,4 +1,4 @@
-// F1.4 step 1 — fetch ~30 Tampa venues from Google Places, store with 2dsphere index.
+// F1.4 step 1 - fetch ~30 Tampa venues from Google Places, store with 2dsphere index.
 // Run with: npx tsx scripts/seed-venues.ts
 
 import { config } from "dotenv";

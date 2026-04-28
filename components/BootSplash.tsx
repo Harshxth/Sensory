@@ -10,7 +10,7 @@ const STORAGE_KEY = "sensory:boot-seen";
 const TAGLINE = "Maps for everyone.";
 
 /**
- * Cinematic boot splash — ported from the Claude Design prototype.
+ * Cinematic boot splash - ported from the Claude Design prototype.
  * White background. Animated map drift behind a black "Sensory" wordmark
  * and a Playfair Display italic tagline that types out. After ~2.7s a
  * "Tap anywhere to continue" hint appears; click/tap/Enter dismisses with
@@ -29,7 +29,7 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
   const dismissedRef = useRef(false);
 
   // First-mount: load profile, kick off animation, prefetch next route.
-  // Splash plays on every visit to "/" — no sessionStorage skip — so the
+  // Splash plays on every visit to "/" - no sessionStorage skip - so the
   // user always sees the boot animation when they open the site.
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -201,7 +201,7 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
               </g>
             </g>
           </svg>
-          {/* White vignette fade — keeps content readable */}
+          {/* White vignette fade - keeps content readable */}
           <div
             className="absolute inset-0"
             style={{
@@ -213,7 +213,7 @@ export function BootSplash({ onDone }: { onDone?: () => void }) {
 
         {/* Wordmark + tagline + tap hint */}
         <div className="relative z-10 flex flex-col items-center gap-6 px-6 text-center">
-          {/* Masked slide-reveal — pure CSS so the text rises into view once
+          {/* Masked slide-reveal - pure CSS so the text rises into view once
               and stays visible. The outer span is the overflow mask; the
               inner span starts at translateY(100%) and rests at 0. */}
           <h1

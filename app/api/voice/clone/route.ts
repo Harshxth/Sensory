@@ -4,7 +4,7 @@ import { encryptField } from "@/lib/encryption";
 import { ClientIdMissingError, requireClientId } from "@/lib/identity";
 import { COLLECTIONS, getDb } from "@/lib/mongodb";
 
-// F1.5 — POST audio blob → ElevenLabs IVC → store encrypted voice_id on the
+// F1.5 - POST audio blob → ElevenLabs IVC → store encrypted voice_id on the
 // user's profile and return the plaintext voiceId for immediate playback.
 //
 // Auth: gated on a stable client id header (X-Sensory-Client-Id). Once real
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ voiceId });
 }
 
-// DELETE /api/voice/clone — clear the user's stored clone. Used by Settings
+// DELETE /api/voice/clone - clear the user's stored clone. Used by Settings
 // when the user wants to remove their voice. Does not delete from ElevenLabs
 // (the voice_id remains in their account); only detaches it from this profile.
 export async function DELETE(req: NextRequest) {

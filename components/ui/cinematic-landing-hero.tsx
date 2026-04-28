@@ -47,7 +47,7 @@ const INJECTED_STYLES = `
           drop-shadow(0px 2px 4px rgba(15,23,42,0.10));
   }
 
-  /* Dark mode — flip text to light so it reads against the deep grid bg */
+  /* Dark mode - flip text to light so it reads against the deep grid bg */
   @media (prefers-color-scheme: dark) {
     .text-3d-matte {
         color: #f1f5f9;
@@ -77,7 +77,7 @@ const INJECTED_STYLES = `
           drop-shadow(0px 4px 8px rgba(0,0,0,0.6));
   }
 
-  /* Forest-deep card body — matches Sensory primary green */
+  /* Forest-deep card body - matches Sensory primary green */
   .premium-depth-card {
       background: linear-gradient(145deg, #225f1c 0%, #0a1612 100%);
       box-shadow:
@@ -182,14 +182,14 @@ export function CinematicHero({
     <>
       <span className="text-white font-semibold">Sensory</span> layers real-time
       noise, light, crowd, smell, and exit data over the streets you already
-      know — for autistic, sensory-sensitive, wheelchair, deaf, blind, and ESL
+      know - for autistic, sensory-sensitive, wheelchair, deaf, blind, and ESL
       communities.
     </>
   ),
   metricValue = 148,
   metricLabel = "Venues mapped",
   ctaHeading = "Find your calm route.",
-  ctaDescription = "Open Sensory and walk the city through every body's eyes — Tampa today, every city next.",
+  ctaDescription = "Open Sensory and walk the city through every body's eyes - Tampa today, every city next.",
   className,
   ...props
 }: CinematicHeroProps) {
@@ -228,7 +228,7 @@ export function CinematicHero({
   }, []);
 
   // Scroll-driven cinematic timeline + auto-scroller that loops the page
-  // top→bottom→top forever. Drop /standby on a laptop and walk away —
+  // top→bottom→top forever. Drop /standby on a laptop and walk away -
   // ScrollTrigger advances the story while the auto-scroller drives scroll.
   useEffect(() => {
     const isMobile = window.innerWidth < 768;
@@ -317,13 +317,13 @@ export function CinematicHero({
         const speed = now - startedAt < introMs ? slowSpeed : fastSpeed;
         const next = window.scrollY + direction * speed;
         if (next >= max) {
-          // Reached the end of the cinematic — hold the CTA on screen for 5s
+          // Reached the end of the cinematic - hold the CTA on screen for 5s
           // before scrolling back to the top.
           window.scrollTo({ top: max, behavior: "auto" });
           direction = -1;
           holdUntil = now + endHoldMs;
         } else if (next <= 0) {
-          // Back at the top — short pause so the hero gets a beat to settle.
+          // Back at the top - short pause so the hero gets a beat to settle.
           window.scrollTo({ top: 0, behavior: "auto" });
           direction = 1;
           holdUntil = now + endHoldMs;

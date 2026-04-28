@@ -93,7 +93,7 @@ export function SensoryHeatmaps({
 
     // ── Crowd → particle swarm ──────────────────────────────────────────
     if (!map.getLayer(CROWD_BURST)) {
-      // Outer halo — animated via JS loop below
+      // Outer halo - animated via JS loop below
       map.addLayer({
         id: CROWD_BURST,
         type: "circle",
@@ -114,7 +114,7 @@ export function SensoryHeatmaps({
       });
     }
     if (!map.getLayer(CROWD_LAYER)) {
-      // Inner dot cluster — many small dots simulating density
+      // Inner dot cluster - many small dots simulating density
       map.addLayer({
         id: CROWD_LAYER,
         type: "circle",

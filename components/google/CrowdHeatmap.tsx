@@ -10,7 +10,7 @@ type Props = {
 };
 
 /**
- * Crowd visualization — population-density-style heatmap. Cool blues for
+ * Crowd visualization - population-density-style heatmap. Cool blues for
  * sparse, deep purples for packed. Distinct from noise (warm spectrum) and
  * light (gold spectrum).
  */

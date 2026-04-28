@@ -1,6 +1,6 @@
 "use client";
 
-// F1.10 — recharts sparkline of 24h hourly avg dB from time-series collection.
+// F1.10 - recharts sparkline of 24h hourly avg dB from time-series collection.
 import { useEffect, useState } from "react";
 import { LineChart, Line, ResponsiveContainer, YAxis } from "recharts";
 

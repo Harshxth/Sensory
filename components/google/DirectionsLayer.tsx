@@ -16,7 +16,7 @@ export type TransitStep = {
   vehicle?: string;
   /** Public-facing line name, e.g. "Route 5" or "Green Line". */
   lineName?: string;
-  /** Where the line is heading — "to USF Marshall Center". */
+  /** Where the line is heading - "to USF Marshall Center". */
   headsign?: string;
   /** Boarding stop name. */
   departureStopName?: string;
@@ -303,7 +303,7 @@ async function fetchRoutes(
 
   // Google Routes API honors a BCP-47 languageCode and returns the entire
   // step instructions translated. So Spanish users get "Gira a la izquierda
-  // en 50 metros" instead of "Turn left in 50 meters" — which is then sent
+  // en 50 metros" instead of "Turn left in 50 meters" - which is then sent
   // straight to ElevenLabs multilingual TTS.
   const languageCode =
     language === "es" ? "es" : language === "zh" ? "zh-CN" : "en-US";

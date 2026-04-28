@@ -187,7 +187,7 @@ export function NavigationOverlay({
   const etaText = eta.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
 
   const currentStep = steps[stepIdx];
-  const distToNext = currentStep ? formatDistance(currentStep.distanceMeters) : "—";
+  const distToNext = currentStep ? formatDistance(currentStep.distanceMeters) : "-";
 
   const visibleFlags = flags
     .filter((f) => position && haversine(position, f.position) < 400)
@@ -311,7 +311,7 @@ function stripHtml(s: string): string {
   return s.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 }
 
-// Default ElevenLabs voice (Bella) — used when the user hasn't cloned one yet.
+// Default ElevenLabs voice (Bella) - used when the user hasn't cloned one yet.
 const DEFAULT_VOICE_ID = "EXAVITQu4vr4xnSDxMaL";
 
 let _audioEl: HTMLAudioElement | null = null;
@@ -387,7 +387,7 @@ function speak(text: string) {
       await audio.play();
     })
     .catch(() => {
-      // ElevenLabs unavailable (no key, network, quota) — fall back so the
+      // ElevenLabs unavailable (no key, network, quota) - fall back so the
       // user still hears the cue. Better robotic than silent.
       fallbackBrowserSpeak(text);
     });
@@ -435,24 +435,24 @@ function warningPhrase(f: RouteFlag, needs: AccessibilityNeed[]): string | null 
     switch (f.kind) {
       case "noise":
         if (needs.includes("noise") || needs.includes("blind") || needs.includes("deaf")) {
-          return `Zona ruidosa adelante — ${f.label}.`;
+          return `Zona ruidosa adelante - ${f.label}.`;
         }
-        return `Zona ruidosa — ${f.label}.`;
+        return `Zona ruidosa - ${f.label}.`;
       case "crowd":
         if (needs.includes("wheelchair")) {
-          return `Mucha gente adelante — espacio estrecho, ${f.label}.`;
+          return `Mucha gente adelante - espacio estrecho, ${f.label}.`;
         }
         if (needs.includes("noise") || needs.includes("blind")) {
-          return `Mucha gente adelante — habrá más ruido, ${f.label}.`;
+          return `Mucha gente adelante - habrá más ruido, ${f.label}.`;
         }
-        return `Mucha gente adelante — ${f.label}.`;
+        return `Mucha gente adelante - ${f.label}.`;
       case "light":
         if (needs.includes("light") || needs.includes("blind")) {
           return `Iluminación intensa adelante en ${f.label}.`;
         }
         return null;
       case "alert":
-        return `Alerta cercana — ${f.label}.`;
+        return `Alerta cercana - ${f.label}.`;
       default:
         return null;
     }
@@ -462,24 +462,24 @@ function warningPhrase(f: RouteFlag, needs: AccessibilityNeed[]): string | null 
   switch (f.kind) {
     case "noise":
       if (needs.includes("noise") || needs.includes("blind") || needs.includes("deaf")) {
-        return `Loud zone ahead — ${f.label}.`;
+        return `Loud zone ahead - ${f.label}.`;
       }
-      return `Loud zone — ${f.label}.`;
+      return `Loud zone - ${f.label}.`;
     case "crowd":
       if (needs.includes("wheelchair")) {
-        return `Crowded patch ahead — narrow space, ${f.label}.`;
+        return `Crowded patch ahead - narrow space, ${f.label}.`;
       }
       if (needs.includes("noise") || needs.includes("blind")) {
-        return `Crowded ahead — extra noise expected, ${f.label}.`;
+        return `Crowded ahead - extra noise expected, ${f.label}.`;
       }
-      return `Crowded ahead — ${f.label}.`;
+      return `Crowded ahead - ${f.label}.`;
     case "light":
       if (needs.includes("light") || needs.includes("blind")) {
         return `Bright lighting ahead at ${f.label}.`;
       }
       return null;
     case "alert":
-      return `Live alert nearby — ${f.label}.`;
+      return `Live alert nearby - ${f.label}.`;
     default:
       return null;
   }

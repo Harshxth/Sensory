@@ -10,7 +10,7 @@ type Props = {
 };
 
 /**
- * Crowd visualization — 3D glowing orbs at each crowded venue. Diameter and
+ * Crowd visualization - 3D glowing orbs at each crowded venue. Diameter and
  * color intensity scale with crowd density. The shading + radial highlight
  * give the spheres a polished volumetric look that reads as distinct from
  * the noise heatmap (smooth blob) and lighting halo (yellow glow).
@@ -48,7 +48,7 @@ export function CrowdOrbs({ venues, visible = true, onSelect }: Props) {
           >
             <div
               role="button"
-              aria-label={`${v.name} — crowd ${score.toFixed(1)} of 10`}
+              aria-label={`${v.name} - crowd ${score.toFixed(1)} of 10`}
               className="cursor-pointer relative"
               style={{ width: `${size}px`, height: `${size}px` }}
             >
@@ -63,7 +63,7 @@ export function CrowdOrbs({ venues, visible = true, onSelect }: Props) {
                   transform: "scale(1.4)",
                 }}
               />
-              {/* The orb itself — radial gradient creates the 3D ball look */}
+              {/* The orb itself - radial gradient creates the 3D ball look */}
               <span
                 aria-hidden
                 className="absolute inset-0 rounded-full"

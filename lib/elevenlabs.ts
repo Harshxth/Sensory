@@ -7,14 +7,14 @@ export function getElevenLabs(): ElevenLabsClient {
   return new ElevenLabsClient({ apiKey });
 }
 
-// F1.5 — Instant Voice Clone. Returns a voice_id to be field-encrypted before storage.
+// F1.5 - Instant Voice Clone. Returns a voice_id to be field-encrypted before storage.
 export async function cloneVoice(name: string, sample: Blob): Promise<string> {
   const client = getElevenLabs();
   const result = await client.voices.ivc.create({ name, files: [sample] });
   return result.voiceId;
 }
 
-// F1.5 — Multilingual TTS using user's cloned voice_id.
+// F1.5 - Multilingual TTS using user's cloned voice_id.
 export async function synthesize(
   voiceId: string,
   text: string,

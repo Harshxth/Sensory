@@ -23,7 +23,7 @@ export function getOrCreateClientId(): string {
 }
 
 // Server-side: pulls the client id from the request header. Throws when the
-// header is missing so callers can return 401 — keeps the contract honest
+// header is missing so callers can return 401 - keeps the contract honest
 // rather than silently falling through to an "anonymous" bucket.
 export function requireClientId(req: NextRequest | Request): string {
   const id = req.headers.get(HEADER);
