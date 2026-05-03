@@ -2,10 +2,14 @@
 
 > The map for how a place *feels* - built for autistic, sensory-sensitive, wheelchair, deaf, blind, and ESL communities the world wasn't designed for.
 
+![Sensory hero](public/screenshots/sensory-hero.png)
+
 **Live demo:** [https://sensorymap.vercel.app](https://sensorymap.vercel.app)
 **Standby screensaver:** [https://sensorymap.vercel.app/standby](https://sensorymap.vercel.app/standby) - open on a laptop while demoing on the phone.
 
 Sensory layers real-time accessibility data on top of Google Maps so people with sensory or mobility needs can navigate by how a place actually feels - noise, crowd, lighting, smell, and exits - not just by ratings.
+
+![Sensory map view with sensory heatmaps](public/screenshots/sensory-map.png)
 
 ## What's in the app
 
